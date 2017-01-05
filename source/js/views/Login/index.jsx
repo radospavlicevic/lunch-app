@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-export default class Dashboard extends Component {
+export default class Login extends Component {
   static propTypes = {
   }
 
   render() {
     return (
-      <div className='Dashboard'>
-        <h1>Dashboard</h1>
+      <div className='Login'>
+        <h1>Login</h1>
       </div>
     );
   }

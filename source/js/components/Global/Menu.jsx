@@ -10,8 +10,14 @@ export default class Menu extends Component {
         <IndexLink to={ routeCodes.DASHBOARD }>
           Dashboard
         </IndexLink>
+        <Link to={ routeCodes.ORDER }>
+          Order
+        </Link>
         <Link to={ routeCodes.ABOUT }>
           About
+        </Link>
+        <Link to={ routeCodes.LOGIN }>
+          Login
         </Link>
         <Link to='404'>
           404
