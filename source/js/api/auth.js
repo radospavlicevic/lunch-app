@@ -9,8 +9,6 @@ export function firebaseAuthSaveUser(user) {
 
 export function firebaseAuthentication(user) {
   return firebaseAuth().createUserWithEmailAndPassword(user.email, user.password);
-    // .then(firebaseAuthSaveUser)
-    // .catch((error) => console.error('Error', error));
 }
 
 export function firebaseLogout() {
@@ -19,4 +17,8 @@ export function firebaseLogout() {
 
 export function firebaseLogin(user) {
   return firebaseAuth().signInWithEmailAndPassword(user.email, user.password);
+}
+
+export function userSignedIn() {
+  return firebaseAuth().currentUser;
 }

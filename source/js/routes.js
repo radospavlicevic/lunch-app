@@ -4,32 +4,35 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import App from 'views/App';
 import Dashboard from 'views/Dashboard';
 import Order from 'views/Order';
-import About from 'views/About';
+import Overview from 'views/Overview';
 import Login from 'views/Login';
 import NotFound from 'views/NotFound';
 
 const publicPath = '/';
 
 export const routeCodes = {
-  DASHBOARD: publicPath,
-  ORDER: `${ publicPath }order`,
-  ABOUT: `${ publicPath }about`,
+  ORDER: publicPath,
+  DASHBOARD: `${ publicPath }dashboard`,
   LOGIN: `${ publicPath }login`,
+  OVERVIEW: `${ publicPath }overview`,
 };
 
 export default class Routes extends Component {
+
   render() {
     return (
       <Router history={ browserHistory }>
         <Route path={ publicPath } component={ App }>
-          <IndexRoute component={ Dashboard } />
+          <IndexRoute component={ Order } />
           <Route path={ routeCodes.DASHBOARD } component={ Dashboard } />
-          <Route path={ routeCodes.ORDER } component={ Order } />
-          <Route path={ routeCodes.ABOUT } component={ About } />
-          <Route path={ routeCodes.LOGIN } component={ Login } />
+          <Route path={ routeCodes.OVERVIEW } component={ Overview } />
+        </Route>
 
+        <Route path={ publicPath } component={ App } >
+          <Route path={ routeCodes.LOGIN } component={ Login } />
           <Route path='*' component={ NotFound } />
         </Route>
+
       </Router>
     );
   }

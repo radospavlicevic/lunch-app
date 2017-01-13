@@ -1,16 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { login } from 'actions/login';
-import { redirectTo } from 'utils/routing';
-import { routeCodes } from '../../routes';
 
 @connect(state => ({
   loginLoading: state.login.get('loginLoading'),
   loginError: state.login.get('loginError'),
-  loginData: state.login.get('loginData'),
   getUserLoading: state.login.get('getUserLoading'),
   getUserError: state.login.get('getUserError'),
-  loggedInUser: state.login.get('loggedInUser'),
 }))
 export default class Login extends Component {
 
@@ -19,7 +15,6 @@ export default class Login extends Component {
     loginError: PropTypes.object,
     getUserLoading: PropTypes.bool,
     getUserError: PropTypes.object,
-    loggedInUser: PropTypes.object,
     // from react-redux connect
     dispatch: PropTypes.func,
   }
@@ -27,15 +22,6 @@ export default class Login extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { loginLoading, loginError, loginData,
-      getUserLoading, getUserError, loggedInUser } = newProps;
-    console.log(loginLoading, loginError, loginData, getUserLoading, getUserError, loggedInUser);
-    if (loggedInUser) {
-      redirectTo(routeCodes.DASHBOARD);
-    }
   }
 
   handleSubmit(event) {
