@@ -2,6 +2,10 @@ body {
   background: #1C1E20;
 }
 
+html {
+  font-size: 16px;
+}
+
 .App {
   margin: 20px auto;
   max-width: 500px;
@@ -11,25 +15,16 @@ body {
   border-radius: 3px;
 }
 
-.Menu a {
-  display: inline-block;
-  padding: 5px 0;
-  margin-right: 10px;
-}
-
-.BackgroundImgExample {
-  width: 250px;
-  height: 141px;
-  background: url(../assets/img/book1.jpg) no-repeat;
-  background-size: 100% auto;
-}
-
-.ImgExample {
-  width: 250px;
-}
-
 hr {
   border: 0;
   border-top: 1px solid #ddd;
   margin: 20px 0;
+}
+
+.Login h1 {
+  text-align: center;
+}
+
+.Message--error {
+  color: $error-color;
 }
