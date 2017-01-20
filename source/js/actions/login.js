@@ -38,7 +38,7 @@ export function getUser(uid) {
     dispatch(getUserStart());
 
     findUserByUID(uid)
-      .then(data => { console.log('getUserData', data.val()); dispatch(getUserSuccess(data.val()[1])); })
+      .then(data => { dispatch(getUserSuccess(data.val())); })
       .catch(error => dispatch(getUserError(error)));
   };
 }

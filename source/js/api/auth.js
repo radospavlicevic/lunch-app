@@ -7,7 +7,7 @@ export function firebaseAuthSaveUser(user) {
   }).then(() => user);
 }
 
-export function firebaseAuthentication(user) {
+export function firebaseRegister(user) {
   return firebaseAuth().createUserWithEmailAndPassword(user.email, user.password);
 }
 

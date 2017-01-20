@@ -1,5 +1,7 @@
 import firebase from 'firebase';
 
+window.firebase = firebase;
+
 const config = {
   apiKey: 'AIzaSyDPMHHjCKaZugRm81iroiEYDG6jrxC2ZIA',
   authDomain: 'lunchapp-caeae.firebaseapp.com',

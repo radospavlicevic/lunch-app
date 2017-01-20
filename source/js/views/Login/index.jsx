@@ -34,6 +34,7 @@ export default class Login extends Component {
     dispatch(login(user));
   }
 
+  // refactor
   renderLoginErrors() {
     const { loginError, getUserError } = this.props;
     if (loginError) {
@@ -60,7 +61,7 @@ export default class Login extends Component {
       <div className='Login'>
         <h1>Login with your email</h1>
         <form className='ClientForm' onSubmit={ this.handleSubmit }>
-          <input ref={ node => this.email = node } className='ClientForm-input' placeholder='Username' />
+          <input ref={ node => this.email = node } className='ClientForm-input' placeholder='Email' />
           <input ref={ node => this.password = node } className='ClientForm-input' placeholder='Password' type='password' />
           <button className='ClientForm-button'>Login</button>
         </form>

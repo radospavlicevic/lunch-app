@@ -22,3 +22,7 @@ export function redirectByRole(role) {
       redirectTo(routeCodes.LOGIN);
   }
 }
+
+export function checkAdminRole(role) {
+  if (role !== roles.ADMIN) redirectTo(routeCodes.ORDER);
+}

@@ -20,10 +20,6 @@ export default class Menu extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('#### ', nextProps.loggedInUser);
-  }
-
   handleLogout() {
     firebaseLogout();
   }
