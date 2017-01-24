@@ -3,7 +3,7 @@ import { roles, checkAdminRole } from 'utils/routing';
 import { firebaseRegister } from 'api/auth.js';
 import { saveUser } from 'api/users.js';
 import { getUserValidationErrors } from 'utils/validation';
-import { prepareForReauthentication, reauthenticateAdmin } from 'utils/register';
+import { prepareForReauthentication, reauthenticateAdmin } from 'utils/reauth';
 
 export default class Register extends Component {
 
@@ -38,10 +38,15 @@ export default class Register extends Component {
     checkAdminRole(loggedInUser && loggedInUser.role);
   }
 
-  resetFields() {
+  resetForm() {
     this.setState({
       user: {
         role: roles.USER,
+        username: '',
+        email: '',
+        password: '',
+      },
+      errors: {
         username: '',
         email: '',
         password: '',
@@ -99,8 +104,8 @@ export default class Register extends Component {
       firebaseRegister(user)
       .then(userRecord => {
         saveUser(userRecord.uid, user);
-        reauthenticateAdmin(loggedInUser.password);
-        this.resetFields();
+        reauthenticateAdmin(loggedInUser);
+        this.resetForm();
       })
       .catch(error => {
         this.setState({

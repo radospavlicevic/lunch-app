@@ -17,7 +17,7 @@ export default class App extends Component {
   componentWillMount() {
     const { dispatch } = this.props;
     firebaseAuth().onAuthStateChanged((user) => {
-      if (this.userRegistrationHandled(user)) return;
+      if (this.handleReauth()) return;
       if (user) {
         redirectTo(routeCodes.ORDER);
         dispatch(getUser(user.uid));
@@ -28,14 +28,18 @@ export default class App extends Component {
     });
   }
 
-  userRegistrationHandled(user) {
-    if (user && localStorage.getItem('admin')) {
-      localStorage.removeItem('admin');
+  handleReauth() {
+    if (localStorage.getItem('reauth')) {
+      localStorage.removeItem('reauth');
       return true;
     }
-    if (user && localStorage.getItem('register')) {
+    if (localStorage.getItem('signout')) {
+      localStorage.removeItem('signout');
+      return true;
+    }
+    if (localStorage.getItem('redirect')) {
       redirectTo(routeCodes.USERS);
-      localStorage.removeItem('register');
+      localStorage.removeItem('redirect');
       return true;
     }
     return false;

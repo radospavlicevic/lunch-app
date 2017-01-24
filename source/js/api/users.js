@@ -1,20 +1,22 @@
-import { ref } from 'utils/firebase_config';
+import { db } from 'utils/firebase_config';
 
 export function findUserByUID(uid) {
-  return ref.child(`users/${ uid }`).once('value');
+  return db.ref(`users/${ uid }`).once('value');
 }
 
 export function saveUser(uid, user) {
-  return ref.child(`users/${ uid }`).set({
+  return db.ref(`users/${ uid }`).set({
     role: user.role,
     username: user.username,
+    email: user.email,
+    password: user.password,
   });
 }
 
-export function saveAdmin(uid, user, pass) {
-  return ref.child(`users/${ uid }`).set({
-    role: user.role,
-    username: user.username,
-    password: pass,
-  });
+export function fetchAllUsers() {
+  return db.ref('users').once('value');
+}
+
+export function removeUser(uid) {
+  db.ref(`users/${ uid }`).remove();
 }
