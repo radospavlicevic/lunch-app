@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addUser, deleteUser } from 'actions/users';
 import { db } from 'utils/firebase_config';
+import { checkAdminRole } from 'utils/routing';
 import Register from 'components/Admin/Register';
 import UserOverview from 'components/Admin/UserOverview';
 
@@ -18,6 +19,8 @@ export default class Users extends Component {
   }
 
   componentWillMount() {
+    const { loggedInUser } = this.props;
+    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
   }
 

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { roles, checkAdminRole } from 'utils/routing';
+import { roles } from 'utils/routing';
 import { firebaseRegister } from 'api/auth.js';
 import { saveUser } from 'api/users.js';
 import { getUserValidationErrors } from 'utils/validation';
@@ -31,11 +31,6 @@ export default class Register extends Component {
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
   }
 
   resetForm() {

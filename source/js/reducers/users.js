@@ -10,9 +10,8 @@ import {
 } from 'actions/users';
 
 const initialState = Map({
-  // fetch users
   usersData: [],
-  userForUpdate: null,
+  // userForUpdate: null,
 });
 
 const actionsMap = {
