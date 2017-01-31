@@ -4,19 +4,23 @@ import CategoryItem from './CategoryItem';
 
 export default class UserOverview extends Component {
   static propTypes = {
-    categories: PropTypes.array,
+    categories: PropTypes.object,
   }
 
   renderCategories() {
     const { categories } = this.props;
-    return categories && categories.map((data, index) => {
-      return <CategoryItem key={ index } category={ data } />;
+    return categories && Object.keys(categories).map((key) => {
+      const data = {
+        'key': key,
+        'name': categories[key].name,
+      };
+      return <CategoryItem key={ key } category={ data } />;
     });
   }
 
   render() {
     return (
-      <div className='UserOverview'>
+      <div className='CategoryOverview'>
         <h1>All Categories</h1>
         <table className='AdminTable table'>
           <thead>

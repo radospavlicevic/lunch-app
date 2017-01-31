@@ -34,12 +34,8 @@ export default class Users extends Component {
       dispatch(addUser(newUser));
     });
 
-    db.ref('users').on('child_removed', removedDBUser => {
-      const removedUser = {
-        uid: removedDBUser.key,
-        user: removedDBUser.val(),
-      };
-      dispatch(deleteUser(removedUser));
+    db.ref('users').on('child_removed', removedUser => {
+      dispatch(deleteUser(removedUser.key));
     });
   }
 

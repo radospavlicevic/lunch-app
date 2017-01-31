@@ -1,10 +1,11 @@
 import { db } from 'utils/firebase_config';
 
 export function saveCategory(category) {
-  return db.ref('category').push({
+  return db.ref('categories').push({
     name: category,
   });
 }
 
-export function removeCategory() {
+export function removeCategory(key) {
+  db.ref(`categories/${ key }`).remove();
 }

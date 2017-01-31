@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { removeCategory } from 'api/meals';
 
 export default class CategoryItem extends Component {
   static propTypes = {
@@ -12,6 +13,8 @@ export default class CategoryItem extends Component {
   }
 
   handleDeleteClick() {
+    const { category } = this.props;
+    removeCategory(category.key);
   }
 
   render() {
@@ -19,7 +22,6 @@ export default class CategoryItem extends Component {
     return (
       <tr>
         <td>{ category.name }</td>
-        {/* <td><button className='AdminTable-button'>Edit</button></td> */}
         <td><button onClick={ this.handleDeleteClick } className='AdminTable-button'>Delete</button></td>
       </tr>
     );

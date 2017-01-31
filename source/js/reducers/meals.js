@@ -7,20 +7,25 @@ import {
 
 const initialState = Map({
   // fetch users
-  categories: [],
+  categories: {},
 });
 
 const actionsMap = {
 
   [ADD_CATEGORY]: (state, action) => {
-    const categories = [...state.get('categories'), action.data];
+    const newCategory = {};
+    newCategory[action.key] = {
+      name: action.data,
+    };
+    const categories = Object.assign({}, state.get('categories'), newCategory);
     return state.merge(Map({
       'categories': categories,
     }));
   },
 
   [DELETE_CATEGORY]: (state, action) => {
-    const categories = state.get('categories').filter(category => category.uid !== action.uid);
+    const categories = Object.assign({}, state.get('categories'));
+    delete categories[action.key];
     return state.merge(Map({
       'categories': categories,
     }));

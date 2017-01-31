@@ -35,10 +35,10 @@ export function addUser(data) {
   };
 }
 
-export function deleteUser(data) {
+export function deleteUser(uid) {
   return {
     type: DELETE_USER,
-    data,
+    uid,
   };
 }
 

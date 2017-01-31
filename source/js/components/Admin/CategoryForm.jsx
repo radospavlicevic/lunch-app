@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { addCategory } from 'api/meals.js';
+import { saveCategory } from 'api/meals.js';
 
 export default class CategoryForm extends Component {
 
@@ -17,6 +17,7 @@ export default class CategoryForm extends Component {
     this.setState({
       errors: categoryName ? '' : 'Category name is required. ',
     });
+    if (categoryName) saveCategory(categoryName);
   }
 
   render() {
@@ -29,7 +30,7 @@ export default class CategoryForm extends Component {
             <input
               ref={ input => this.categoryNameInput = input }
               placeholder='Category Name'
-              className='AdminForm-input'
+              className={ errors ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
             />
           </div>
           <button className='AdminForm-button'>Add</button>

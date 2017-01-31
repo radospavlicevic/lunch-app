@@ -26,7 +26,7 @@ const actionsMap = {
     }));
   },
   [DELETE_USER]: (state, action) => {
-    const usersData = state.get('usersData').filter(user => user.uid !== action.data.uid);
+    const usersData = state.get('usersData').filter(user => user.uid !== action.uid);
     return state.merge(Map({
       'usersData': usersData,
     }));
