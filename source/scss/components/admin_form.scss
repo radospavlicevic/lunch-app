@@ -1,0 +1,53 @@
+.AdminForm-item {
+  margin: 10px 0;
+
+  input {
+    outline: none;
+  }
+}
+
+.AdminForm-input {
+  height: 40px;
+  width: 100%;
+  border: 1px solid gray;
+  &:focus {
+    border: 1px solid $dark-background;
+  }
+}
+
+.AdminForm-textarea {
+  @extend .AdminForm-input;
+  height: 80px;
+  outline: none;
+}
+
+.AdminForm-input--error {
+  border-color: $error-color;
+  box-shadow: 1px 1px 3px #651a1a;
+}
+
+.AdminForm-radioItem {
+  display: flex;
+  margin-top: 20px;
+  flex-flow: row wrap;
+  span {
+    margin-left: 10px;
+    input {
+      margin: 0px 5px;
+    }
+  }
+}
+
+.AdminForm-button {
+  margin: 20px 0;
+}
+
+.AdminForm-select {
+  outline:none;
+  width: 50%;
+  min-width: 200px;
+  height: 40px;
+  &:focus {
+    border: 1px solid $dark-background;
+  }
+}

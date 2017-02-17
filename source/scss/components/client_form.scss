@@ -1,0 +1,23 @@
+.ClientForm {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: space-around;
+  min-height: 200px;
+}
+
+.ClientForm-input {
+  outline:none;
+  background: none;
+  border: none;
+  border-bottom: 1px solid gray;
+  &:focus {
+    border-color: black;
+    border-width: 2px;
+  }
+}
+
+.ClientForm-button {
+  align-self: flex-end;
+  width: 100px;
+}

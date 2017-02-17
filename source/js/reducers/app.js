@@ -18,9 +18,9 @@ const actionsMap = {
   [TEST_ACTION]: (state) => {
     const counter = state.get('counter') + 1;
 
-    return state.merge({
+    return state.merge(Map({
       counter,
-    });
+    }));
   },
 
   // Async action

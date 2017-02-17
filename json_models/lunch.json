@@ -1,0 +1,114 @@
+
+{
+  "users": {
+    "1": {
+      "username": "Rados Pavlicevic",
+      "role": "USER",
+      "email": "rados.pavlicevic@work.co",
+      "password": "rados123@"
+    },
+    "2": {
+      "username": "Milos Pavlicevic",
+      "role": "USER",
+      "email": "milos@work.co",
+      "password": "milos123@"
+    }
+  },
+  "caterings" : {
+    "1": {
+      "name": "Cedic",
+      "contact": "011xxxxxxx"
+    }
+  },
+  "categories": {
+    "1": "Glavna jela",
+    "2": "Supe/corbe",
+    "3": "Salate"
+  },
+  "mealItems": {
+    "1": {
+      "category": "1",
+      "catering": "1",
+      "standard_item": false,
+      "name": "Sarma",
+      "description": "Pirinac, sargarepa, kupus.",
+      "price": 300
+    },
+    "2": {
+      "category": "1",
+      "catering": "1",
+      "standard_item": false,
+      "name": "Pileca krilca",
+      "description": "Krilca, spanac, krompir. ",
+      "price": 300
+    },
+    "3": {
+      "category": "2",
+      "catering": "1",
+      "standard_item": false,
+      "name": "Sopska salata",
+      "description": "Paradajz, krastavac, sir. ",
+      "price": 300
+    },
+    "4": {
+      "category": "2",
+      "catering": "1",
+      "standard_item": false,
+      "name": "Kupus salata",
+      "description": "Svez kupus",
+      "price": 300
+    },
+    "5": {
+      "category": "3",
+      "catering": "1",
+      "standard_item": false,
+      "name": "Potaz od tikvica",
+      "description": "...",
+      "price": 300
+    }
+  },
+  "menus": {
+    "catering": "1",
+    "name": "Menu name",
+    "allFood": {
+      "mealItemId1": "1",
+      "mealItemId2": "2",
+      "mealItemId3": "3",
+      "mealItemId4": "4"
+    },
+    "timestamp": 1483632595000
+  },
+  "orders": {
+    "1": {
+      "user": "1",
+      "fullMeal": {
+        "mealItemId1": "2",
+        "mealItemId2": "3",
+        "mealItemId3": "5"
+      },
+      "note": "bez boranije",
+      "timestamp": 1483891794000
+    },
+    "2": {
+      "user": "2",
+      "fullMeal": {
+        "mealItemId1": "1",
+        "mealItemId2": "2",
+        "mealItemId3": "4"
+      },
+      "note": "bez luka",
+      "timestamp": 1483891794000
+    }
+  },
+  "lunchDay": {
+      "timestamp": 1483891794000,
+      "catering": {
+          "cateringId1": "1",
+          "cateringId2": "2"
+      },
+      "menus": {
+        "dailyMenu": "1",
+        "standardMenu": "3"
+      }
+  }
+}

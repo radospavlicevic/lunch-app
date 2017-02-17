@@ -1,2 +1,13 @@
 @import "base/normalize";
+@import "base/params";
+@import "base/breakpoints";
+@import "base/mixins";
 @import "base/app";
+@import "components/menu";
+@import "base/tables";
+@import "components/client_form";
+@import "components/admin_form";
+@import "components/dishes";
+@import "components/modal";
+
+@import "../../node_modules/react-datepicker/dist/react-datepicker.css";
