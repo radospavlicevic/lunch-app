@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import CategoryItem from './CategoryItem';
 
-export default class UserOverview extends Component {
+export default class CategoryOverview extends Component {
   static propTypes = {
     categories: PropTypes.object,
   }

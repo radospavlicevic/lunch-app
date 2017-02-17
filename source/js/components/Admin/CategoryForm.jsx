@@ -15,9 +15,16 @@ export default class CategoryForm extends Component {
     event.preventDefault();
     const categoryName = this.categoryNameInput.value;
     this.setState({
-      errors: categoryName ? '' : 'Category name is required. ',
+      errors: categoryName ? '' : 'Category Name field is required. ',
     });
-    if (categoryName) saveCategory(categoryName);
+    if (categoryName) {
+      saveCategory(categoryName);
+      this.resetInput();
+    }
+  }
+
+  resetInput() {
+    this.categoryNameInput.value = '';
   }
 
   render() {

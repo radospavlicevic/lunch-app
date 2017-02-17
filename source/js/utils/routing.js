@@ -1,10 +1,6 @@
 import { browserHistory } from 'react-router';
+import { roles } from './globals';
 import { routeCodes } from '../routes';
-
-export const roles = {
-  USER: 'USER',
-  ADMIN: 'ADMIN',
-};
 
 export function redirectTo(page) {
   browserHistory.push(page);

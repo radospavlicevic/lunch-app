@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { roles } from 'utils/routing';
+import { roles } from 'utils/globals';
 import { firebaseRegister } from 'api/auth.js';
 import { saveUser } from 'api/users.js';
 import { getUserValidationErrors } from 'utils/validation';

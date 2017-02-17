@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link } from 'react-router';
 import { connect } from 'react-redux';
-import { roles } from 'utils/routing';
+import { roles } from 'utils/globals';
 import { routeCodes } from '../../routes';
 import { userSignedIn, firebaseLogout } from '../../api/auth';
 

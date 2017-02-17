@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { addCategory, deleteCategory } from 'actions/meals.js';
+import { deleteCategory } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import CategoryForm from 'components/Admin/CategoryForm';
@@ -10,7 +10,7 @@ import CategoryOverview from 'components/Admin/CategoryOverview';
   loggedInUser: state.login.get('loggedInUser'),
   categories: state.meals.get('categories'),
 }))
-export default class Meals extends Component {
+export default class Categories extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
@@ -26,9 +26,9 @@ export default class Meals extends Component {
 
   setupFirebaseObservers() {
     const { dispatch } = this.props;
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
-    });
+    // db.ref('categories').on('child_added', newCategory => {
+    //   dispatch(addCategory(newCategory.key, newCategory.val().name));
+    // });
 
     db.ref('categories').on('child_removed', removedCategory => {
       dispatch(deleteCategory(removedCategory.key));
@@ -38,7 +38,7 @@ export default class Meals extends Component {
   render() {
     const { categories } = this.props;
     return (
-      <div className='Meals'>
+      <div className='Categories'>
         <CategoryForm />
         <CategoryOverview categories={ categories } />
       </div>
