@@ -96,7 +96,8 @@ export default class DishForm extends Component {
 
   validationPassed() {
     let passed = true;
-    const { name, price } = this.state.dish;
+    const { categories } = this.props;
+    const { name, price, category } = this.state.dish;
     const errors = {
       name: '',
       price: '',
@@ -105,7 +106,7 @@ export default class DishForm extends Component {
       errors.name = 'Name field is required. ';
       passed = false;
     }
-    if (!price) {
+    if (categories[category].name.toLowerCase() !== 'salate' && !price) {
       errors.price = 'Price field is required. ';
       passed = false;
     }

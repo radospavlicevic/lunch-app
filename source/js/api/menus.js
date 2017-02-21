@@ -10,6 +10,6 @@ export function saveDishesInMenu(date, dishes) {
   });
 }
 
-export function daleteDishFromMenu(date, key) {
+export function deleteDishFromMenu(date, key) {
   return db.ref(`menus/${ date }/${ key }`).remove();
 }

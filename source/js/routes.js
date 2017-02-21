@@ -41,7 +41,7 @@ export default class Routes extends Component {
           <Route path={ routeCodes.DISHES } component={ Dishes } />
           <Route path={ routeCodes.CATEGORIES } component={ Categories } />
           <Route path={ routeCodes.CATERINGS } component={ Caterings } />
-          <Route path={ routeCodes.MENUS } component={ Menus } />
+          <Route path={ `${ routeCodes.MENUS }(/:date)` } component={ Menus } />
           <Route path='*' component={ NotFound } />
         </Route>
 

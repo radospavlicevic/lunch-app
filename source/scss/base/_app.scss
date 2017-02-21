@@ -7,21 +7,15 @@ html {
 }
 
 .App {
-  margin: 20px auto;
+}
+
+.Page {
   max-width: 800px;
   width: calc(100% - 40px);
   background: #f5f6f7;
   padding: 20px;
-  border-radius: 3px;
-
-  a {
-    text-decoration: none;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
+  display: block;
+  margin: auto;
 }
 
 hr {

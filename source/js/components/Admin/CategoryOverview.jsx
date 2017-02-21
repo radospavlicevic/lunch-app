@@ -5,16 +5,17 @@ import CategoryItem from './CategoryItem';
 export default class CategoryOverview extends Component {
   static propTypes = {
     categories: PropTypes.object,
+    number: PropTypes.number,
   }
 
   renderCategories() {
-    const { categories } = this.props;
+    const { categories, number } = this.props;
     return categories && Object.keys(categories).map((key) => {
       const data = {
         'key': key,
         'name': categories[key].name,
       };
-      return <CategoryItem key={ key } category={ data } />;
+      return <CategoryItem key={ key } category={ data } number={ number } />;
     });
   }
 

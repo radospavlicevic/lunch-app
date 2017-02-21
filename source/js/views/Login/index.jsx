@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { login } from 'actions/login';
+import md5 from 'md5';
 
 @connect(state => ({
   loginLoading: state.login.get('loginLoading'),
@@ -29,7 +30,7 @@ export default class Login extends Component {
     const { dispatch } = this.props;
     const user = {
       email: this.email.value,
-      password: this.password.value,
+      password: md5(this.password.value),
     };
     dispatch(login(user));
   }

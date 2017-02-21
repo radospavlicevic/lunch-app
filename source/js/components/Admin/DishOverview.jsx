@@ -1,8 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { dishOverviewTypes } from 'utils/globals';
-import DishItem from './DishItem';
 import SelectableDishItem from './SelectableDishItem';
+import RemovableDishItem from './RemovableDishItem';
 import EditableDishItem from './EditableDishItem';
 
 export default class DishOverview extends Component {
@@ -15,16 +15,19 @@ export default class DishOverview extends Component {
     lunchDay: PropTypes.string,
   }
 
-  constructor() {
-    super();
-
+  componentWillMount() {
     this.state = {
       filters: {
         catering: 'all',
         category: 'all',
         search: '',
       },
+      filtered: this.props.dishes,
     };
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    this.filterDishes(nextProps, nextState);
   }
 
   handleFilterChange(event, filterName) {
@@ -36,45 +39,59 @@ export default class DishOverview extends Component {
     });
   }
 
-  filterByCatering(dishes) {
+  filterDishes(nextProps, nextState) {
+    let filterPerformed = false;
     const { filters } = this.state;
+    let filteredDishes = Object.assign({}, nextProps.dishes);
+    if (nextState.filters.catering !== filters.catering) {
+      filteredDishes = this.filterByCatering(filteredDishes, nextState.filters.catering);
+      filterPerformed = true;
+    }
+    if (nextState.filters.category !== filters.category) {
+      filteredDishes = this.filterByCategory(filteredDishes, nextState.filters.category);
+      filterPerformed = true;
+    }
+    if (nextState.filters.search !== filters.search) {
+      filteredDishes = this.filterBySearchWord(filteredDishes, nextState.filters.search);
+      filterPerformed = true;
+    }
+    if (filterPerformed) {
+      this.setState({
+        filtered: filteredDishes,
+      });
+    }
+  }
+
+  filterByCatering(dishes, catering) {
     const filteredDishes = {};
-    if (filters.catering === 'all') return dishes;
+    if (catering === 'all') return dishes;
     Object.keys(dishes).forEach((key) => {
-      if (dishes[key].catering === filters.catering) {
+      if (dishes[key].catering === catering) {
         filteredDishes[key] = dishes[key];
       }
     });
     return filteredDishes;
   }
 
-  filterByCategory(dishes) {
-    const { filters } = this.state;
+  filterByCategory(dishes, category) {
     const filteredDishes = {};
-    if (filters.category === 'all') return dishes;
+    if (category === 'all') return dishes;
     Object.keys(dishes).forEach((key) => {
-      if (dishes[key].category === filters.category) {
+      if (dishes[key].category === category) {
         filteredDishes[key] = dishes[key];
       }
     });
     return filteredDishes;
   }
 
-  filterBySearchWord(dishes) {
-    const { filters } = this.state;
+  filterBySearchWord(dishes, searchWord) {
     const filteredDishes = {};
     Object.keys(dishes).forEach((key) => {
-      if (dishes[key].name.toLowerCase().includes(filters.search.toLowerCase())) {
+      if (dishes[key].name.toLowerCase().includes(searchWord.toLowerCase())) {
         filteredDishes[key] = dishes[key];
       }
     });
     return filteredDishes;
-  }
-
-  filteredDishes() {
-    const { dishes } = this.props;
-    if (!dishes) return null;
-    return this.filterBySearchWord(this.filterByCategory(this.filterByCatering(dishes)));
   }
 
   renderCateringSelect() {
@@ -125,34 +142,48 @@ export default class DishOverview extends Component {
   }
 
   renderDishItem(index, key, data) {
-    const { type } = this.props;
+    const { type, lunchDay, menus } = this.props;
     if (type === dishOverviewTypes.SELECTABLE) {
-      const { lunchDay, menus } = this.props;
       return (
         <SelectableDishItem
-          key={ index } dishKey={ key } dishData={ data } lunchDay={ lunchDay } menus={ menus }
+          key={ key }
+          dishKey={ key }
+          dishData={ data }
+          lunchDay={ lunchDay }
+          menus={ menus }
         />
       );
     } else if (type === dishOverviewTypes.EDITABLE) {
-      return <EditableDishItem key={ index } dishKey={ key } dishData={ data } />;
-    } else if (type === dishOverviewTypes.PLAIN) {
-      return <DishItem key={ index } dishKey={ key } dishData={ data } />;
+      return (
+        <EditableDishItem
+          key={ key }
+          dishKey={ key }
+          dishData={ data }
+        />
+      );
+    } else if (type === dishOverviewTypes.REMOVABLE) {
+      return (
+        <RemovableDishItem
+          key={ key }
+          dishKey={ key }
+          dishData={ data }
+          lunchDay={ lunchDay }
+        />
+      );
     }
     return '';
   }
 
   renderDishes() {
-    const filteredDishes = this.filteredDishes();
-    if (!filteredDishes) return <div className='Message--info'>There is no dishes added. </div>;
-    return filteredDishes && Object.keys(filteredDishes).map((key, index) => {
-      const data = {
-        'catering': filteredDishes[key].catering,
-        'category': filteredDishes[key].category,
-        'name': filteredDishes[key].name,
-        'description': filteredDishes[key].description,
-        'price': filteredDishes[key].price,
-      };
-      return this.renderDishItem(index, key, data);
+    const { filtered } = this.state;
+    if (!filtered) {
+      return (
+        <div className='Message--info'>There is no dishes added. </div>
+      );
+    }
+
+    return Object.keys(filtered).map((key, index) => {
+      return this.renderDishItem(index, key, filtered[key]);
     });
   }
 
@@ -162,7 +193,7 @@ export default class DishOverview extends Component {
       return <h2>Select Dishes</h2>;
     } else if (type === dishOverviewTypes.EDITABLE) {
       return <h2>All Dishes</h2>;
-    } else if (type === dishOverviewTypes.PLAIN) {
+    } else if (type === dishOverviewTypes.REMOVABLE) {
       return <h2>Selected Dishes</h2>;
     }
     return '';
