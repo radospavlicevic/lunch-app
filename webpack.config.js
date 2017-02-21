@@ -11,6 +11,7 @@ const isProduction = nodeEnv === 'production';
 
 const jsSourcePath = path.join(__dirname, './source/js');
 const buildPath = path.join(__dirname, './build');
+const fontsPath = path.join(__dirname, './source/assets/fonts');
 const imgPath = path.join(__dirname, './source/assets/img');
 const sourcePath = path.join(__dirname, './source');
 
@@ -55,6 +56,11 @@ const rules = [
     use: [
       'babel-loader',
     ],
+  },
+  {
+    test: /\.(otf)$/,
+    include: fontsPath,
+    use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
   },
   {
     test: /\.(png|gif|jpg|svg)$/,
