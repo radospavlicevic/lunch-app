@@ -1,7 +1,18 @@
+.Menu {
+  width: 100%;
+  padding: 20px;
+  background: $dark-background;
+}
+
 .Menu a {
   display: inline-block;
   padding: 5px 0;
+  color: white;
   margin-right: 10px;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .Menu-right {

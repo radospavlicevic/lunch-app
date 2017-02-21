@@ -1,5 +1,5 @@
-import { firebaseAuth } from '../utils/firebase_config';
-import { reauthenticateAdmin } from '../utils/reauth';
+import { firebaseAuth } from 'utils/firebase_config';
+import { reauthenticateAdmin } from 'utils/reauth';
 
 export function firebaseRegister(user) {
   return firebaseAuth().createUserWithEmailAndPassword(user.email, user.password);

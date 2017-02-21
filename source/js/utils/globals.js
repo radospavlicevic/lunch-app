@@ -1,5 +1,6 @@
 export const dishOverviewTypes = {
   SELECTABLE: 'selectable',
+  REMOVABLE: 'removable',
   EDITABLE: 'editable',
   PLAIN: 'plain',
 };

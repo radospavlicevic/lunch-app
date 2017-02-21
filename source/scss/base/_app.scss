@@ -7,6 +7,14 @@ html {
 }
 .App {}
 
+.Page {
+  max-width: 800px;
+  width: calc(100% - 40px);
+  background: #f5f6f7;
+  padding: 20px;
+  display: block;
+  margin: auto;
+}
 
 hr {
   border: 0;

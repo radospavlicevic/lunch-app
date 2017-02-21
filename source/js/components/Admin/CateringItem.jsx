@@ -1,6 +1,5 @@
 
 import React, { Component, PropTypes } from 'react';
-import { Modal } from 'components/global/Modal';
 import { removeCatering } from 'api/meals';
 
 export default class CategoryItem extends Component {

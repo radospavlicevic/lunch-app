@@ -4,6 +4,7 @@ import { firebaseRegister } from 'api/auth.js';
 import { saveUser } from 'api/users.js';
 import { getUserValidationErrors } from 'utils/validation';
 import { prepareForReauthentication, reauthenticateAdmin } from 'utils/reauth';
+import md5 from 'md5';
 
 export default class Register extends Component {
 
@@ -93,12 +94,17 @@ export default class Register extends Component {
     event.preventDefault();
     const { loggedInUser } = this.props;
     const { user } = this.state;
+    const encryptedUser = {
+      ...user,
+      password: md5(user.password),
+    };
     const validationErrors = getUserValidationErrors(user);
     if (this.validationPassed(validationErrors)) {
       prepareForReauthentication();
-      firebaseRegister(user)
+      firebaseRegister(encryptedUser)
       .then(userRecord => {
-        saveUser(userRecord.uid, user);
+        console.log('USER', encryptedUser);
+        saveUser(userRecord.uid, encryptedUser);
         reauthenticateAdmin(loggedInUser);
         this.resetForm();
       })
