@@ -37,7 +37,7 @@ export default class EditableDishItem extends Component {
         { dishData.description && <div className='DishItem-desc' >{ dishData.description }</div> }
         <hr />
         <div className='DishItem-footer'>
-          <div className='DishItem-price'>{ dishData.price }din</div>
+          <div className='DishItem-price'>{ dishData.price ? dishData.price : 0 }din</div>
           <button className='DishItem-button' onClick={ this.handleDeleteClick }>Delete</button>
           <button className='DishItem-button' onClick={ this.handleEditClick }>Edit</button>
         </div>

@@ -117,10 +117,11 @@ export default class Menus extends Component {
     } else if (selectedTab === 'overview') {
       return (
         <DishOverview
-          type={ dishOverviewTypes.PLAIN }
+          type={ dishOverviewTypes.REMOVABLE }
           caterings={ caterings }
           categories={ categories }
           dishes={ this.selectedDateDishes() }
+          lunchDay={ selectedDay.format(this.datePattern) }
         />
       );
     }
@@ -136,6 +137,7 @@ export default class Menus extends Component {
           <DatePicker
             selected={ this.state.selectedDay }
             onChange={ this.handleDayChange }
+            dateFormat='DD-MM-YYYY'
           />
           { !selectedDay && <span className='Message--error'>No lunch day is selected. </span> }
         </div>
