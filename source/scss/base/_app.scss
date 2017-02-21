@@ -5,24 +5,8 @@ body {
 html {
   font-size: 16px;
 }
+.App {}
 
-.App {
-  margin: 20px auto;
-  max-width: 800px;
-  width: calc(100% - 40px);
-  background: #f5f6f7;
-  padding: 20px;
-  border-radius: 3px;
-
-  a {
-    text-decoration: none;
-    cursor: pointer;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-}
 
 hr {
   border: 0;

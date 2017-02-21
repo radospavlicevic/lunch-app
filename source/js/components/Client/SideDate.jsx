@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import SideDateItem from 'components/Client/SideDateItem';
 import moment from 'moment';
 
@@ -9,96 +9,64 @@ export default class SideDate extends Component {
   constructor() {
     super();
 
-    const startDay = moment().startOf('isoWeek');
-
     this.state = {
       counter: 0,
-      dayViews: this.initDaysInCurrentWeek(),
-      selectedId: this.getMonthId(startDay),
+      dayViews: this.getCurrentWeek(0),
     };
+
+    this.handlePreviousClick = this.handlePreviousClick.bind(this);
+    this.handleNextClick = this.handleNextClick.bind(this);
   }
 
-  // function returns formatted date as number
-  getNumberOfDate(date) {
-    return date.format('D');
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.counter !== this.state.counter) {
+      this.setState({
+        dayViews: this.getCurrentWeek(nextState.counter),
+      });
+    }
   }
-  // function returns formatted date as month name
-  getMonthOfDate(date) {
-    return date.format('MMMM');
-  }
+
   // function returns formatted date as id
-  getMonthId(date) {
-    return date.format('x');
+  getTimestamp(date) {
+    return moment(date, 'DD-MM-YYYY').format('x');
   }
 
-  getDay(monthName, monthNumber, monthId) {
-    const day = {
-      month: monthName,
-      number: monthNumber,
-      id: monthId,
-    };
-    return day;
-  }
-
-  initDaysInCurrentWeek() {
+  getCurrentWeek(counter) {
     const dayViews = [];
-    const date = moment();
     // get current week
-    const startOfWeek = date.startOf('isoWeek');
-    // get name of the current month
-    const nameOfMonth = this.getMonthOfDate(startOfWeek);
-    // get number of day in current month
-    const numberOfCurrentDay = this.getNumberOfDate(startOfWeek);
-    // get number of day in current month as ID
-    const monthDayId = this.getMonthId(startOfWeek);
+    const startOfWeek = moment().add(counter, 'weeks').startOf('isoWeek');
     // 3 - add current month,days and ID to daysArray (before for loop so this item goes first)
-    dayViews.push(this.getDay(nameOfMonth, numberOfCurrentDay, monthDayId));
+    dayViews.push(startOfWeek.format('DD-MM-YYYY'));
+
     // 2 - get second,third,fourth, and fifth day of the current week
     for (let i = 1; i < 5; i++) {
-      const newDate = date.startOf('isoWeek').add(i, 'days');
-      const numberOfNextDaysOfWeek = this.getNumberOfDate(newDate);
-      const nameOfMonthOfDaysInSpecWeek = this.getMonthOfDate(newDate);
-      const dayId = this.getMonthId(newDate);
-      dayViews.push(this.getDay(nameOfMonthOfDaysInSpecWeek, numberOfNextDaysOfWeek, dayId));
+      const newDate = startOfWeek.startOf('isoWeek').add(i, 'days');
+      // console.log('NEW_DATE', newDate.format('DD-MM-YYYY'));
+      dayViews.push(newDate.format('DD-MM-YYYY'));
     }
     return dayViews;
   }
 
-  changeWeekDays(isNext) {
-    const {
-      counter,
-    } = this.state;
-    let newCounter = 0;
-    if (isNext) {
-      newCounter = counter + 1;
-    } else {
-      newCounter = counter - 1;
-    }
-    const newDaysArray = [];
-    const newWeek = moment().add(newCounter, 'weeks').startOf('isoWeek');
-    const newWeekNumber = this.getNumberOfDate(newWeek);
-    const newWeekMonth = this.getMonthOfDate(newWeek);
-    const newWeekId = this.getMonthId(newWeek);
-    newDaysArray.push(this.getDay(newWeekMonth, newWeekNumber, newWeekId));
-    for (let i = 1; i < 5; i++) {
-      const newWeekDate = newWeek.clone().add(i, 'days');
-      const numberOfDays = this.getNumberOfDate(newWeekDate);
-      const nameOfMonth = this.getMonthOfDate(newWeekDate);
-      const dayId = this.getMonthId(newWeekDate);
-      newDaysArray.push(this.getDay(nameOfMonth, numberOfDays, dayId));
-    }
+  handlePreviousClick() {
+    this.setState({
+      counter: this.state.counter - 1,
+    });
+  }
+
+  handleNextClick() {
+    this.setState({
+      counter: this.state.counter + 1,
+    });
   }
 
   renderSideDateItems() {
     const { dayViews } = this.state;
     return (
-      dayViews.map((item, index) => {
+      dayViews.map((date) => {
         return (
           <SideDateItem
-            key={ index }
-            id={ item.id }
-            date={ { day: item.number, month: item.month } }
-            isActive={ false }
+            key={ this.getTimestamp(date) }
+            date={ date }
           />
         );
       })
@@ -108,9 +76,9 @@ export default class SideDate extends Component {
   render() {
     return (
       <div className='SideDate-wrapper'>
-        <button onClick={ () => { this.changeWeekDays(false); } } className='SideDate-loadButton'>Previous</button>
+        <button onClick={ this.handlePreviousClick } className='SideDate-loadButton'>Previous</button>
         { this.renderSideDateItems() }
-        <button onClick={ () => { this.changeWeekDays(true); } } className='SideDate-loadButton'>Next</button>
+        <button onClick={ this.handleNextClick } className='SideDate-loadButton'>Next</button>
       </div>
     );
   }

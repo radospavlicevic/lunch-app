@@ -1,10 +1,16 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { setSelectedDate } from 'actions/order';
+import moment from 'moment';
 
+@connect(state => ({
+  selectedDate: state.order.get('selectedDate'),
+}))
 export default class SideDateItem extends Component {
   static propTypes = {
-    id: PropTypes.string,
-    date: PropTypes.object,
-    isActive: PropTypes.bool,
+    date: PropTypes.string,
+    selectedDate: PropTypes.string,
+    dispatch: PropTypes.func,
   }
 
   constructor() {
@@ -13,25 +19,48 @@ export default class SideDateItem extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleClick(event) {
-    event.preventDefault();
-    console.log('CLICKED');
+  componentWillMount() {
+    const { date, selectedDate } = this.props;
+    this.state = {
+      active: date === selectedDate,
+    };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { date, selectedDate } = this.props;
+    if (nextProps.selectedDate !== selectedDate) {
+      this.setState({
+        active: nextProps.selectedDate === date,
+      });
+    }
+  }
+
+  // function returns formatted date as number
+  getDay() {
+    const { date } = this.props;
+    return moment(date, 'DD-MM-YYYY').format('D');
+  }
+  // function returns formatted date as month name
+  getMonthName() {
+    const { date } = this.props;
+    return moment(date, 'DD-MM-YYYY').format('MMMM');
+  }
+
+  handleClick(event) {
+    event.preventDefault();
+    const { date, dispatch } = this.props;
+    dispatch(setSelectedDate(date));
+  }
 
   render() {
-    const {
-      id,
-      date,
-      isActive,
-    } = this.props;
+    const { active } = this.state;
     return (
       <button
         onClick={ this.handleClick }
-        className={ isActive ? 'SideDate-active' : 'SideDate' }
+        className={ active ? 'SideDate-active' : 'SideDate' }
       >
-        <p className='SideDate-month'>{ date.month }</p>
-        <p className='SideDate-day'>{ date.day }</p>
+        <p className='SideDate-month'>{ this.getMonthName() }</p>
+        <p className='SideDate-day'>{ this.getDay() }</p>
         <p className='SideDate-viewOrders'>view orders</p>
       </button>
     );

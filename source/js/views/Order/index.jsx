@@ -8,10 +8,12 @@ import OrderSummary from 'components/Client/OrderSummary';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
+  menus: state.menus.get('menus'),
 }))
 export default class Order extends Component {
   static propTypes = {
     loggedInUser: PropTypes.object,
+    menus: PropTypes.object,
   }
   // render() {
   //   const { loggedInUser } = this.props;
@@ -23,11 +25,12 @@ export default class Order extends Component {
   // }
 
   render() {
+    const { menus } = this.props;
+    console.log('MENUS', menus);
     return (
       <div className='Order'>
-        <div className='MyOrder-wrapper'>
-          <SideDate />
-        </div>
+        <SideDate />
+        <div className='MyOrder-wrapper'></div>
       </div>
     );
     // {this.state.foodArray.map((item, index) => (
