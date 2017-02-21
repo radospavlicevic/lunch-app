@@ -103,7 +103,6 @@ export default class Register extends Component {
       prepareForReauthentication();
       firebaseRegister(encryptedUser)
       .then(userRecord => {
-        console.log('USER', encryptedUser);
         saveUser(userRecord.uid, encryptedUser);
         reauthenticateAdmin(loggedInUser);
         this.resetForm();
