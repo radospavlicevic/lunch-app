@@ -156,7 +156,7 @@ export default class Menus extends Component {
 
   render() {
     return (
-      <div className='Menus'>
+      <div className='Menus Admin-wrapper'>
         <h1>Menus</h1>
         <div className='Menus-wrapper'>
           {this.renderDateView() }

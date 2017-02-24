@@ -52,7 +52,7 @@ export default class Dishes extends Component {
   render() {
     const { caterings, categories, dishes } = this.props;
     return (
-      <div className='Dishes'>
+      <div className='Dishes Admin-wrapper'>
         <DishForm caterings={ caterings } categories={ categories } />
         <DishOverview
           type={ dishOverviewTypes.EDITABLE }

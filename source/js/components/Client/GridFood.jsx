@@ -5,19 +5,16 @@ export default class GridFood extends Component {
     food: PropTypes.array,
   }
   render() {
-    const {
-      food,
-    } = this.props;
     return (
-      <div className='Grid-foodWrapper'>
-        {food.map((item, index) => (
-          <p
-            id={ index + 1 }
-            key={ index }
-          >{ item.name }
-          </p>
-        ))}
-      </div>
+      <div className='Grid-foodWrapper' />
+        // {food.map((item, index) => (
+        //   <p
+        //     id={ index + 1 }
+        //     key={ index }
+        //   >{ item.name }
+        //   </p>
+        // ))}
+      // </div>
     );
   }
 }

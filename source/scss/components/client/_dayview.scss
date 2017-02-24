@@ -6,10 +6,12 @@ $height: 100vh;
 }
 
 .SideDate-wrapper {
-  width: 260px;
+  width: 25%;
   height: $height;
   overflow-y: scroll;
-  overflow-x: hidden;
+  p {
+    margin: 0;
+  }
 }
 
 .SideDate-month,
@@ -27,8 +29,7 @@ $height: 100vh;
 .MyOrder-wrapper {
   display: flex;
   flex-direction: column;
-  width: calc(100% - 260px);
-  overflow-y: scroll;
+  width: 75%;
   height: $height;
 }
 
@@ -46,7 +47,7 @@ $height: 100vh;
   align-items: center;
   position: relative;
   background: #ececec;
-  padding: 40px 30px;
+  padding: 55px 30px;
   border: 0;
   border-bottom: 1px solid #000;
   width: 100%;
@@ -63,7 +64,7 @@ $height: 100vh;
   align-items: center;
   position: relative;
   background: #fff;
-  padding: 40px 30px;
+  padding: 55px 30px;
   border: 0;
   border-bottom: 1px solid #000;
   width: 100%;
