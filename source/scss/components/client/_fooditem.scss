@@ -1,0 +1,23 @@
+.FoodItem {
+  border: 1px solid #fff;
+  background: none;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 5px;
+  padding: 0;
+  p {
+    margin: 0;
+    height: auto;
+    font-size: 48px;
+    margin-top: 5px;
+  }
+}
+
+@media (max-width: 768px) {
+  .FoodItem {
+    p {
+      font-size: 26px;
+    }
+  }
+}

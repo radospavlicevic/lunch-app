@@ -13,25 +13,27 @@ import OrderSummary from 'components/Client/OrderSummary';
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   menus: state.menus.get('menus'),
+  categories: state.meals.get('categories'),
   selectedDate: state.order.get('selectedDate'),
 }))
 export default class Order extends Component {
   static propTypes = {
     loggedInUser: PropTypes.object,
+    categories: PropTypes.object,
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-
-    this.foodText = [
-      `Hello ${ loggedInUser && loggedInUser.username }, Please choose soup you'd like to eat:`,
-      'Awesome, and the main dish?',
-      'What about salad?',
-      'Did you save room for dessert?'];
     this.setupFirebaseObservers();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { selectedDate } = this.props;
+    if (selectedDate !== nextProps.selectedDate) {
+      this.updateFirebaseObservers(nextProps.selectedDate);
+    }
   }
 
   setupFirebaseObservers() {
@@ -41,26 +43,56 @@ export default class Order extends Component {
       dispatch(addCategory(newCategory.key, newCategory.val().name));
     });
 
-    db.ref('menus').on('child_added', newMenuDish => {
+    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
       dispatch(
         addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
       );
     });
   }
 
-  // renderMenuSections() {
-  //   const { menus, selectedDate } = this.props;
-  //   Object.keys(menus[selectedDate]).map((key) => {
-  //     return <MenuSection />;
-  //   });
-  // }
+  updateFirebaseObservers(selectedDate) {
+    const { dispatch } = this.props;
+
+    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
+      dispatch(
+        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
+      );
+    });
+  }
+
+  filterByCategory(dishes, category) {
+    if (!dishes) {
+      return null;
+    }
+    const filteredDishes = {};
+
+    Object.keys(dishes).forEach((key) => {
+      if (dishes[key].category === category) {
+        filteredDishes[key] = dishes[key];
+      }
+    });
+    return filteredDishes;
+  }
+
+  renderMenuSections() {
+    const { menus, categories, selectedDate } = this.props;
+    return Object.keys(categories).map((key, index) => {
+      return (
+        <MenuSection
+          key={ index }
+          dishes={ this.filterByCategory(menus[selectedDate], key) }
+          category={ categories[key].name }
+        />
+      );
+    });
+  }
 
   render() {
-    const { menus } = this.props;
     return (
       <div className='Order'>
         <SideDate />
         <div className='MyOrder-wrapper'>
+          { this.renderMenuSections() }
         </div>
       </div>
     );

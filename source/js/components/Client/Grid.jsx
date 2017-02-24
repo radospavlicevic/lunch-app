@@ -1,16 +1,33 @@
 import React, { Component, PropTypes } from 'react';
-import GridFood from 'components/Client/GridFood';
+import FoodItem from 'components/Client/FoodItem';
 
 export default class Grid extends Component {
   static propTypes = {
-    food: PropTypes.array,
+    dishes: PropTypes.object,
   }
+
+  renderDishes() {
+    const { dishes } = this.props;
+    if (!dishes) {
+      return <h1 className='Grid-loading'>Loading...</h1>;
+    }
+    return Object.keys(dishes).map((key, index) => {
+      return (
+        <FoodItem
+          key={ index }
+          dishKey={ key }
+          dishData={ dishes[key] }
+          selected={ false }
+        />
+      );
+    });
+  }
+
   render() {
-    const { food } = this.props;
     return (
-      <GridFood
-        food={ food }
-      />
+      <div className='Grid'>
+        { this.renderDishes() }
+      </div>
     );
   }
 }
