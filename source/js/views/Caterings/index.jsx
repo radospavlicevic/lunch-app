@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
-import { deleteCatering, countCaterings } from 'actions/meals.js';
+import { addCatering, deleteCatering, countCaterings } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import CateringForm from 'components/Admin/CateringForm';
@@ -33,6 +33,10 @@ export default class Caterings extends Component {
     const { dispatch } = this.props;
     db.ref('caterings').on('value', snapshot => {
       dispatch(countCaterings(snapshot.numChildren()));
+    });
+
+    db.ref('caterings').on('child_added', newCatering => {
+      dispatch(addCatering(newCatering.key, newCatering.val()));
     });
 
     db.ref('caterings').on('child_removed', removedCatering => {

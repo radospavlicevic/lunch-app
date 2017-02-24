@@ -26,61 +26,75 @@ export default class DishOverview extends Component {
     };
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    this.filterDishes(nextProps, nextState);
-  }
-
-  handleFilterChange(event, filterName) {
-    this.setState({
-      filters: {
-        ...this.state.filters,
-        [filterName]: event.target.value,
-      },
-    });
-  }
-
-  filterDishes(nextProps, nextState) {
-    let filterPerformed = false;
+  componentWillReceiveProps(nextProps) {
+    const { dishes } = this.props;
     const { filters } = this.state;
-    let filteredDishes = Object.assign({}, nextProps.dishes);
-    if (nextState.filters.catering !== filters.catering) {
-      filteredDishes = this.filterByCatering(filteredDishes, nextState.filters.catering);
-      filterPerformed = true;
-    }
-    if (nextState.filters.category !== filters.category) {
-      filteredDishes = this.filterByCategory(filteredDishes, nextState.filters.category);
-      filterPerformed = true;
-    }
-    if (nextState.filters.search !== filters.search) {
-      filteredDishes = this.filterBySearchWord(filteredDishes, nextState.filters.search);
-      filterPerformed = true;
-    }
-    if (filterPerformed) {
+    if (nextProps.dishes !== dishes) {
       this.setState({
-        filtered: filteredDishes,
+        filtered: this.filterDishes(nextProps.dishes, filters),
       });
     }
   }
 
+  handleFilterChange(event, filterName) {
+    const { dishes } = this.props;
+    const nextFilters = {
+      ...this.state.filters,
+      [filterName]: event.target.value,
+    };
+
+    const filtered = this.filterDishes(dishes, nextFilters);
+
+    this.setState({
+      filters: nextFilters,
+      filtered,
+    });
+  }
+
+  filterDishes(dishes, nextFilters) {
+    let filtered = dishes;
+
+    filtered = this.filterByCatering(filtered, nextFilters.catering);
+    filtered = this.filterByCategory(filtered, nextFilters.category);
+    filtered = this.filterBySearchWord(filtered, nextFilters.search);
+
+    return filtered;
+  }
+
   filterByCatering(dishes, catering) {
     const filteredDishes = {};
-    if (catering === 'all') return dishes;
+    if (catering === 'all') {
+      return dishes;
+    }
+
     Object.keys(dishes).forEach((key) => {
       if (dishes[key].catering === catering) {
         filteredDishes[key] = dishes[key];
       }
     });
+
     return filteredDishes;
   }
 
   filterByCategory(dishes, category) {
     const filteredDishes = {};
-    if (category === 'all') return dishes;
-    Object.keys(dishes).forEach((key) => {
-      if (dishes[key].category === category) {
-        filteredDishes[key] = dishes[key];
-      }
-    });
+    if (category === 'all') {
+      return dishes;
+    }
+    if (category === 'standard') {
+      Object.keys(dishes).forEach((key) => {
+        if (dishes[key].standard) {
+          filteredDishes[key] = dishes[key];
+        }
+      });
+    } else {
+      Object.keys(dishes).forEach((key) => {
+        if (dishes[key].category === category) {
+          filteredDishes[key] = dishes[key];
+        }
+      });
+    }
+
     return filteredDishes;
   }
 
@@ -110,11 +124,15 @@ export default class DishOverview extends Component {
   }
 
   renderCategorySelect() {
-    const { categories } = this.props;
+    const { categories, type } = this.props;
     const { filters } = this.state;
+    const standardOptionVisible = type === dishOverviewTypes.EDITABLE;
     return (
       <select className='DishOverview-filter' value={ filters.category } onChange={ (e) => this.handleFilterChange(e, 'category') }>
         <option key={ -1 } value='all'>All</option>
+        { standardOptionVisible &&
+          <option key={ -2 } value='standard'>Standardni meni</option>
+        }
         {
           Object.keys(categories).map((key, index) => {
             return <option key={ index } value={ key }>{ categories[key].name }</option>;
@@ -156,7 +174,7 @@ export default class DishOverview extends Component {
     } else if (type === dishOverviewTypes.EDITABLE) {
       return (
         <EditableDishItem
-          key={ key }
+          key={ index }
           dishKey={ key }
           dishData={ data }
         />
@@ -164,7 +182,7 @@ export default class DishOverview extends Component {
     } else if (type === dishOverviewTypes.REMOVABLE) {
       return (
         <RemovableDishItem
-          key={ key }
+          key={ index }
           dishKey={ key }
           dishData={ data }
           lunchDay={ lunchDay }
@@ -178,7 +196,7 @@ export default class DishOverview extends Component {
     const { filtered } = this.state;
     if (!filtered) {
       return (
-        <div className='Message--info'>There is no dishes added. </div>
+        <div className='Message--info'>There are no dishes added. </div>
       );
     }
 

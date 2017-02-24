@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
-import { deleteCategory, countCategories } from 'actions/meals.js';
+import { addCategory, deleteCategory, countCategories } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import CategoryForm from 'components/Admin/CategoryForm';
@@ -33,6 +33,10 @@ export default class Categories extends Component {
     const { dispatch } = this.props;
     db.ref('categories').on('value', snapshot => {
       dispatch(countCategories(snapshot.numChildren()));
+    });
+
+    db.ref('categories').on('child_added', newCategory => {
+      dispatch(addCategory(newCategory.key, newCategory.val().name));
     });
 
     db.ref('categories').on('child_removed', removedCategory => {

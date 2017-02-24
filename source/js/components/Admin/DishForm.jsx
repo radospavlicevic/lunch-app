@@ -17,6 +17,8 @@ export default class DishForm extends Component {
     super();
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCategoryChange = this.handleCategoryChange.bind(this);
+    this.handleStandardChange = this.handleStandardChange.bind(this);
   }
 
   componentWillMount() {
@@ -36,6 +38,7 @@ export default class DishForm extends Component {
         description: dishForUpdate.data.description,
         catering: dishForUpdate.data.catering,
         category: dishForUpdate.data.category,
+        standard: dishForUpdate.data.standard,
         price: dishForUpdate.data.price,
       },
       errors: {},
@@ -51,6 +54,7 @@ export default class DishForm extends Component {
         description: '',
         catering: Object.keys(caterings)[0],
         category: Object.keys(categories)[0],
+        standard: false,
         price: '',
       },
       errors: {},
@@ -72,10 +76,34 @@ export default class DishForm extends Component {
   }
 
   handleChange(event, propertyName) {
+    event.preventDefault();
     this.setState({
       dish: {
         ...this.state.dish,
         [propertyName]: event.target.value,
+      },
+    });
+  }
+
+  handleCategoryChange(event) {
+    event.preventDefault();
+    const nextCategory = event.target.value;
+    const nextStandard = nextCategory === 'main_dish' ? this.state.dish.standard : false;
+    this.setState({
+      dish: {
+        ...this.state.dish,
+        category: nextCategory,
+        standard: nextStandard,
+      },
+    });
+  }
+
+  handleStandardChange() {
+    const checked = !this.state.dish.standard;
+    this.setState({
+      dish: {
+        ...this.state.dish,
+        standard: checked,
       },
     });
   }
@@ -102,10 +130,12 @@ export default class DishForm extends Component {
       name: '',
       price: '',
     };
+
     if (!name) {
       errors.name = 'Name field is required. ';
       passed = false;
     }
+
     if (categories[category].name.toLowerCase() !== 'salate' && !price) {
       errors.price = 'Price field is required. ';
       passed = false;
@@ -134,7 +164,7 @@ export default class DishForm extends Component {
     const { categories } = this.props;
     const { dish } = this.state;
     return (
-      <select className='AdminForm-select' value={ dish.category } onChange={ (e) => this.handleChange(e, 'category') }>
+      <select className='AdminForm-select' value={ dish.category } onChange={ this.handleCategoryChange }>
         {
           Object.keys(categories).map((key, index) => {
             return <option key={ index } value={ key }>{ categories[key].name }</option>;
@@ -155,6 +185,18 @@ export default class DishForm extends Component {
           </div>
           <div className='AdminForm-item'>
             { this.renderCategorySelect() }
+          </div>
+          <div className='AdminForm-item'>
+            <input
+              id='standard-checkbox'
+              type='checkbox'
+              disabled={ dish.category !== 'main_dish' }
+              checked={ dish.standard }
+              onChange={ this.handleStandardChange }
+            />
+            <label className='AdminForm-item-checkboxText' htmlFor='standard-checkbox'>
+              Standard
+            </label>
           </div>
           <div className='AdminForm-item'>
             <input
