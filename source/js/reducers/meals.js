@@ -9,16 +9,20 @@ import {
   COUNT_CATEGORIES,
   ADD_OR_UPDATE_DISH,
   PREPARE_DISH_UPDATE,
-  COMPLETE_DISH_UPDATE,
   DELETE_DISH,
 } from 'actions/meals';
 
 const initialState = Map({
-  categories: {},
+  categories: {
+    main_dish: {
+      name: 'Glavno jelo',
+    },
+  },
   categoriesNumber: 0,
   caterings: {},
   cateringsNumber: 0,
   dishes: {},
+  noStandardDishes: {},
   dishForUpdate: null,
 });
 
@@ -69,7 +73,7 @@ const actionsMap = {
   [COUNT_CATEGORIES]: (state, action) => {
     const number = action.number;
     return state.merge(Map({
-      'categoriesNumber': number,
+      categoriesNumber: number,
     }));
   },
 
@@ -80,11 +84,16 @@ const actionsMap = {
       category: action.data.category,
       name: action.data.name,
       description: action.data.description,
+      standard: action.data.standard,
       price: action.data.price,
     };
     const dishes = Object.assign({}, state.get('dishes'), newDish);
+    const noStandardDishes = Object.assign({}, state.get('noStandardDishes'),
+      !newDish[action.key].standard && newDish);
     return state.merge(Map({
-      'dishes': dishes,
+      dishes,
+      noStandardDishes,
+      dishForUpdate: null,
     }));
   },
 
@@ -94,12 +103,6 @@ const actionsMap = {
         key: action.key,
         data: action.data,
       },
-    }));
-  },
-
-  [COMPLETE_DISH_UPDATE]: (state) => {
-    return state.merge(Map({
-      dishForUpdate: null,
     }));
   },
 

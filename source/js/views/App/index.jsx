@@ -17,6 +17,9 @@ export default class App extends Component {
   componentWillMount() {
     const { dispatch } = this.props;
     firebaseAuth().onAuthStateChanged((user) => {
+      // console.log(location.pathname);
+      // const path = location.pathname;
+      // console.log('location', path);
       if (this.handleReauth()) return;
       if (user) {
         redirectTo(routeCodes.ORDER);

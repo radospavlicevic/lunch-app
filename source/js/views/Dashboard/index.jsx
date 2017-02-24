@@ -1,37 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
-import { addCatering, addCategory, addOrUpdateDish } from 'actions/meals.js';
+import { checkAdminRole } from 'utils/routing';
 import { routeCodes } from '../../routes';
 
-@connect()
+@connect(state => ({
+  loggedInUser: state.login.get('loggedInUser'),
+}))
 export default class Dashboard extends Component {
   static propTypes = {
-    dispatch: PropTypes.func,
+    loggedInUser: PropTypes.object,
   }
 
   componentWillMount() {
-    this.setupFirebaseObservers();
-  }
-
-  setupFirebaseObservers() {
-    const { dispatch } = this.props;
-    db.ref('caterings').on('child_added', newCatering => {
-      dispatch(addCatering(newCatering.key, newCatering.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
-    });
-
-    db.ref('dishes').on('child_changed', updatedDish => {
-      dispatch(addOrUpdateDish(updatedDish.key, updatedDish.val()));
-    });
+    const { loggedInUser } = this.props;
+    checkAdminRole(loggedInUser && loggedInUser.role);
   }
 
   render() {

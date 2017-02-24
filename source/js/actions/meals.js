@@ -8,7 +8,6 @@ export const ADD_OR_UPDATE_DISH = 'ADD_OR_UPDATE_DISH';
 export const DELETE_DISH = 'DELETE_DISH';
 export const PREPARE_DISH_UPDATE = 'PREPARE_DISH_UPDATE';
 export const UPDATE_DISH = 'UPDATE_DISH';
-export const COMPLETE_DISH_UPDATE = 'COMPLETE_DISH_UPDATE';
 
 export function addCatering(key, data) {
   return {
@@ -75,12 +74,6 @@ export function updateDish(key, data) {
     type: UPDATE_DISH,
     key,
     data,
-  };
-}
-
-export function completeDishUpdate() {
-  return {
-    type: COMPLETE_DISH_UPDATE,
   };
 }
 
