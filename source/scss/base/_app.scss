@@ -49,7 +49,7 @@ hr {
   align-content: space-around;
 }
 
-.AdminDashboard-item {
+.AdminDashboard-link {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,10 +57,7 @@ hr {
   width: 45%;
   height: 100px;
   margin-top: 10px;
-
-  a {
-    color: white;
-  }
+  color: white;
 }
 
 .AdminTable-button {
@@ -140,4 +137,16 @@ hr {
 
 .MenuOverview-item {
   margin-bottom: 40px;
+}
+
+.LoadingModal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  font-size: 2rem;
+  color: white;
 }

@@ -95,7 +95,6 @@ export default class Menus extends Component {
       selectedDay: date,
     });
     const formattedDate = date.format(this.datePattern);
-    // browserHistory.push(`menus/${ formattedDate }`);
     this.updateFirebaseObservers(formattedDate);
   }
 
@@ -118,7 +117,6 @@ export default class Menus extends Component {
   renderTabContent() {
     const { selectedTab, selectedDay } = this.state;
     const { caterings, categories, dishes, menus } = this.props;
-
     if (selectedTab === 'select_dishes') {
       return (
         <DishOverview
@@ -178,7 +176,7 @@ export default class Menus extends Component {
       <div className='Menus'>
         <h1>Menus</h1>
         <div className='Menus-wrapper'>
-          {this.renderDateView() }
+          { this.renderDateView() }
           { this.renderTabs() }
           { this.renderTabContent() }
         </div>

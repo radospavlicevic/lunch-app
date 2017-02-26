@@ -7,28 +7,43 @@ import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
 
-@connect()
+@connect(state => ({
+  getUserLoading: state.login.get('getUserLoading'),
+}))
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
+    getUserLoading: PropTypes.bool,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
     firebaseAuth().onAuthStateChanged((user) => {
-      // console.log(location.pathname);
-      // const path = location.pathname;
-      // console.log('location', path);
       if (this.handleReauth()) return;
       if (user) {
-        redirectTo(routeCodes.ORDER);
         dispatch(getUser(user.uid));
       } else {
         redirectTo(routeCodes.LOGIN);
         dispatch(logoutUser);
       }
     });
+  }
+
+  componentWillReceiveProps() {
+    const { getUserLoading } = this.props;
+    const path = location.pathname;
+    if (!getUserLoading) {
+      if (this.rootOrLogin(path)) {
+        redirectTo(routeCodes.ORDER);
+      } else {
+        redirectTo(path);
+      }
+    }
+  }
+
+  rootOrLogin(path) {
+    return (path === '/' || path === '/login');
   }
 
   handleReauth() {
@@ -49,10 +64,11 @@ export default class App extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, getUserLoading } = this.props;
 
     return (
       <div className='App'>
+        { getUserLoading && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
 
         <div className='Page'>

@@ -108,9 +108,12 @@ const actionsMap = {
 
   [DELETE_DISH]: (state, action) => {
     const dishes = Object.assign({}, state.get('dishes'));
+    const noStandardDishes = Object.assign({}, state.get('noStandardDishes'));
     delete dishes[action.key];
+    delete noStandardDishes[action.key];
     return state.merge(Map({
-      'dishes': dishes,
+      dishes,
+      noStandardDishes,
     }));
   },
 };

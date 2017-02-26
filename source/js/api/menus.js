@@ -13,3 +13,7 @@ export function saveDishesInMenu(date, dishes) {
 export function deleteDishFromMenu(date, key) {
   return db.ref(`menus/${ date }/${ key }`).remove();
 }
+
+export function updateDishInMenu(date, key, data) {
+  return db.ref(`menus/${ date }/${ key }`).update(data);
+}
