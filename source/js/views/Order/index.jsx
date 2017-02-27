@@ -82,22 +82,23 @@ export default class Order extends Component {
           key={ index }
           dishes={ this.filterByCategory(menus[selectedDate], key) }
           category={
-          {
-            key,
-            name: categories[key].name,
-          } }
+          { key, name: categories[key].name }
+          }
         />
       );
     });
   }
 
   render() {
+    const { loggedInUser } = this.props;
     return (
       <div className='Order'>
         <SideDate />
-        <div className='MyOrder-wrapper'>
-          { this.renderMenuSections() }
-        </div>
+        { loggedInUser &&
+          <div className='MyOrder-wrapper'>
+            { this.renderMenuSections() }
+          </div>
+        }
       </div>
     );
   }

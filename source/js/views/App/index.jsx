@@ -77,11 +77,11 @@ export default class App extends Component {
         { getUserLoading && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
 
-        { !getUserLoading &&
-          <div className='Page'>
-            { children }
-          </div>
-        }
+
+        <div className='Page'>
+          { children }
+        </div>
+
       </div>
     );
   }
