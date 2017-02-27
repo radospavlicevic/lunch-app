@@ -10,7 +10,6 @@ import CategoryOverview from 'components/Admin/CategoryOverview';
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   categories: state.meals.get('categories'),
-  categoriesNumber: state.meals.get('categoriesNumber'),
   dishes: state.meals.get('dishes'),
 }))
 export default class Categories extends Component {
@@ -55,11 +54,11 @@ export default class Categories extends Component {
   }
 
   render() {
-    const { categories, categoriesNumber } = this.props;
+    const { categories } = this.props;
     return (
       <div className='Categories'>
         <CategoryForm />
-        <CategoryOverview categories={ categories } number={ categoriesNumber } />
+        <CategoryOverview categories={ categories } />
       </div>
     );
   }

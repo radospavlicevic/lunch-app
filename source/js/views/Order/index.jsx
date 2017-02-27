@@ -13,7 +13,7 @@ export default class Order extends Component {
     const { loggedInUser } = this.props;
     return (
       <div className='Order'>
-        <h1>Hello, { loggedInUser && loggedInUser.username }</h1>
+        <h1>{ loggedInUser && `Hello, ${ loggedInUser.username }` }</h1>
       </div>
     );
   }

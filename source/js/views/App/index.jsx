@@ -8,17 +8,20 @@ import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
 
 @connect(state => ({
+  loggedInUser: state.login.get('loggedInUser'),
   getUserLoading: state.login.get('getUserLoading'),
 }))
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
+    loggedInUser: PropTypes.object,
     getUserLoading: PropTypes.bool,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
+    localStorage.setItem('init-path', location.pathname);
     firebaseAuth().onAuthStateChanged((user) => {
       if (this.handleReauth()) return;
       if (user) {
@@ -30,20 +33,23 @@ export default class App extends Component {
     });
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     const { getUserLoading } = this.props;
-    const path = location.pathname;
-    if (!getUserLoading) {
-      if (this.rootOrLogin(path)) {
-        redirectTo(routeCodes.ORDER);
-      } else {
-        redirectTo(path);
+    const path = localStorage.getItem('init-path');
+    if (nextProps.getUserLoading !== getUserLoading) {
+      if (!nextProps.getUserLoading && nextProps.loggedInUser) {
+        if (this.isLoginPath(path)) {
+          redirectTo(routeCodes.ORDER);
+        } else {
+          redirectTo(path);
+        }
+        localStorage.removeItem('init-path');
       }
     }
   }
 
-  rootOrLogin(path) {
-    return (path === '/' || path === '/login');
+  isLoginPath(path) {
+    return (path === '/login');
   }
 
   handleReauth() {
@@ -71,9 +77,11 @@ export default class App extends Component {
         { getUserLoading && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
 
-        <div className='Page'>
-          { children }
-        </div>
+        { !getUserLoading &&
+          <div className='Page'>
+            { children }
+          </div>
+        }
       </div>
     );
   }
