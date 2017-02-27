@@ -57,7 +57,7 @@ export default class Caterings extends Component {
   render() {
     const { caterings, cateringsNumber } = this.props;
     return (
-      <div className='Caterings'>
+      <div className='Caterings Admin-wrapper'>
         <CateringForm />
         <CateringOverview caterings={ caterings } number={ cateringsNumber } />
       </div>

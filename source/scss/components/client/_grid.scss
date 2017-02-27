@@ -1,0 +1,14 @@
+.Grid {
+  font-size: 24px;
+  font-family: Avenir;
+  height: calc(100% - 300px);
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .Grid {
+    height: calc(100% - 240px);
+  }
+}

@@ -59,7 +59,7 @@ export default class Login extends Component {
       getUserLoading,
     } = this.props;
     return (
-      <div className='Login'>
+      <div className='Login Admin-wrapper'>
         <h1>Login with your email</h1>
         <form className='ClientForm' onSubmit={ this.handleSubmit }>
           <input ref={ node => this.email = node } className='ClientForm-input' placeholder='Email' />

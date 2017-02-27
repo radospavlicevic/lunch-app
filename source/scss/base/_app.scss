@@ -1,15 +1,13 @@
 body {
   background: #1C1E20;
+  overflow-y: hidden;
 }
 
 html {
   font-size: 16px;
 }
 
-.App {
-}
-
-.Page {
+.Admin-wrapper {
   max-width: 800px;
   width: calc(100% - 40px);
   background: #f5f6f7;

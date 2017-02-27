@@ -19,7 +19,7 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div className='Dashboard'>
+      <div className='Dashboard Admin-wrapper'>
         <h1>Dashboard</h1>
         <div className='AdminDashboard'>
           <Link className='AdminDashboard-link' to={ routeCodes.USERS }>Users</Link>

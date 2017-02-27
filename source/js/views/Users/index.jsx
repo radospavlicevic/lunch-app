@@ -42,7 +42,7 @@ export default class Users extends Component {
   render() {
     const { loggedInUser, usersData } = this.props;
     return (
-      <div className='Users'>
+      <div className='Users Admin-wrapper'>
         <Register loggedInUser={ loggedInUser } />
         <UserOverview usersData={ usersData } admin={ loggedInUser } />
         {/* { fetchUsersLoading && <span>Loading...</span> } */}

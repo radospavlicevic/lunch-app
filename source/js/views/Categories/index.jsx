@@ -56,7 +56,7 @@ export default class Categories extends Component {
   render() {
     const { categories } = this.props;
     return (
-      <div className='Categories'>
+      <div className='Categories Admin-wrapper'>
         <CategoryForm />
         <CategoryOverview categories={ categories } />
       </div>

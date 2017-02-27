@@ -3,12 +3,16 @@
 @import "base/breakpoints";
 @import "base/mixins";
 @import "base/utility";
+@import "base/fonts";
 @import "base/app";
 @import "components/menu";
 @import "base/tables";
 @import "components/client_form";
 @import "components/admin_form";
 @import "components/dishes";
-@import "components/modal";
-
+@import "components/client/dayview";
+@import "components/client/foodtext";
+@import "components/client/grid";
+@import "components/client/fooditem";
+@import "components/dishes";
 @import "../../node_modules/react-datepicker/dist/react-datepicker.css";
