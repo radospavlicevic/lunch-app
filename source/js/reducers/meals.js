@@ -15,7 +15,7 @@ import {
 const initialState = Map({
   categories: {
     main_dish: {
-      name: 'Glavno jelo',
+      name: 'Glavna jela',
     },
   },
   categoriesNumber: 0,
@@ -23,6 +23,7 @@ const initialState = Map({
   cateringsNumber: 0,
   dishes: {},
   noStandardDishes: {},
+  standardDishes: {},
   dishForUpdate: null,
 });
 
@@ -32,7 +33,7 @@ const actionsMap = {
     newCatering[action.key] = action.data;
     const caterings = Object.assign({}, state.get('caterings'), newCatering);
     return state.merge(Map({
-      'caterings': caterings,
+      caterings,
     }));
   },
 
@@ -40,14 +41,14 @@ const actionsMap = {
     const caterings = Object.assign({}, state.get('caterings'));
     delete caterings[action.key];
     return state.merge(Map({
-      'caterings': caterings,
+      caterings,
     }));
   },
 
   [COUNT_CATERINGS]: (state, action) => {
     const number = action.number;
     return state.merge(Map({
-      'cateringsNumber': number,
+      cateringsNumber: number,
     }));
   },
 
@@ -58,7 +59,7 @@ const actionsMap = {
     };
     const categories = Object.assign({}, state.get('categories'), newCategory);
     return state.merge(Map({
-      'categories': categories,
+      categories,
     }));
   },
 
@@ -66,7 +67,7 @@ const actionsMap = {
     const categories = Object.assign({}, state.get('categories'));
     delete categories[action.key];
     return state.merge(Map({
-      'categories': categories,
+      categories,
     }));
   },
 
@@ -90,9 +91,12 @@ const actionsMap = {
     const dishes = Object.assign({}, state.get('dishes'), newDish);
     const noStandardDishes = Object.assign({}, state.get('noStandardDishes'),
       !newDish[action.key].standard && newDish);
+    const standardDishes = Object.assign({}, state.get('standardDishes'),
+      newDish[action.key].standard && newDish);
     return state.merge(Map({
       dishes,
       noStandardDishes,
+      standardDishes,
       dishForUpdate: null,
     }));
   },
@@ -108,9 +112,15 @@ const actionsMap = {
 
   [DELETE_DISH]: (state, action) => {
     const dishes = Object.assign({}, state.get('dishes'));
+    const noStandardDishes = Object.assign({}, state.get('noStandardDishes'));
+    const standardDishes = Object.assign({}, state.get('standardDishes'));
     delete dishes[action.key];
+    delete noStandardDishes[action.key];
+    delete standardDishes[action.key];
     return state.merge(Map({
-      'dishes': dishes,
+      dishes,
+      noStandardDishes,
+      standardDishes,
     }));
   },
 };

@@ -96,14 +96,5 @@ export default class Order extends Component {
         </div>
       </div>
     );
-    // {this.state.foodArray.map((item, index) => (
-    //   <OrderFood
-    //     key={ index }
-    //     food={ item }
-    //     text={ this.state.foodText[index] }
-    //   />
-    // ))}
-    // <OrderNote />
-    // <OrderSummary />
   }
 }

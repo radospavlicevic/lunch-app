@@ -22,12 +22,12 @@ export default class Dashboard extends Component {
       <div className='Dashboard Admin-wrapper'>
         <h1>Dashboard</h1>
         <div className='AdminDashboard'>
-          <div className='AdminDashboard-item'><Link to={ routeCodes.USERS }>Users</Link></div>
-          <div className='AdminDashboard-item'><Link to={ routeCodes.CATEGORIES }>Categories</Link></div>
-          <div className='AdminDashboard-item'><Link to={ routeCodes.CATERINGS }>Caterings</Link></div>
-          <div className='AdminDashboard-item'><Link to={ routeCodes.DISHES }>Dishes</Link></div>
-          <div className='AdminDashboard-item'><Link to={ routeCodes.MENUS }>Menus</Link></div>
-          <div className='AdminDashboard-item'><Link to='#'>Daily Overview</Link></div>
+          <Link className='AdminDashboard-link' to={ routeCodes.USERS }>Users</Link>
+          <Link className='AdminDashboard-link' to={ routeCodes.CATEGORIES }>Categories</Link>
+          <Link className='AdminDashboard-link' to={ routeCodes.CATERINGS }>Caterings</Link>
+          <Link className='AdminDashboard-link' to={ routeCodes.DISHES }>Dishes</Link>
+          <Link className='AdminDashboard-link' to={ routeCodes.MENUS }>Menus</Link>
+          <Link className='AdminDashboard-link' to='#'>Daily Overview</Link>
         </div>
       </div>
     );

@@ -5,7 +5,7 @@ import { checkAdminRole } from 'utils/routing';
 import DishForm from 'components/Admin/DishForm';
 import DishOverview from 'components/Admin/DishOverview';
 import { addOrUpdateDish, deleteDish, addCategory, addCatering } from 'actions/meals.js';
-import { deleteDishFromMenu } from 'api/menus.js';
+import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
 
 @connect(state => ({
@@ -41,6 +41,7 @@ export default class Dishes extends Component {
 
     db.ref('dishes').on('child_changed', updatedDish => {
       dispatch(addOrUpdateDish(updatedDish.key, updatedDish.val()));
+      this.cascadeUpdate(updatedDish.key, updatedDish.val());
     });
 
     db.ref('dishes').on('child_removed', removedDish => {
@@ -54,6 +55,15 @@ export default class Dishes extends Component {
 
     db.ref('categories').on('child_added', newCategory => {
       dispatch(addCategory(newCategory.key, newCategory.val().name));
+    });
+  }
+
+  cascadeUpdate(dishKey, dishData) {
+    const { menus } = this.props;
+    Object.keys(menus).forEach(date => {
+      if (menus[date][dishKey]) {
+        updateDishInMenu(date, dishKey, dishData);
+      }
     });
   }
 

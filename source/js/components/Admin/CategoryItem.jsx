@@ -5,7 +5,6 @@ import { removeCategory } from 'api/meals';
 export default class CategoryItem extends Component {
   static propTypes = {
     category: PropTypes.object,
-    number: PropTypes.number,
   }
 
   constructor() {
@@ -14,10 +13,8 @@ export default class CategoryItem extends Component {
   }
 
   handleDeleteClick() {
-    const { category, number } = this.props;
-    if (number > 1) {
-      removeCategory(category.key);
-    }
+    const { category } = this.props;
+    removeCategory(category.key);
   }
 
   render() {
@@ -25,7 +22,7 @@ export default class CategoryItem extends Component {
     return (
       <tr>
         <td>{ category.name }</td>
-        <td><button onClick={ this.handleDeleteClick } className='AdminTable-button'>Delete</button></td>
+        <td><button onClick={ this.handleDeleteClick } disabled={ category.key === 'main_dish' } className='AdminTable-button'>Delete</button></td>
       </tr>
     );
   }

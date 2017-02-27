@@ -7,28 +7,49 @@ import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
 
-@connect()
+@connect(state => ({
+  loggedInUser: state.login.get('loggedInUser'),
+  getUserLoading: state.login.get('getUserLoading'),
+}))
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
+    loggedInUser: PropTypes.object,
+    getUserLoading: PropTypes.bool,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
+    localStorage.setItem('init-path', location.pathname);
     firebaseAuth().onAuthStateChanged((user) => {
-      // console.log(location.pathname);
-      // const path = location.pathname;
-      // console.log('location', path);
       if (this.handleReauth()) return;
       if (user) {
-        redirectTo(routeCodes.ORDER);
         dispatch(getUser(user.uid));
       } else {
         redirectTo(routeCodes.LOGIN);
         dispatch(logoutUser);
       }
     });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { getUserLoading } = this.props;
+    const path = localStorage.getItem('init-path');
+    if (nextProps.getUserLoading !== getUserLoading) {
+      if (!nextProps.getUserLoading && nextProps.loggedInUser) {
+        if (this.isLoginPath(path)) {
+          redirectTo(routeCodes.ORDER);
+        } else {
+          redirectTo(path);
+        }
+        localStorage.removeItem('init-path');
+      }
+    }
+  }
+
+  isLoginPath(path) {
+    return (path === '/login');
   }
 
   handleReauth() {
@@ -49,15 +70,18 @@ export default class App extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, getUserLoading } = this.props;
 
     return (
       <div className='App'>
+        { getUserLoading && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
 
-        <div className='Page'>
-          { children }
-        </div>
+        { !getUserLoading &&
+          <div className='Page'>
+            { children }
+          </div>
+        }
       </div>
     );
   }
