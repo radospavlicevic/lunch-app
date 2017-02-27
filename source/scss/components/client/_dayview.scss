@@ -44,6 +44,30 @@ $height: 100vh;
   color: #fff;
   font-size: 40px;
   height: $height;
+  border-bottom: 1px solid gray;
+}
+
+.MenuSection-tabWrapper {
+  // border-bottom: 1px solid #fff;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+
+.MenuSection-tab {
+  outline: none;
+  border: 1px solid $light-gray;
+  font-size: 1rem;
+  padding: 5px;
+  background: none;
+  color: #fff;
+  flex-basis: 49%;
+  cursor: pointer;
+}
+
+.MenuSection-tab--selected {
+  @extend .MenuSection-tab;
+  border: 3px solid $light-gray;
 }
 
 .MenuSection-category {

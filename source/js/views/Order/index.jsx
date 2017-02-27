@@ -5,15 +5,12 @@ import { addCategory } from 'actions/meals.js';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
-import OrderFood from 'components/Client/OrderFood';
-import OrderNote from 'components/Client/OrderNote';
-import OrderSummary from 'components/Client/OrderSummary';
-// import moment from 'moment';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   menus: state.menus.get('menus'),
   categories: state.meals.get('categories'),
+  standardDishes: state.meals.get('standardDishes'),
   selectedDate: state.order.get('selectedDate'),
 }))
 export default class Order extends Component {
@@ -22,10 +19,12 @@ export default class Order extends Component {
     categories: PropTypes.object,
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
+    standardDishes: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
+    console.log(this.props.standardDishes);
     this.setupFirebaseObservers();
   }
 
@@ -71,6 +70,7 @@ export default class Order extends Component {
         filteredDishes[key] = dishes[key];
       }
     });
+
     return filteredDishes;
   }
 
@@ -81,7 +81,11 @@ export default class Order extends Component {
         <MenuSection
           key={ index }
           dishes={ this.filterByCategory(menus[selectedDate], key) }
-          category={ categories[key].name }
+          category={
+          {
+            key,
+            name: categories[key].name,
+          } }
         />
       );
     });
@@ -96,14 +100,5 @@ export default class Order extends Component {
         </div>
       </div>
     );
-    // {this.state.foodArray.map((item, index) => (
-    //   <OrderFood
-    //     key={ index }
-    //     food={ item }
-    //     text={ this.state.foodText[index] }
-    //   />
-    // ))}
-    // <OrderNote />
-    // <OrderSummary />
   }
 }

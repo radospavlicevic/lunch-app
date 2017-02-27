@@ -14,10 +14,24 @@
   }
 }
 
+.FoodItem--selected {
+  background: #fff;
+  color: $dark-background;
+}
+
+.FoodItem-desc {
+  font-size: 18px;
+  padding: 5px 20px;
+  border-top: 1px solid #fff;
+}
+
 @media (max-width: 768px) {
   .FoodItem {
     p {
       font-size: 26px;
     }
+  }
+  .FoodItem-desc {
+    font-size: 14px;
   }
 }
