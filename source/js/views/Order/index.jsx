@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
-import { addCategory } from 'actions/meals.js';
+import { addCategory, addOrUpdateDish } from 'actions/meals.js';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
@@ -24,7 +24,6 @@ export default class Order extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.standardDishes);
     this.setupFirebaseObservers();
   }
 
@@ -47,6 +46,10 @@ export default class Order extends Component {
         addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
       );
     });
+
+    db.ref('dishes').on('child_added', newDish => {
+      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
+    });
   }
 
   updateFirebaseObservers(selectedDate) {
@@ -60,6 +63,7 @@ export default class Order extends Component {
   }
 
   filterByCategory(dishes, category) {
+    const { standardDishes } = this.props;
     if (!dishes) {
       return null;
     }
@@ -71,7 +75,7 @@ export default class Order extends Component {
       }
     });
 
-    return filteredDishes;
+    return (category !== 'main_dish') ? filteredDishes : Object.assign({}, filteredDishes, standardDishes);
   }
 
   renderMenuSections() {

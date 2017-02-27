@@ -11,19 +11,35 @@ export default class MenuSection extends Component {
   componentWillMount() {
     if (this.isMainDish()) {
       this.state = {
-        selectedTab: 'main_dish',
-        dishes: this.props.dishes,
+        selectedTab: 'main',
+        dishes: this.filterMainDishes('main'),
       };
     } else {
       this.state = {
         selectedTab: 'none',
+        dishes: this.props.dishes,
       };
     }
   }
 
+  filterMainDishes(filterId) {
+    const { dishes } = this.props;
+    const filteredDishes = {};
+    Object.keys(dishes).forEach(key => {
+      if (filterId === 'standard' && dishes[key].standard) {
+        filteredDishes[key] = dishes[key];
+      } else if (filterId === 'main' && !dishes[key].standard) {
+        filteredDishes[key] = dishes[key];
+      }
+    });
+    return filteredDishes;
+  }
+
   handleTabClick(event, tabId) {
+    const visibleDishes = this.filterMainDishes(tabId);
     this.setState({
       selectedTab: tabId,
+      dishes: visibleDishes,
     });
   }
 
@@ -37,8 +53,8 @@ export default class MenuSection extends Component {
     return (
       <div className='MenuSection-tabWrapper'>
         <button
-          className={ selectedTab === 'main_dish' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
-          onClick={ (e) => this.handleTabClick(e, 'main_dish') }
+          className={ selectedTab === 'main' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
+          onClick={ (e) => this.handleTabClick(e, 'main') }
         >
         Glavna jela</button>
         <button
@@ -51,7 +67,8 @@ export default class MenuSection extends Component {
   }
 
   render() {
-    const { dishes, category } = this.props;
+    const { category } = this.props;
+    const { dishes } = this.state;
     return (
       <div className='MenuSection'>
         <p className='MenuSection-category'>{ category.name }</p>

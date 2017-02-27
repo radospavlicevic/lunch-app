@@ -2,6 +2,7 @@
   width: 100%;
   padding: 20px;
   background: $dark-background;
+  border-bottom: 1px solid $light-gray;
 }
 
 .Menu a {
@@ -22,6 +23,5 @@
 @media (max-width: 768px) {
   .Menu {
     padding: 20px 10px;
-    border-bottom: 1px solid #fff;
   }
 }
