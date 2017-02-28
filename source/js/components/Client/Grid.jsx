@@ -4,10 +4,11 @@ import FoodItem from 'components/Client/FoodItem';
 export default class Grid extends Component {
   static propTypes = {
     dishes: PropTypes.object,
+    selectedDate: PropTypes.string,
   }
 
   renderDishes() {
-    const { dishes } = this.props;
+    const { dishes, selectedDate } = this.props;
     if (!dishes) {
       return <h1 className='Grid-loading'>Loading...</h1>;
     }
@@ -18,6 +19,7 @@ export default class Grid extends Component {
           dishKey={ key }
           dishData={ dishes[key] }
           selected={ false }
+          selectedDate={ selectedDate }
         />
       );
     });

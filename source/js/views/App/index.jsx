@@ -14,7 +14,6 @@ import { routeCodes } from '../../routes';
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
-    loggedInUser: PropTypes.object,
     getUserLoading: PropTypes.bool,
     dispatch: PropTypes.func,
   }
@@ -76,7 +75,6 @@ export default class App extends Component {
       <div className='App'>
         { getUserLoading && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
-
 
         <div className='Page'>
           { children }

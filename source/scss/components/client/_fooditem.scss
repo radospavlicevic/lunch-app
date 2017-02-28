@@ -13,9 +13,16 @@
     font-size: 2rem;
     margin-top: 5px;
   }
+  @include sm-and-lower {
+    flex-basis: 100%;
+    p {
+      font-size: 26px;
+    }
+  }
 }
 
 .FoodItem--selected {
+  @extend .FoodItem;
   background: #fff;
   color: $dark-background;
 }
@@ -24,15 +31,8 @@
   font-size: 18px;
   padding: 5px 20px;
   border-top: 1px solid #fff;
-}
 
-@media (max-width: 768px) {
-  .FoodItem {
-    p {
-      font-size: 26px;
-    }
-  }
-  .FoodItem-desc {
+  @include sm-and-lower {
     font-size: 14px;
   }
 }
