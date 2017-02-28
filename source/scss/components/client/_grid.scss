@@ -3,11 +3,8 @@
   font-family: Avenir;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-@media (max-width: 768px) {
-  .Grid {
+  justify-content: space-around;
+  @mixin md-and-lower() {
     height: calc(100% - 240px);
   }
 }

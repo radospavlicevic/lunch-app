@@ -16,7 +16,7 @@
   @include sm-and-lower {
     flex-basis: 100%;
     p {
-      font-size: 26px;
+      font-size: 1.62rem;
     }
   }
 }
@@ -28,11 +28,11 @@
 }
 
 .FoodItem-desc {
-  font-size: 18px;
+  font-size: 1.13rem;
   padding: 5px 20px;
   border-top: 1px solid #fff;
 
   @include sm-and-lower {
-    font-size: 14px;
+    font-size: 0.86rem;
   }
 }

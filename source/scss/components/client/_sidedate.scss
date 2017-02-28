@@ -1,0 +1,84 @@
+.SideDate-wrapper {
+  width: 25%;
+  height: 100vh;
+  overflow-y: scroll;
+  p {
+    margin: 0;
+  }
+  @include md-and-lower {
+    width: 35%;
+  }
+}
+
+.SideDate-month,
+.SideDate-viewOrders {
+  font-size: 1.5rem;
+  font-family: AvenirRoman;
+  text-transform: lowercase;
+  @include md-and-lower {
+    font-size: 1.5rem;
+  }
+}
+
+.SideDate-day {
+  font-size: 4.5rem;
+  font-family: Avenir;
+  @include md-and-lower {
+    font-size: 3.2rem;
+  }
+}
+
+.SideDate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: #ececec;
+  padding: 55px 30px;
+  border: 0;
+  border-bottom: 1px solid #000;
+  width: 100%;
+  outline: 0;
+  cursor: pointer;
+  &:first-child {
+    border-top: 1px solid #000;
+  }
+  @include md-and-lower {
+    padding: 35px 30px;
+  }
+}
+
+.SideDate-active {
+  @extend .SideDate;
+  background: #fff;
+}
+
+.SideDate-loadButton {
+  width: 100%;
+  height: 4.38rem;
+  font-family: AvenirRoman;
+  font-size: 1.5rem;
+  background-color: #ececec;
+  border: 1px solid #252525;
+  color: #252525;
+  text-transform: lowercase;
+  cursor: pointer;
+  border-right: transparent;
+  border-left: transparent;
+  &:hover {
+      color: #ececec;
+      background-color: #252525;
+      border: 1px solid #ececec;
+      border-right: 1px solid #ececec;
+      border-left: 1px solid #ececec;
+  }
+  &:first-child {
+    border-top: none;
+  }
+  &:last-child {
+    border-top: none;
+    &:hover {
+      border-bottom: 0;
+    }
+  }
+}

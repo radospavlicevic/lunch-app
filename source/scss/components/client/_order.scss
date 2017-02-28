@@ -9,12 +9,18 @@
   color: #fff;
   font-size: 1.5rem;
   border-bottom: 1px solid gray;
+  flex-wrap: wrap;
 }
 
 .Order-noteInput {
-  width: 500px;
+  width: 70%;
   height: 40px;
   outline:none;
+  padding-left: 10px;
+  padding-top: 6px;
+  @include md-and-lower {
+    width: 100%;
+  }
 }
 
 .Order-noteButton {
@@ -22,4 +28,6 @@
   font-size: 1.5rem;
   margin-left: 10px;
   cursor: pointer;
+  flex: 1;
+  padding-top: 6px;
 }
