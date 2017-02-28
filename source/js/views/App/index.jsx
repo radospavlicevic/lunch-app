@@ -14,7 +14,7 @@ import { routeCodes } from '../../routes';
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
-    getUserLoading: PropTypes.bool,
+    loggedInUser: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
@@ -33,9 +33,9 @@ export default class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { getUserLoading } = this.props;
+    const { loggedInUser } = this.props;
     const path = localStorage.getItem('init-path');
-    if (nextProps.getUserLoading !== getUserLoading) {
+    if (nextProps.loggedInUser !== loggedInUser) {
       if (!nextProps.getUserLoading && nextProps.loggedInUser) {
         if (this.isLoginPath(path)) {
           redirectTo(routeCodes.ORDER);

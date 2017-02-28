@@ -10,7 +10,6 @@ export default class FoodItem extends Component {
     dishData: PropTypes.object,
     selectedDate: PropTypes.string,
     selected: PropTypes.bool,
-    // dispatch: PropTypes.func,
   }
 
   constructor() {
@@ -25,9 +24,12 @@ export default class FoodItem extends Component {
   }
 
   render() {
-    const { dishData } = this.props;
+    const { dishData, selected } = this.props;
     return (
-      <button className='FoodItem' onClick={ this.handleClick }>
+      <button
+        className={ selected ? 'FoodItem--selected' : 'FoodItem' }
+        onClick={ this.handleClick }
+      >
         <p>{ dishData.name }</p>
         { dishData.description && <div className='FoodItem-desc' >{ dishData.description }</div> }
       </button>

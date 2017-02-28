@@ -6,6 +6,7 @@ export default class MenuSection extends Component {
   static propTypes = {
     dishes: PropTypes.object,
     category: PropTypes.object,
+    orders: PropTypes.object,
     selectedDate: PropTypes.string,
   }
 
@@ -92,13 +93,18 @@ export default class MenuSection extends Component {
   }
 
   render() {
-    const { category, selectedDate } = this.props;
+    const { category, selectedDate, orders } = this.props;
     const { dishes } = this.state;
     return (
       <div className='MenuSection'>
         <p className='MenuSection-category'>{ category.name }</p>
         { this.isMainDish() && this.renderTabs() }
-        <Grid dishes={ dishes } selectedDate={ selectedDate } />
+        <Grid
+          dishes={ dishes }
+          selectedDate={ selectedDate }
+          category={ category }
+          orders={ orders }
+        />
         <button onClick={ this.handleCancelClick } className='ManuSection-cancelButton'>Cancel</button>
       </div>
     );
