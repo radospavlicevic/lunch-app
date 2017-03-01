@@ -34,9 +34,9 @@ export default class App extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { loggedInUser } = this.props;
+    const path = localStorage.getItem('init-path');
     if (nextProps.loggedInUser !== loggedInUser) {
-      if (nextProps.loggedInUser) {
-        const path = localStorage.getItem('init-path');
+      if (nextProps.loggedInUser && path) {
         if (this.isLoginPath(path)) {
           redirectTo(routeCodes.ORDER);
         } else {

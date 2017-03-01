@@ -1,8 +1,9 @@
 export const ADD_CATERING = 'ADD_CATERING';
 export const DELETE_CATERING = 'DELETE_CATERING';
 export const COUNT_CATERINGS = 'COUNT_CATERINGS';
-export const ADD_CATEGORY = 'ADD_CATEGORY';
+export const ADD_OR_UPDATE_CATEGORY = 'ADD_OR_UPDATE_CATEGORY';
 export const DELETE_CATEGORY = 'DELETE_CATEGORY';
+export const PREPARE_CATEGORY_UPDATE = 'PREPARE_CATEGORY_UPDATE';
 export const COUNT_CATEGORIES = 'COUNT_CATEGORIES';
 export const ADD_OR_UPDATE_DISH = 'ADD_OR_UPDATE_DISH';
 export const DELETE_DISH = 'DELETE_DISH';
@@ -31,9 +32,9 @@ export function countCaterings(number) {
   };
 }
 
-export function addCategory(key, data) {
+export function addOrUpdateCategory(key, data) {
   return {
-    type: ADD_CATEGORY,
+    type: ADD_OR_UPDATE_CATEGORY,
     key,
     data,
   };
@@ -43,6 +44,14 @@ export function deleteCategory(key) {
   return {
     type: DELETE_CATEGORY,
     key,
+  };
+}
+
+export function prepareCategoryUpdate(key, name) {
+  return {
+    type: PREPARE_CATEGORY_UPDATE,
+    key,
+    name,
   };
 }
 

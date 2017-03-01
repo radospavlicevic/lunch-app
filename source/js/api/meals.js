@@ -14,6 +14,10 @@ export function saveCategory(category) {
   });
 }
 
+export function updateCategory(key, name) {
+  return db.ref(`categories/${ key }`).update({ name });
+}
+
 export function removeCategory(key) {
   db.ref(`categories/${ key }`).remove();
 }

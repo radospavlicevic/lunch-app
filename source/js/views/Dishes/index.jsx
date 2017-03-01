@@ -4,7 +4,7 @@ import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import DishForm from 'components/Admin/DishForm';
 import DishOverview from 'components/Admin/DishOverview';
-import { addOrUpdateDish, deleteDish, addCategory, addCatering } from 'actions/meals.js';
+import { addOrUpdateDish, deleteDish, addOrUpdateCategory, addCatering } from 'actions/meals.js';
 import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
 
@@ -54,7 +54,7 @@ export default class Dishes extends Component {
     });
 
     db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
+      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
   }
 
