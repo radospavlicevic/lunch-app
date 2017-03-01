@@ -1,6 +1,5 @@
 body {
   background: #1C1E20;
-  overflow-y: hidden;
 }
 
 html {
@@ -20,10 +19,6 @@ hr {
   border: 0;
   border-top: 1px solid #ddd;
   margin: 20px 0;
-}
-
-.Login h1 {
-  text-align: center;
 }
 
 .Register {
@@ -147,4 +142,5 @@ hr {
   background: rgba(0, 0, 0, 0.8);
   font-size: 2rem;
   color: white;
+  z-index: 10;
 }

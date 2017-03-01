@@ -1,7 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
-import { addCategory } from 'actions/meals.js';
+import { userSignedIn } from 'api/auth';
+import { saveNoteInOrder } from 'api/orders';
+import { updateOrder } from 'actions/orders';
+import { addCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
@@ -11,7 +14,8 @@ import MenuSection from 'components/Client/MenuSection';
   menus: state.menus.get('menus'),
   categories: state.meals.get('categories'),
   standardDishes: state.meals.get('standardDishes'),
-  selectedDate: state.order.get('selectedDate'),
+  selectedDate: state.orders.get('selectedDate'),
+  orders: state.orders.get('orders'),
 }))
 export default class Order extends Component {
   static propTypes = {
@@ -20,18 +24,29 @@ export default class Order extends Component {
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
     standardDishes: PropTypes.object,
+    orders: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
+  constructor() {
+    super();
+
+    this.handleSaveNoteClick = this.handleSaveNoteClick.bind(this);
+  }
+
   componentWillMount() {
-    console.log(this.props.standardDishes);
     this.setupFirebaseObservers();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedDate } = this.props;
+    const { selectedDate, loggedInUser, dispatch } = this.props;
     if (selectedDate !== nextProps.selectedDate) {
       this.updateFirebaseObservers(nextProps.selectedDate);
+    }
+    if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
+      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
+        dispatch(updateOrder(selectedDate, order.key, order.val()));
+      });
     }
   }
 
@@ -47,6 +62,10 @@ export default class Order extends Component {
         addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
       );
     });
+
+    db.ref('dishes').on('child_added', newDish => {
+      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
+    });
   }
 
   updateFirebaseObservers(selectedDate) {
@@ -57,11 +76,22 @@ export default class Order extends Component {
         addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
       );
     });
+
+    db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
+      dispatch(updateOrder(selectedDate, order.key, order.val()));
+    });
+  }
+
+  handleSaveNoteClick() {
+    const { selectedDate } = this.props;
+    saveNoteInOrder(selectedDate, this.noteInput.value);
+    this.noteInput.value = '';
   }
 
   filterByCategory(dishes, category) {
+    const { standardDishes } = this.props;
     if (!dishes) {
-      return null;
+      return (category === 'main_dish') ? standardDishes : null;
     }
     const filteredDishes = {};
 
@@ -71,33 +101,44 @@ export default class Order extends Component {
       }
     });
 
-    return filteredDishes;
+    return (category !== 'main_dish') ? filteredDishes : Object.assign({}, filteredDishes, standardDishes);
   }
 
   renderMenuSections() {
-    const { menus, categories, selectedDate } = this.props;
+    const { menus, categories, selectedDate, orders } = this.props;
     return Object.keys(categories).map((key, index) => {
       return (
         <MenuSection
           key={ index }
           dishes={ this.filterByCategory(menus[selectedDate], key) }
           category={
-          {
-            key,
-            name: categories[key].name,
-          } }
+          { key, name: categories[key].name }
+          }
+          selectedDate={ selectedDate }
+          orders={ orders }
         />
       );
     });
   }
 
   render() {
+    const { loggedInUser } = this.props;
     return (
       <div className='Order'>
-        <SideDate />
-        <div className='MyOrder-wrapper'>
-          { this.renderMenuSections() }
-        </div>
+        { loggedInUser && <SideDate /> }
+        { loggedInUser &&
+          <div className='MyOrder-wrapper'>
+            { this.renderMenuSections() }
+            <div className='Order-noteSection'>
+              <textarea
+                placeholder='Note...'
+                className='Order-noteInput'
+                ref={ node => this.noteInput = node }
+              />
+              <button onClick={ this.handleSaveNoteClick } className='Order-noteButton'>Save Note</button>
+            </div>
+          </div>
+        }
       </div>
     );
   }

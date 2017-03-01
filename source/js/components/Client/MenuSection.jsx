@@ -1,30 +1,72 @@
 import React, { Component, PropTypes } from 'react';
-
+import { deleteDishFromOrder } from 'api/orders';
 import Grid from 'components/Client/Grid';
 
 export default class MenuSection extends Component {
   static propTypes = {
     dishes: PropTypes.object,
     category: PropTypes.object,
+    orders: PropTypes.object,
+    selectedDate: PropTypes.string,
+  }
+
+  constructor() {
+    super();
+
+    this.handleCancelClick = this.handleCancelClick.bind(this);
   }
 
   componentWillMount() {
+    const { dishes } = this.props;
     if (this.isMainDish()) {
       this.state = {
-        selectedTab: 'main_dish',
-        dishes: this.props.dishes,
+        selectedTab: 'main',
+        dishes: this.filterMainDishes('main', dishes),
       };
     } else {
       this.state = {
         selectedTab: 'none',
+        dishes,
       };
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { dishes } = this.props;
+    const { selectedTab } = this.state;
+    if (nextProps.dishes !== dishes) {
+      this.setState({
+        selectedTab,
+        dishes: (this.isMainDish()) ?
+          this.filterMainDishes(selectedTab, nextProps.dishes) : nextProps.dishes,
+      });
+    }
+  }
+
+  filterMainDishes(filterId, dishes) {
+    const filteredDishes = {};
+    if (!dishes) return {};
+    Object.keys(dishes).forEach(key => {
+      if (filterId === 'standard' && dishes[key].standard) {
+        filteredDishes[key] = dishes[key];
+      } else if (filterId === 'main' && !dishes[key].standard) {
+        filteredDishes[key] = dishes[key];
+      }
+    });
+    return filteredDishes;
+  }
+
   handleTabClick(event, tabId) {
+    const visibleDishes = this.filterMainDishes(tabId, this.props.dishes);
     this.setState({
       selectedTab: tabId,
+      dishes: visibleDishes,
     });
+  }
+
+  handleCancelClick() {
+    const { selectedDate, category } = this.props;
+    deleteDishFromOrder(selectedDate, category.key);
   }
 
   isMainDish() {
@@ -37,8 +79,8 @@ export default class MenuSection extends Component {
     return (
       <div className='MenuSection-tabWrapper'>
         <button
-          className={ selectedTab === 'main_dish' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
-          onClick={ (e) => this.handleTabClick(e, 'main_dish') }
+          className={ selectedTab === 'main' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
+          onClick={ (e) => this.handleTabClick(e, 'main') }
         >
         Glavna jela</button>
         <button
@@ -51,12 +93,19 @@ export default class MenuSection extends Component {
   }
 
   render() {
-    const { dishes, category } = this.props;
+    const { category, selectedDate, orders } = this.props;
+    const { dishes } = this.state;
     return (
       <div className='MenuSection'>
         <p className='MenuSection-category'>{ category.name }</p>
         { this.isMainDish() && this.renderTabs() }
-        <Grid dishes={ dishes } />
+        <Grid
+          dishes={ dishes }
+          selectedDate={ selectedDate }
+          category={ category }
+          orders={ orders }
+        />
+        <button onClick={ this.handleCancelClick } className='ManuSection-cancelButton'>Cancel</button>
       </div>
     );
   }

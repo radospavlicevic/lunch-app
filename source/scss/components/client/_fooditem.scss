@@ -5,33 +5,34 @@
   cursor: pointer;
   outline: none;
   margin-bottom: 5px;
+  flex-basis: 49%;
   padding: 0;
   p {
     margin: 0;
     height: auto;
-    font-size: 48px;
+    font-size: 2rem;
     margin-top: 5px;
+  }
+  @include sm-and-lower {
+    flex-basis: 100%;
+    p {
+      font-size: 1.62rem;
+    }
   }
 }
 
 .FoodItem--selected {
+  @extend .FoodItem;
   background: #fff;
   color: $dark-background;
 }
 
 .FoodItem-desc {
-  font-size: 18px;
+  font-size: 1.13rem;
   padding: 5px 20px;
   border-top: 1px solid #fff;
-}
 
-@media (max-width: 768px) {
-  .FoodItem {
-    p {
-      font-size: 26px;
-    }
-  }
-  .FoodItem-desc {
-    font-size: 14px;
+  @include sm-and-lower {
+    font-size: 0.86rem;
   }
 }

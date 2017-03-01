@@ -1,0 +1,22 @@
+.Login {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  margin: 0 auto;
+  height: 100vh;
+  justify-content: center;
+  color: #fff;
+  font-family: Avenir;
+  align-items: center;
+  h1 {
+    font-size: 3.5rem;
+  }
+  input {
+    color: #fff;
+  }
+  @include md-and-lower {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+}
