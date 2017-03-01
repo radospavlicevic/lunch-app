@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import DishOverview from 'components/Admin/DishOverview';
 import { dishOverviewTypes } from 'utils/globals';
 import { addDishInMenu, removeDishFromMenu } from 'actions/menus';
-import { addOrUpdateDish, addCategory, addCatering } from 'actions/meals';
+import { addOrUpdateDish, addOrUpdateCategory, addCatering } from 'actions/meals';
 import moment from 'moment';
 
 @connect(state => ({
@@ -67,7 +67,7 @@ export default class Menus extends Component {
     });
 
     db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
+      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
   }
 

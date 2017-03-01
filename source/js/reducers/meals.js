@@ -4,7 +4,8 @@ import {
   ADD_CATERING,
   DELETE_CATERING,
   COUNT_CATERINGS,
-  ADD_CATEGORY,
+  ADD_OR_UPDATE_CATEGORY,
+  PREPARE_CATEGORY_UPDATE,
   DELETE_CATEGORY,
   COUNT_CATEGORIES,
   ADD_OR_UPDATE_DISH,
@@ -18,6 +19,7 @@ const initialState = Map({
       name: 'Glavna jela',
     },
   },
+  categoryForUpdate: null,
   categoriesNumber: 0,
   caterings: {},
   cateringsNumber: 0,
@@ -52,7 +54,7 @@ const actionsMap = {
     }));
   },
 
-  [ADD_CATEGORY]: (state, action) => {
+  [ADD_OR_UPDATE_CATEGORY]: (state, action) => {
     const newCategory = {};
     newCategory[action.key] = {
       name: action.data,
@@ -60,6 +62,16 @@ const actionsMap = {
     const categories = Object.assign({}, state.get('categories'), newCategory);
     return state.merge(Map({
       categories,
+      categoryForUpdate: null,
+    }));
+  },
+
+  [PREPARE_CATEGORY_UPDATE]: (state, action) => {
+    return state.merge(Map({
+      categoryForUpdate: {
+        key: action.key,
+        name: action.name,
+      },
     }));
   },
 

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
-import { addCategory, deleteCategory, countCategories } from 'actions/meals.js';
+import { addOrUpdateCategory, deleteCategory, countCategories } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import CategoryForm from 'components/Admin/CategoryForm';
@@ -17,7 +17,6 @@ export default class Categories extends Component {
   static propTypes = {
     loggedInUser: PropTypes.object,
     categories: PropTypes.object,
-    categoriesNumber: PropTypes.number,
     dishes: PropTypes.object,
     dispatch: PropTypes.func,
   }
@@ -35,7 +34,11 @@ export default class Categories extends Component {
     });
 
     db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
+      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
+    });
+
+    db.ref('categories').on('child_changed', newCategory => {
+      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
     db.ref('categories').on('child_removed', removedCategory => {

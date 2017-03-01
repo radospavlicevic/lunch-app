@@ -4,7 +4,7 @@ import { db } from 'utils/firebase_config';
 import { userSignedIn } from 'api/auth';
 import { saveNoteInOrder } from 'api/orders';
 import { updateOrder } from 'actions/orders';
-import { addCategory, addOrUpdateDish } from 'actions/meals';
+import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
@@ -54,7 +54,7 @@ export default class Order extends Component {
     const { selectedDate, dispatch } = this.props;
 
     db.ref('categories').on('child_added', newCategory => {
-      dispatch(addCategory(newCategory.key, newCategory.val().name));
+      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
     db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
