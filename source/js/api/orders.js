@@ -9,6 +9,6 @@ export function deleteDishFromOrder(date, category) {
   return db.ref(`orders/${ date }/${ userSignedIn().uid }/meal/${ category }`).remove();
 }
 
-export function saveNoteInOrder(date, uid, note) {
+export function saveNoteInOrder(date, note) {
   return db.ref(`orders/${ date }/${ userSignedIn().uid }/note`).set(note);
 }

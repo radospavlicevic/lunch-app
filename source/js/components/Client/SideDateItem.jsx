@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { setSelectedDate } from 'actions/order';
+import { setSelectedDate } from 'actions/orders';
 import moment from 'moment';
 
 @connect(state => ({
-  selectedDate: state.order.get('selectedDate'),
+  selectedDate: state.orders.get('selectedDate'),
 }))
 export default class SideDateItem extends Component {
   static propTypes = {

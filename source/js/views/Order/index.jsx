@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
 import { userSignedIn } from 'api/auth';
 import { saveNoteInOrder } from 'api/orders';
+import { updateOrder } from 'actions/orders';
 import { addCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
@@ -13,7 +14,8 @@ import MenuSection from 'components/Client/MenuSection';
   menus: state.menus.get('menus'),
   categories: state.meals.get('categories'),
   standardDishes: state.meals.get('standardDishes'),
-  selectedDate: state.order.get('selectedDate'),
+  selectedDate: state.orders.get('selectedDate'),
+  orders: state.orders.get('orders'),
 }))
 export default class Order extends Component {
   static propTypes = {
@@ -22,6 +24,7 @@ export default class Order extends Component {
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
     standardDishes: PropTypes.object,
+    orders: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
@@ -36,13 +39,13 @@ export default class Order extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedDate, loggedInUser } = this.props;
+    const { selectedDate, loggedInUser, dispatch } = this.props;
     if (selectedDate !== nextProps.selectedDate) {
       this.updateFirebaseObservers(nextProps.selectedDate);
     }
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
-      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('child_added', order => {
-        console.log('-OBSERVER', order.key, order.val());
+      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
+        dispatch(updateOrder(selectedDate, order.key, order.val()));
       });
     }
   }
@@ -74,8 +77,8 @@ export default class Order extends Component {
       );
     });
 
-    db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('child_added', order => {
-      console.log('ORDER-OBSERVER', order.key, order.val());
+    db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
+      dispatch(updateOrder(selectedDate, order.key, order.val()));
     });
   }
 
@@ -102,7 +105,7 @@ export default class Order extends Component {
   }
 
   renderMenuSections() {
-    const { menus, categories, selectedDate } = this.props;
+    const { menus, categories, selectedDate, orders } = this.props;
     return Object.keys(categories).map((key, index) => {
       return (
         <MenuSection
@@ -112,6 +115,7 @@ export default class Order extends Component {
           { key, name: categories[key].name }
           }
           selectedDate={ selectedDate }
+          orders={ orders }
         />
       );
     });

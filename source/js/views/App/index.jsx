@@ -14,14 +14,14 @@ import { routeCodes } from '../../routes';
 export default class App extends Component {
   static propTypes = {
     children: PropTypes.object,
-    getUserLoading: PropTypes.bool,
+    loggedInUser: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
     const { dispatch } = this.props;
-    localStorage.setItem('init-path', location.pathname);
     firebaseAuth().onAuthStateChanged((user) => {
+      localStorage.setItem('init-path', location.pathname);
       if (this.handleReauth()) return;
       if (user) {
         dispatch(getUser(user.uid));
@@ -33,10 +33,10 @@ export default class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { getUserLoading } = this.props;
-    const path = localStorage.getItem('init-path');
-    if (nextProps.getUserLoading !== getUserLoading) {
-      if (!nextProps.getUserLoading && nextProps.loggedInUser) {
+    const { loggedInUser } = this.props;
+    if (nextProps.loggedInUser !== loggedInUser) {
+      if (nextProps.loggedInUser) {
+        const path = localStorage.getItem('init-path');
         if (this.isLoginPath(path)) {
           redirectTo(routeCodes.ORDER);
         } else {
@@ -69,11 +69,11 @@ export default class App extends Component {
   }
 
   render() {
-    const { children, getUserLoading } = this.props;
+    const { children, loggedInUser } = this.props;
 
     return (
       <div className='App'>
-        { getUserLoading && <div className='LoadingModal'>Loading...</div> }
+        { (userSignedIn() && !loggedInUser) && <div className='LoadingModal'>Loading...</div> }
         { userSignedIn() && <Menu /> }
 
         <div className='Page'>
