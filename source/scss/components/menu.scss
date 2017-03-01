@@ -3,6 +3,9 @@
   padding: 20px;
   background: $dark-background;
   border-bottom: 1px solid $light-gray;
+  @include sm-and-lower {
+    padding: 20px 10px;
+  }
 }
 
 .Menu a {
@@ -18,10 +21,4 @@
 
 .Menu-right {
   float: right;
-}
-
-@media (max-width: 768px) {
-  .Menu {
-    padding: 20px 10px;
-  }
 }

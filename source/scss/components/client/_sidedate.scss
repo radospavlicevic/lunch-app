@@ -1,12 +1,12 @@
 .SideDate-wrapper {
-  width: 25%;
-  height: 100vh;
+  width: 300px;
+  height: 93vh;
   overflow-y: scroll;
   p {
     margin: 0;
   }
   @include md-and-lower {
-    width: 35%;
+    width: 240px;
   }
 }
 
