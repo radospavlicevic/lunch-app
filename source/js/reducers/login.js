@@ -7,7 +7,7 @@ import {
   GET_USER_START,
   GET_USER_ERROR,
   GET_USER_SUCCESS,
-  LOGOUT_USER,
+  LOGOUT,
 } from 'actions/login';
 
 const initialState = Map({
@@ -15,6 +15,7 @@ const initialState = Map({
   loginLoading: false,
   loginError: null,
   loginData: null,
+  logoutProcessing: false,
   // getUser
   getUserLoading: false,
   getUserError: null,
@@ -61,7 +62,7 @@ const actionsMap = {
       loggedInUser: action.data,
     }));
   },
-  [LOGOUT_USER]: (state) => {
+  [LOGOUT]: (state) => {
     return state.merge(Map({
       loggedInUser: null,
     }));

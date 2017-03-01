@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
 import { firebaseAuth } from 'utils/firebase_config';
-import { getUser, logoutUser } from 'actions/login';
+import { getUser, logout } from 'actions/login';
 import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
@@ -27,7 +27,7 @@ export default class App extends Component {
         dispatch(getUser(user.uid));
       } else {
         redirectTo(routeCodes.LOGIN);
-        dispatch(logoutUser);
+        dispatch(logout());
       }
     });
   }
@@ -70,11 +70,10 @@ export default class App extends Component {
 
   render() {
     const { children, loggedInUser } = this.props;
-
     return (
       <div className='App'>
         { (userSignedIn() && !loggedInUser) && <div className='LoadingModal'>Loading...</div> }
-        { userSignedIn() && <Menu /> }
+        { (userSignedIn() && loggedInUser) && <Menu /> }
 
         <div className='Page'>
           { children }
