@@ -1,0 +1,62 @@
+.Overview {
+  display: flex;
+  color: #fff;
+  font-family: Avenir;
+}
+
+.Overview-top {
+  width: calc( 100% - 300px );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @include md-and-lower {
+    width: calc( 100% - 240px);
+  }
+}
+
+.Overview-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #fff;
+  p {
+    margin: 3px 0;
+  }
+}
+
+.Overview-itemDesc {
+  text-align: center;
+}
+
+.Overview-note {
+  border: 1px solid #fff;
+  margin-top: 10px;
+  font-size: 1.5rem;
+  padding: 5px 10px;
+}
+
+.Overview-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.Overview-itemName {
+  font-size: 1.5rem;
+}
+
+.Overview-edit {
+  margin-top: 20px;
+  border: 1px solid #fff;
+  background: #252525;
+  color: #fff;
+  width: 100px;
+  padding-top: 5px;
+  outline: 0;
+  text-decoration: none;
+  outline: 0;
+  text-align: center;
+  text-transform: lowercase;
+}
