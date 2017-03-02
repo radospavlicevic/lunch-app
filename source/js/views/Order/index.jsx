@@ -122,12 +122,15 @@ export default class Order extends Component {
   }
 
   render() {
-    const { loggedInUser } = this.props;
+    const { loggedInUser, selectedDate } = this.props;
     return (
       <div className='Order'>
         { loggedInUser && <SideDate /> }
         { loggedInUser &&
           <div className='MyOrder-wrapper'>
+            <span className='Order-label'>Hello, { loggedInUser.username } <br />
+              Choose your meal for { selectedDate }
+            </span>
             { this.renderMenuSections() }
             <div className='Order-noteSection'>
               <textarea

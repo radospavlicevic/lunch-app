@@ -7,7 +7,7 @@ import { prepareForReauthentication } from 'utils/reauth';
 export default class UserItem extends Component {
   static propTypes = {
     admin: PropTypes.object,
-    data: PropTypes.object,
+    user: PropTypes.object,
   }
 
   constructor() {
@@ -16,19 +16,20 @@ export default class UserItem extends Component {
   }
 
   handleDeleteClick() {
-    const { data, admin } = this.props;
+    const { user, admin } = this.props;
     prepareForReauthentication();
-    removeUser(data.uid);
-    deleteUserFromAuthDB(data.user, admin);
+    removeUser(user.uid);
+    deleteUserFromAuthDB(user.data, admin);
   }
 
   render() {
-    const { data } = this.props;
+    const { user } = this.props;
+
     return (
       <tr>
-        <td>{ data.user.username }</td>
-        <td>{ data.user.email }</td>
-        <td>{ data.user.role }</td>
+        <td>{ user.data.username }</td>
+        <td>{ user.data.email }</td>
+        <td>{ user.data.role }</td>
         {/* <td><button className='AdminTable-button'>Edit</button></td> */}
         <td><button onClick={ this.handleDeleteClick } className='AdminTable-button'>Delete</button></td>
       </tr>

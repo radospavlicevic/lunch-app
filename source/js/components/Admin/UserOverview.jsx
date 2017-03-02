@@ -5,13 +5,13 @@ import UserItem from './UserItem';
 export default class UserOverview extends Component {
   static propTypes = {
     admin: PropTypes.object,
-    usersData: PropTypes.array,
+    users: PropTypes.object,
   }
 
   renderUsers() {
-    const { admin, usersData } = this.props;
-    return usersData && usersData.map((data, index) => {
-      return <UserItem key={ index } admin={ admin } data={ data } />;
+    const { admin, users } = this.props;
+    return users && Object.keys(users).map((key, index) => {
+      return <UserItem key={ index } admin={ admin } user={ { uid: key, data: users[key] } } />;
     });
   }
 

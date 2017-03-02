@@ -8,13 +8,13 @@ import UserOverview from 'components/Admin/UserOverview';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
-  usersData: state.users.get('usersData'),
+  users: state.users.get('users'),
 }))
 export default class Users extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
-    usersData: PropTypes.array,
+    users: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
@@ -26,12 +26,8 @@ export default class Users extends Component {
 
   setupFirebaseObservers() {
     const { dispatch } = this.props;
-    db.ref('users').on('child_added', newDBUser => {
-      const newUser = {
-        uid: newDBUser.key,
-        user: newDBUser.val(),
-      };
-      dispatch(addUser(newUser));
+    db.ref('users').on('child_added', newUser => {
+      dispatch(addUser(newUser.key, newUser.val()));
     });
 
     db.ref('users').on('child_removed', removedUser => {
@@ -40,11 +36,11 @@ export default class Users extends Component {
   }
 
   render() {
-    const { loggedInUser, usersData } = this.props;
+    const { loggedInUser, users } = this.props;
     return (
       <div className='Users Admin-wrapper'>
         <Register loggedInUser={ loggedInUser } />
-        <UserOverview usersData={ usersData } admin={ loggedInUser } />
+        <UserOverview users={ users } admin={ loggedInUser } />
         {/* { fetchUsersLoading && <span>Loading...</span> } */}
       </div>
     );

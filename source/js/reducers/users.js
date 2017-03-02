@@ -3,61 +3,51 @@ import { Map } from 'immutable';
 import {
   ADD_USER,
   DELETE_USER,
-  UPDATE_USER,
   FETCH_USERS_START,
   FETCH_USERS_ERROR,
   FETCH_USERS_SUCCESS,
 } from 'actions/users';
 
 const initialState = Map({
-  usersData: [],
+  users: {},
   // userForUpdate: null,
 });
 
 const actionsMap = {
   // USERS actions
   [ADD_USER]: (state, action) => {
-    let usersData = [...state.get('usersData')];
-    if (!usersData.find(user => user.uid === action.data.uid)) {
-      usersData = [...state.get('usersData'), action.data];
-    }
+    const users = { ...state.get('users'), [action.uid]: action.data };
     return state.merge(Map({
-      'usersData': usersData,
+      users,
     }));
   },
+
   [DELETE_USER]: (state, action) => {
-    const usersData = state.get('usersData').filter(user => user.uid !== action.uid);
+    const users = { ...state.get('users') };
+    delete users[action.uid];
     return state.merge(Map({
-      'usersData': usersData,
+      users,
     }));
   },
-  [UPDATE_USER]: (state, action) => {
-    const usersData = [...state.get('usersData')];
-    for (let i = 0; i < usersData.length; i++) {
-      if (usersData[i].uid === action.data.uid) {
-        usersData[i] = action.data;
-      }
-    }
-    return state.merge(Map({
-      'usersData': usersData,
-    }));
-  },
+
   [FETCH_USERS_START]: (state) => {
     return state.merge(Map({
       fetchUsersLoading: true,
       fetchUsersError: null,
     }));
   },
+
   [FETCH_USERS_ERROR]: (state, action) => {
     return state.merge(Map({
       fetchUsersLoading: false,
       fetchUsersError: action.error,
     }));
   },
+
   [FETCH_USERS_SUCCESS]: (state, action) => {
     return state.merge(Map({
       fetchUsersLoading: false,
-      usersData: action.data,
+      users: action.data,
     }));
   },
 };

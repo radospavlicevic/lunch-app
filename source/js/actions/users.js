@@ -28,9 +28,10 @@ function fetchUsersError(error) {
   };
 }
 
-export function addUser(data) {
+export function addUser(uid, data) {
   return {
     type: ADD_USER,
+    uid,
     data,
   };
 }
