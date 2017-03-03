@@ -8,55 +8,60 @@
   width: calc( 100% - 300px );
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  padding: 0 50px;
   @include md-and-lower {
     width: calc( 100% - 240px);
   }
 }
 
-.Overview-items {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-bottom: 1px solid #fff;
-  p {
-    margin: 3px 0;
-  }
-}
-
-.Overview-itemDesc {
-  text-align: center;
-}
-
 .Overview-note {
-  border: 1px solid #fff;
-  margin-top: 10px;
   font-size: 1.5rem;
-  padding: 5px 10px;
 }
 
 .Overview-wrap {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 20px;
+  align-items: flex-start;
+}
+
+.Overview-itemDesc {
+  width: 70%;
 }
 
 .Overview-itemName {
   font-size: 1.5rem;
+  margin: 3px 0;
 }
 
 .Overview-edit {
-  margin-top: 20px;
-  border: 1px solid #fff;
-  background: #252525;
   color: #fff;
   width: 100px;
-  padding-top: 5px;
   outline: 0;
   text-decoration: none;
   outline: 0;
-  text-align: center;
-  text-transform: lowercase;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #fff;
+  color: #252525;
+  height: 30px;
+  padding: 0 5px;
+  p {
+    margin: 0;
+    margin-top: 5px;
+  }
+}
+
+.Overview-editImage {
+  width: 15px;
+}
+
+.Overview-selectedDate {
+  font-size: 2.5rem;
+  letter-spacing: 1px;
+}
+
+.Overview-headerText {
+  font-size: 1.5rem;
 }
