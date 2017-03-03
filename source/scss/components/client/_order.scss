@@ -10,6 +10,10 @@
  color: #fff;
  font-size: 1.5rem;
  border-bottom: 1px solid gray;
+ @include md-and-lower {
+   padding: 90px 20px;
+   font-size: 1rem;
+ }
 }
 
 .Order-noteInput {
@@ -18,8 +22,9 @@
  flex-basis: 70%;
  padding-left: 10px;
  padding-top: 6px;
- @include sm-and-lower {
+ @include md-and-lower {
    flex-basis: 100%;
+   padding-top: 12px;
  }
 }
 
@@ -31,6 +36,12 @@
  margin-left: 10px;
  cursor: pointer;
  padding-top: 6px;
+ @include md-and-lower {
+   flex: inherit;
+   font-size: 1rem;
+   margin: 5px auto;
+   border: 0;
+ }
  @include sm-and-lower {
    flex-basis: 50%;
  }

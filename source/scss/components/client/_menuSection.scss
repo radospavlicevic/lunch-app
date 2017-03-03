@@ -29,6 +29,9 @@
 .MenuSection-tab--selected {
   @extend .MenuSection-tab;
   border: 3px solid $light-gray;
+  @include sm-and-lower {
+    font-size: 0.80rem;
+  }
 }
 
 .ManuSection-cancelButton {
@@ -48,5 +51,10 @@
   @include md-and-lower {
     font-size: 2.5rem;
     margin-bottom: 20px;
+  }
+  @include sm-and-lower {
+    font-size: 1.5rem;
+    height: auto;
+    margin-top: 50px;
   }
 }

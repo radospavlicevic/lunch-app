@@ -17,6 +17,7 @@
     flex-basis: 100%;
     p {
       font-size: 1.62rem;
+      padding: 0 5px;
     }
   }
 }
@@ -31,8 +32,8 @@
   font-size: 1.13rem;
   padding: 5px 20px;
   border-top: 1px solid #fff;
-
   @include sm-and-lower {
     font-size: 0.86rem;
+    padding: 5px;
   }
 }

@@ -12,4 +12,7 @@
   @include md-and-lower {
     width: calc( 100% - 240px );
   }
+  @include sm-and-lower {
+    width: 70%;
+  }
 }

@@ -13,10 +13,19 @@
   @include md-and-lower {
     width: calc( 100% - 240px);
   }
+  @include sm-and-lower {
+    width: 70%;
+    h1 {
+    font-size: 1rem;
+    }
+  }
 }
 
 .Overview-note {
   font-size: 1.5rem;
+  @include sm-and-lower {
+    font-size: 1rem;
+  }
 }
 
 .Overview-wrap {
@@ -32,6 +41,9 @@
 .Overview-itemName {
   font-size: 1.5rem;
   margin: 3px 0;
+  @include sm-and-lower {
+    font-size: 1rem;
+  }
 }
 
 .Overview-edit {
@@ -60,8 +72,14 @@
 .Overview-selectedDate {
   font-size: 2.5rem;
   letter-spacing: 1px;
+  @include sm-and-lower {
+    font-size: 1.5rem;
+  }
 }
 
 .Overview-headerText {
   font-size: 1.5rem;
+  @include sm-and-lower {
+    font-size: 1rem;
+  }
 }
