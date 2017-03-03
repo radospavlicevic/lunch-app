@@ -74,6 +74,11 @@ export default class MenuSection extends Component {
     return category.key === 'main_dish';
   }
 
+  noDishes() {
+    const { dishes } = this.state;
+    return dishes && Object.keys(dishes).length === 0;
+  }
+
   renderTabs() {
     const { selectedTab } = this.state;
     return (
@@ -96,7 +101,7 @@ export default class MenuSection extends Component {
     const { category, selectedDate, orders } = this.props;
     const { dishes } = this.state;
     return (
-      <div className='MenuSection'>
+      <div className={ this.noDishes() ? 'u-invisible' : 'MenuSection' } >
         <p className='MenuSection-category'>{ category.name }</p>
         { this.isMainDish() && this.renderTabs() }
         <Grid

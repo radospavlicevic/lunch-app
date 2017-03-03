@@ -8,6 +8,9 @@
   @include md-and-lower {
     width: 240px;
   }
+  @include sm-and-lower {
+    width: 30%;
+  }
 }
 
 .SideDate-month,
@@ -18,6 +21,9 @@
   @include md-and-lower {
     font-size: 1.5rem;
   }
+  @include sm-and-lower {
+    font-size: 1rem;
+  }
 }
 
 .SideDate-day {
@@ -25,6 +31,9 @@
   font-family: Avenir;
   @include md-and-lower {
     font-size: 3.2rem;
+  }
+  @include sm-and-lower {
+    font-size: 2rem;
   }
 }
 
@@ -45,6 +54,10 @@
   }
   @include md-and-lower {
     padding: 35px 30px;
+  }
+  @include sm-and-lower {
+    padding: 50px 20px;
+    height: 164px;
   }
 }
 
@@ -80,5 +93,9 @@
     &:hover {
       border-bottom: 0;
     }
+  }
+  @include sm-and-lower {
+    height: 3rem;
+    font-size: 1rem;
   }
 }

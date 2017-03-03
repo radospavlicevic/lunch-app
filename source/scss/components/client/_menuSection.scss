@@ -24,6 +24,9 @@
   color: #fff;
   flex-basis: 49%;
   cursor: pointer;
+  @include sm-and-lower {
+    font-size: 0.80rem;
+  }
 }
 
 .MenuSection-tab--selected {
@@ -36,6 +39,10 @@
   margin: 20px auto;
   font-size: 1.5rem;
   cursor: pointer;
+  background: #fff;
+  border: none;
+  padding-bottom: 0px;
+  outline: none;
 }
 
 .MenuSection-category {
@@ -48,5 +55,10 @@
   @include md-and-lower {
     font-size: 2.5rem;
     margin-bottom: 20px;
+  }
+  @include sm-and-lower {
+    font-size: 1.5rem;
+    height: auto;
+    margin-top: 50px;
   }
 }

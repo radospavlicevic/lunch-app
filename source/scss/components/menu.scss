@@ -3,9 +3,6 @@
   padding: 2vh;
   background: $dark-background;
   border-bottom: 1px solid $light-gray;
-  @include sm-and-lower {
-    padding: 20px 10px;
-  }
 }
 
 .Menu a {

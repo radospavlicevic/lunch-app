@@ -1,10 +1,20 @@
 .Grid {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-family: Avenir;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   @mixin md-and-lower() {
     height: calc(100% - 240px);
+  }
+}
+
+.Grid-loading {
+  font-size: 2.5rem;
+  @include md-and-lower {
+    font-size: 2rem;
+  }
+  @include sm-and-lower {
+    font-size: 1rem;
   }
 }
