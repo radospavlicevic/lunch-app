@@ -15,9 +15,12 @@
   }
   @include sm-and-lower {
     width: 70%;
-    h1 {
-    font-size: 1rem;
-    }
+  }
+}
+
+.Overview-userName {
+  @include sm-and-lower {
+  font-size: 1rem;
   }
 }
 

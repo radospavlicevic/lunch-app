@@ -102,7 +102,7 @@ export default class Overview extends Component {
         { loggedInUser && <SideDate /> }
         { loggedInUser &&
         <div className='Overview-top'>
-          <h1>{ loggedInUser.username }&apos;s orders: </h1>
+          <h1 className='Overview-userName'>{ loggedInUser.username }&apos;s orders: </h1>
           <h1 className='Overview-selectedDate'>{ selectedDate }</h1>
           { (loggedInUser && order) && <MealOverview data={ order } /> }
         </div>

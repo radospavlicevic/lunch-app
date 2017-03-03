@@ -21,8 +21,9 @@ export default class Grid extends Component {
     const { dishes, selectedDate } = this.props;
 
     if (!dishes) {
-      return <h1 className='Grid-loading'>Loading...</h1>;
+      return <h1 className='Grid-loading'>No dishes</h1>;
     }
+
     return Object.keys(dishes).map((key, index) => {
       return (
         <FoodItem
