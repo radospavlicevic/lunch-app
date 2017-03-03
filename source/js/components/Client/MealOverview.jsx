@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { routeCodes } from '../../routes';
+import pencilImg from '../../../assets/img/pencil.png';
 
 export default class MealOverview extends Component {
   static propTypes = {
@@ -33,7 +34,8 @@ export default class MealOverview extends Component {
         <p className='Overview-note'>Note: { data.note }</p>
         }
         <Link className='Overview-edit' to={ routeCodes.ORDER }>
-          Edit
+          <img src={ pencilImg } className='Overview-editImage' alt='edit order' />
+          <p>Edit</p>
         </Link>
       </div>
     );
