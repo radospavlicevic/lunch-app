@@ -128,7 +128,7 @@ export default class Order extends Component {
         { loggedInUser && <SideDate /> }
         { loggedInUser &&
           <div className='MyOrder-wrapper'>
-            <span className='Order-label'>Hello, { loggedInUser.username } <br />
+            <span className='Order-label'>Hello, { loggedInUser.username.split(' ', 1) } <br />
               Choose your meal for { selectedDate }
             </span>
             { this.renderMenuSections() }

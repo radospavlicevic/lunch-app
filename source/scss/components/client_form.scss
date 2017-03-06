@@ -25,6 +25,7 @@
   font-size: 1.2rem;
   height: 35px;
   padding-top: 5px;
+  outline: none;
   @include md-and-lower {
     align-self: center;
   }

@@ -14,7 +14,8 @@
     width: calc( 100% - 240px);
   }
   @include sm-and-lower {
-    width: 70%;
+    width: 65%;
+    padding: 0 30px;
   }
 }
 
@@ -59,7 +60,7 @@
   align-items: center;
   justify-content: space-around;
   background: #fff;
-  color: #252525;
+  color: $dark-background;
   height: 30px;
   padding: 0 5px;
   p {

@@ -1,6 +1,6 @@
 .SideDate-wrapper {
   width: 300px;
-  height: 93vh;
+  height: 92vh;
   overflow-y: scroll;
   p {
     margin: 0;
@@ -9,7 +9,8 @@
     width: 240px;
   }
   @include sm-and-lower {
-    width: 30%;
+    width: 35%;
+    height: 94vh;
   }
 }
 
@@ -42,7 +43,7 @@
   flex-direction: column;
   align-items: center;
   position: relative;
-  background: #ececec;
+  background: $light-gray;
   padding: 55px 30px;
   border: 0;
   border-bottom: 1px solid #000;
@@ -59,6 +60,9 @@
     padding: 50px 20px;
     height: 164px;
   }
+  @include sm {
+    padding: 35px 20px;
+  }
 }
 
 .SideDate-active {
@@ -71,22 +75,24 @@
   height: 4.38rem;
   font-family: AvenirRoman;
   font-size: 1.5rem;
-  background-color: #ececec;
-  border: 1px solid #252525;
-  color: #252525;
+  background-color: $light-gray;
+  color: $dark-background;
   text-transform: lowercase;
   cursor: pointer;
   border-right: transparent;
   border-left: transparent;
   &:hover {
       color: #ececec;
-      background-color: #252525;
+      background-color: $dark-background;
       border: 1px solid #ececec;
-      border-right: 1px solid #ececec;
-      border-left: 1px solid #ececec;
+      border-right: 1px solid $light-gray;
+      border-left: 1px solid $light-gray;
   }
   &:first-child {
     border-top: none;
+    @include sm-and-lower {
+      border-bottom: 1px solid $dark-background;
+    }
   }
   &:last-child {
     border-top: none;
