@@ -143,7 +143,9 @@ export default class Order extends Component {
             <span className='Order-label'>Hello, { loggedInUser.username.split(' ', 1) } <br />
               Choose your meal for { selectedDate }
             </span>
-            <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
+            <div className='Order-cancelLunch'>
+              <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
+            </div>
             { this.renderMenuSections() }
             <div className='Order-noteSection'>
               <textarea

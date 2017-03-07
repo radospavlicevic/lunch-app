@@ -1,16 +1,21 @@
 .Menu {
   width: 100%;
-  padding: 2vh;
+  height: 5vh;
   background: $dark-background;
   border-bottom: 1px solid $light-gray;
+  padding-left: 10px;
   @include sm-and-lower {
-    padding: 1vh;
+    height: 5vh;
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem;
+    justify-content: space-around;
   }
 }
 
 .Menu a {
   display: inline-block;
-  padding: 5px 0;
+  padding: 15px 0;
   color: white;
   margin-right: 10px;
   text-decoration: none;
@@ -21,6 +26,11 @@
 
 .Menu-right {
   float: right;
+  margin-right: 2vh;
+  margin-top: 1vh;
+  @include sm-and-lower {
+    margin-top: 0;
+  }
 }
 
 .Menu-button {

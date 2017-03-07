@@ -1,8 +1,9 @@
 .SideDate-wrapper {
   width: 300px;
-  height: 92vh;
+  height: 95vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  background-color: $light-gray;
   p {
     margin: 0;
   }
@@ -11,7 +12,6 @@
   }
   @include sm-and-lower {
     width: 35%;
-    height: 94vh;
   }
 }
 
@@ -90,16 +90,11 @@
       border-left: 1px solid $light-gray;
   }
   &:first-child {
-    border-top: none;
-    @include sm-and-lower {
-      border-bottom: 1px solid $dark-background;
-    }
+    border: none;
+    border-bottom: 1px solid $dark-background;
   }
   &:last-child {
-    border-top: none;
-    &:hover {
-      border-bottom: 0;
-    }
+    border: none;
   }
   @include sm-and-lower {
     height: 3rem;
