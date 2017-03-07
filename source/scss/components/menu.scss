@@ -3,6 +3,9 @@
   padding: 2vh;
   background: $dark-background;
   border-bottom: 1px solid $light-gray;
+  @include sm-and-lower {
+    padding: 1vh;
+  }
 }
 
 .Menu a {
@@ -18,4 +21,10 @@
 
 .Menu-right {
   float: right;
+}
+
+.Menu-button {
+  background-color: #fff;
+  border: none;
+  height: 30px;
 }
