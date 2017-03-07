@@ -12,9 +12,7 @@ import md5 from 'md5';
 export default class Login extends Component {
 
   static propTypes = {
-    loginLoading: PropTypes.bool,
     loginError: PropTypes.object,
-    getUserLoading: PropTypes.bool,
     getUserError: PropTypes.object,
     // from react-redux connect
     dispatch: PropTypes.func,
@@ -54,10 +52,6 @@ export default class Login extends Component {
   }
 
   render() {
-    const {
-      loginLoading,
-      getUserLoading,
-    } = this.props;
     return (
       <div className='Login'>
         <h1>Login with your email</h1>
@@ -66,7 +60,6 @@ export default class Login extends Component {
           <input ref={ node => this.password = node } className='ClientForm-input' placeholder='Password' type='password' />
           <button className='ClientForm-button'>Login</button>
         </form>
-        { (loginLoading || getUserLoading) && <p>Loading...</p> }
         { this.renderLoginErrors() }
       </div>
     );

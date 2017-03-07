@@ -59,6 +59,12 @@
   text-align: center;
 }
 
+.Order-cancelLunch {
+  @include sm-and-lower {
+    padding: 0 25px;
+  }
+}
+
 .Order-cancelLunchButton {
   border: none;
   outline: none;
@@ -72,8 +78,9 @@
   font-size: 2rem;
   cursor: pointer;
   @include sm-and-lower {
-    font-size: 0.8rem;
+    font-size: 1rem;
     padding: 15px 0;
     line-height: 0;
+    width: 100%;
   }
 }
