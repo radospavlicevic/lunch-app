@@ -1,11 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { DATE_PATTERN } from 'utils/globals';
 import { setSelectedDate } from 'actions/orders';
 import moment from 'moment';
 
 @connect()
-export default class SideDateItem extends Component {
+export default class WeekPickerItem extends Component {
   static propTypes = {
     date: PropTypes.string,
     selected: PropTypes.bool,
@@ -18,15 +17,14 @@ export default class SideDateItem extends Component {
     this.handleClick = this.handleClick.bind(this);
   }
 
-  // function returns formatted date as number
   getDay() {
     const { date } = this.props;
-    return moment(date, DATE_PATTERN).format('D');
+    return moment(date, 'DD-MM-YYYY').format('D');
   }
-  // function returns formatted date as month name
+
   getMonthName() {
     const { date } = this.props;
-    return moment(date, DATE_PATTERN).format('MMMM');
+    return moment(date, 'DD-MM-YYYY').format('MMMM');
   }
 
   handleClick(event) {
@@ -40,11 +38,9 @@ export default class SideDateItem extends Component {
     return (
       <button
         onClick={ this.handleClick }
-        className={ selected ? 'SideDate-active' : 'SideDate' }
+        className={ selected ? 'WeekPicker-item--active' : 'WeekPicker-item' }
       >
-        <p className='SideDate-month'>{ this.getMonthName() }</p>
-        <p className='SideDate-day'>{ this.getDay() }</p>
-        <p className='SideDate-viewOrders'>view orders</p>
+        <span>{ this.getMonthName() }<br />{ this.getDay() }</span>
       </button>
     );
   }

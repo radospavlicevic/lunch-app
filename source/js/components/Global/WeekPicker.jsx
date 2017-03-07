@@ -1,12 +1,13 @@
+
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import SideDateItem from 'components/Client/SideDateItem';
+import WeekPickerItem from 'components/Global/WeekPickerItem';
 import { setSelectedDate } from 'actions/orders';
 import { DATE_PATTERN } from 'utils/globals';
 import moment from 'moment';
 
 @connect()
-export default class SideDate extends Component {
+export default class WeekPicker extends Component {
   static propTypes = {
     selectedDate: PropTypes.string,
     dispatch: PropTypes.func,
@@ -49,6 +50,11 @@ export default class SideDate extends Component {
     return daysModel;
   }
 
+  getYear() {
+    const { selectedDate } = this.props;
+    return moment(selectedDate, DATE_PATTERN).format('YYYY');
+  }
+
   switchWeek(indicator) {
     const { selectedDate, dispatch } = this.props;
     const newSelectedDate = moment(selectedDate, DATE_PATTERN).add(indicator * 7, 'days').format(DATE_PATTERN);
@@ -63,13 +69,13 @@ export default class SideDate extends Component {
     this.switchWeek(1);
   }
 
-  renderSideDateItems() {
+  renderWeekPickerItems() {
     const { daysModel } = this.state;
     const { selectedDate } = this.props;
     return (
       daysModel.map((date, index) => {
         return (
-          <SideDateItem
+          <WeekPickerItem
             key={ index }
             date={ date }
             selected={ date === selectedDate }
@@ -81,10 +87,13 @@ export default class SideDate extends Component {
 
   render() {
     return (
-      <div className='SideDate-wrapper'>
-        <button onClick={ this.handlePreviousClick } className='SideDate-loadButton'>Previous</button>
-        { this.renderSideDateItems() }
-        <button onClick={ this.handleNextClick } className='SideDate-loadButton'>Next</button>
+      <div className='WeekPicker'>
+        <h1>{ this.getYear() }</h1>
+        <div className='WeekPicker-controls'>
+          <button onClick={ this.handlePreviousClick } className='WeekPicker-button'>Previous</button>
+          { this.renderWeekPickerItems() }
+          <button onClick={ this.handleNextClick } className='WeekPicker-button'>Next</button>
+        </div>
       </div>
     );
   }

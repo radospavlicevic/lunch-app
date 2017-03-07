@@ -1,0 +1,51 @@
+.WeekPicker {
+  background: #fff;
+  h1 {
+    color: $dark-background;
+    text-align: center;
+    margin: 10px 0;
+  }
+}
+
+.WeekPicker-controls {
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.WeekPicker-item {
+  border: 1px solid #fff;
+  outline: none;
+  width: 100px;
+  height: 80px;
+  background: $dark-background;
+  color: white;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+  @include sm-and-lower {
+    width: 20%;
+    height: 60px;
+    font-size: 0.8rem;
+    order: 1;
+  }
+}
+
+.WeekPicker-button {
+  @extend .WeekPicker-item;
+  @include sm-and-lower {
+    flex-basis: 50%;
+    order: 2;
+  }
+}
+
+.WeekPicker-item--active {
+  @extend .WeekPicker-item;
+  background: $light-gray;
+  color: $dark-background;
+  font-weight: bold;
+  border: 1px solid $dark-background;
+}

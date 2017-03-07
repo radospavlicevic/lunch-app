@@ -14,6 +14,7 @@ export default class Grid extends Component {
     const { category, selectedDate, orders } = this.props;
     if (!orders[selectedDate]) return false;
     if (!orders[selectedDate][userSignedIn().uid]) return false;
+    if (!orders[selectedDate][userSignedIn().uid].meal) return false;
     return (orders[selectedDate][userSignedIn().uid].meal[category.key] === dishKey);
   }
 
@@ -21,7 +22,7 @@ export default class Grid extends Component {
     const { dishes, selectedDate } = this.props;
 
     if (!dishes) {
-      return <h1 className='Grid-loading'>No dishes</h1>;
+      return <h1 className='Grid-loading'>No dishes...</h1>;
     }
 
     return Object.keys(dishes).map((key, index) => {

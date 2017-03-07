@@ -9,3 +9,5 @@ export const roles = {
   USER: 'USER',
   ADMIN: 'ADMIN',
 };
+
+export const DATE_PATTERN = 'DD-MM-YYYY';

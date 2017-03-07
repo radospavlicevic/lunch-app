@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
 import { userSignedIn } from 'api/auth';
-import { saveNoteInOrder } from 'api/orders';
+import { saveNoteInOrder, deleteUserOrder } from 'api/orders';
 import { updateOrder } from 'actions/orders';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
@@ -32,6 +32,7 @@ export default class Order extends Component {
     super();
 
     this.handleSaveNoteClick = this.handleSaveNoteClick.bind(this);
+    this.handleCancelLunchClick = this.handleCancelLunchClick.bind(this);
   }
 
   componentWillMount() {
@@ -66,6 +67,12 @@ export default class Order extends Component {
     db.ref('dishes').on('child_added', newDish => {
       dispatch(addOrUpdateDish(newDish.key, newDish.val()));
     });
+
+    if (userSignedIn()) {
+      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
+        dispatch(updateOrder(selectedDate, order.key, order.val()));
+      });
+    }
   }
 
   updateFirebaseObservers(selectedDate) {
@@ -86,6 +93,11 @@ export default class Order extends Component {
     const { selectedDate } = this.props;
     saveNoteInOrder(selectedDate, this.noteInput.value);
     this.noteInput.value = '';
+  }
+
+  handleCancelLunchClick() {
+    const { selectedDate } = this.props;
+    deleteUserOrder(selectedDate, userSignedIn().uid);
   }
 
   filterByCategory(dishes, category) {
@@ -112,7 +124,7 @@ export default class Order extends Component {
           key={ index }
           dishes={ this.filterByCategory(menus[selectedDate], key) }
           category={
-          { key, name: categories[key].name }
+            { key, name: categories[key].name }
           }
           selectedDate={ selectedDate }
           orders={ orders }
@@ -125,12 +137,13 @@ export default class Order extends Component {
     const { loggedInUser, selectedDate } = this.props;
     return (
       <div className='Order'>
-        { loggedInUser && <SideDate /> }
+        { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
           <div className='MyOrder-wrapper'>
             <span className='Order-label'>Hello, { loggedInUser.username.split(' ', 1) } <br />
               Choose your meal for { selectedDate }
             </span>
+            <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
             { this.renderMenuSections() }
             <div className='Order-noteSection'>
               <textarea

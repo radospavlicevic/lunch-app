@@ -41,7 +41,6 @@ export default class Users extends Component {
       <div className='Users Admin-wrapper'>
         <Register loggedInUser={ loggedInUser } />
         <UserOverview users={ users } admin={ loggedInUser } />
-        {/* { fetchUsersLoading && <span>Loading...</span> } */}
       </div>
     );
   }

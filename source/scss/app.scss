@@ -7,11 +7,14 @@
 @import "base/app";
 @import "components/menu";
 @import "base/tables";
-@import "components/login";
+@import "components/week_picker";
 @import "components/client_form";
 @import "components/admin_form";
+@import "components/daily_table";
 @import "components/dishes";
-@import "components/client/order";
+@import "components/pages/login";
+@import "components/pages/order";
+@import "components/pages/weeklyOverview";
 @import "components/client/dayview";
 @import "components/client/menuSection";
 @import "components/client/grid";

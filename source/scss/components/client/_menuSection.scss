@@ -45,6 +45,9 @@
 }
 
 .ManuSection-cancelButton {
+  border: none;
+  outline: none;
+  background: $light-gray;
   display: block;
   margin: 20px auto;
   font-size: 1.5rem;

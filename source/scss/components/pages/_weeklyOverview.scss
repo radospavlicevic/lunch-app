@@ -1,0 +1,13 @@
+.WeeklyOverview {
+  width: 90%;
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  h2 {
+    text-align: center;
+    border-bottom: 1px solid $dark-background;
+    background: $light-gray;
+    padding: 20px 0;
+    margin-bottom: 0;
+  }
+}

@@ -11,6 +11,7 @@ import Dishes from 'views/Dishes';
 import Categories from 'views/Categories';
 import Caterings from 'views/Caterings';
 import Menus from 'views/Menus';
+import WeeklyOverview from 'views/WeeklyOverview';
 import NotFound from 'views/NotFound';
 
 const publicPath = '/';
@@ -25,6 +26,7 @@ export const routeCodes = {
   CATEGORIES: `${ publicPath }categories`,
   CATERINGS: `${ publicPath }caterings`,
   MENUS: `${ publicPath }menus`,
+  WEEKLY_OVERVIEW: `${ publicPath }weekly-overview`,
 };
 
 export default class Routes extends Component {
@@ -41,7 +43,8 @@ export default class Routes extends Component {
           <Route path={ routeCodes.DISHES } component={ Dishes } />
           <Route path={ routeCodes.CATEGORIES } component={ Categories } />
           <Route path={ routeCodes.CATERINGS } component={ Caterings } />
-          <Route path={ `${ routeCodes.MENUS }(${ publicPath }:date)` } component={ Menus } />
+          <Route path={ routeCodes.MENUS } component={ Menus } />
+          <Route path={ routeCodes.WEEKLY_OVERVIEW } component={ WeeklyOverview } />
           <Route path='*' component={ NotFound } />
         </Route>
 

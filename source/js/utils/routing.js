@@ -3,7 +3,6 @@ import { roles } from './globals';
 import { routeCodes } from '../routes';
 
 export function redirectTo(page) {
-  console.log('Page-->', page);
   browserHistory.push(page);
 }
 
