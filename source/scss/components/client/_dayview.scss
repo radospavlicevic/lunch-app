@@ -9,6 +9,7 @@
   width: calc( 100% - 300px );
   max-height: 92vh;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   @include md-and-lower {
     width: calc( 100% - 240px );
   }
