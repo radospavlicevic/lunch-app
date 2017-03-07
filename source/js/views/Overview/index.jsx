@@ -99,7 +99,7 @@ export default class Overview extends Component {
     const order = this.getOrder(loggedInUser, selectedDate, orders);
     return (
       <div className='Overview'>
-        { loggedInUser && <SideDate /> }
+        { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
         <div className='Overview-top'>
           <h1 className='Overview-userName'>{ loggedInUser.username }&apos;s orders: </h1>
