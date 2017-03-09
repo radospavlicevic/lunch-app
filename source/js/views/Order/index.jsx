@@ -124,7 +124,17 @@ export default class Order extends Component {
 
   menuIsLocked(selectedDate) {
     const { menus } = this.props;
-    return (menus[selectedDate] && menus[selectedDate].locked);
+    return menus[selectedDate] && menus[selectedDate].locked;
+  }
+
+  emptyMenu(selectedDate) {
+    const { menus } = this.props;
+    if (menus[selectedDate]) {
+      return (Object.keys(menus[selectedDate]).length === 0) ||
+              (Object.keys(menus[selectedDate]).length === 1 &&
+              menus[selectedDate].locked !== undefined);
+    }
+    return false;
   }
 
   renderMenuSections(selectedDate) {
@@ -152,6 +162,14 @@ export default class Order extends Component {
     );
   }
 
+  renderNoMenuScreen() {
+    return (
+      <div className='u-locked'>
+        <span>There is no menu for this day yet.</span>
+      </div>
+    );
+  }
+
   renderUnlockedScreen(selectedDate) {
     return (
       <div>
@@ -174,6 +192,16 @@ export default class Order extends Component {
     );
   }
 
+  renderMyOrderSide(selectedDate) {
+    const { menus } = this.props;
+    if (!menus[selectedDate] || this.emptyMenu(selectedDate)) {
+      return this.renderNoMenuScreen(selectedDate);
+    } else if (this.menuIsLocked(selectedDate)) {
+      return this.renderLockedScreen(selectedDate);
+    }
+    return this.renderUnlockedScreen(selectedDate);
+  }
+
   render() {
     const { loggedInUser, selectedDate } = this.props;
     return (
@@ -181,11 +209,7 @@ export default class Order extends Component {
         { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
           <div className='MyOrder-wrapper'>
-            {
-              this.menuIsLocked(selectedDate) ?
-              this.renderLockedScreen(selectedDate) :
-              this.renderUnlockedScreen(selectedDate)
-            }
+            { this.renderMyOrderSide(selectedDate) }
           </div>
         }
       </div>

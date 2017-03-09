@@ -7,7 +7,7 @@ import DishOverview from 'components/Admin/DishOverview';
 import { dishOverviewTypes, DATE_PATTERN } from 'utils/globals';
 import { addDishInMenu, removeDishFromMenu, setMenuLock } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
-import { addOrUpdateDish, addOrUpdateCategory, addCatering } from 'actions/meals';
+import { addOrUpdateDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
 import moment from 'moment';
 
 @connect(state => ({
@@ -72,7 +72,7 @@ export default class Menus extends Component {
     });
 
     db.ref('caterings').on('child_added', newCatering => {
-      dispatch(addCatering(newCatering.key, newCatering.val()));
+      dispatch(addOrUpdateCatering(newCatering.key, newCatering.val()));
     });
 
     db.ref('categories').on('child_added', newCategory => {

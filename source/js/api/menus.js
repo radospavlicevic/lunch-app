@@ -19,5 +19,5 @@ export function updateDishInMenu(date, key, data) {
 }
 
 export function switchMenuLock(date, lock) {
-  return db.ref(`menus/${ date }`).set({ locked: lock });
+  return db.ref(`menus/${ date }/locked`).set(lock);
 }
