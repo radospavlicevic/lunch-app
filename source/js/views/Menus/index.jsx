@@ -4,8 +4,9 @@ import { db } from 'utils/firebase_config';
 import { checkAdminRole } from 'utils/routing';
 import DatePicker from 'react-datepicker';
 import DishOverview from 'components/Admin/DishOverview';
-import { dishOverviewTypes } from 'utils/globals';
-import { addDishInMenu, removeDishFromMenu } from 'actions/menus';
+import { dishOverviewTypes, DATE_PATTERN } from 'utils/globals';
+import { addDishInMenu, removeDishFromMenu, setMenuLock } from 'actions/menus';
+import { switchMenuLock } from 'api/menus';
 import { addOrUpdateDish, addOrUpdateCategory, addCatering } from 'actions/meals';
 import moment from 'moment';
 
@@ -15,6 +16,7 @@ import moment from 'moment';
   categories: state.meals.get('categories'),
   dishes: state.meals.get('noStandardDishes'),
   menus: state.menus.get('menus'),
+  selectedDate: state.orders.get('selectedDate'),
 }))
 export default class Menus extends Component {
 
@@ -24,18 +26,20 @@ export default class Menus extends Component {
     categories: PropTypes.object,
     dishes: PropTypes.object,
     menus: PropTypes.object,
+    selectedDate: PropTypes.string,
     dispatch: PropTypes.func,
   }
 
-  constructor() {
+  constructor(props) {
     super();
+
     this.state = {
       selectedTab: 'select_dishes',
-      selectedDay: moment(),
+      selectedDay: props.selectedDate,
     };
 
-    this.datePattern = 'DD-MM-YYYY';
     this.handleDayChange = this.handleDayChange.bind(this);
+    this.handleLockClick = this.handleLockClick.bind(this);
   }
 
   componentWillMount() {
@@ -53,14 +57,18 @@ export default class Menus extends Component {
       dispatch(addOrUpdateDish(newDish.key, newDish.val()));
     });
 
-    db.ref(`menus/${ selectedDay.format(this.datePattern) }`).on('child_added', newMenuDish => {
+    db.ref(`menus/${ selectedDay }`).on('child_added', newMenuDish => {
       dispatch(
-        addDishInMenu(selectedDay.format(this.datePattern), newMenuDish.key, newMenuDish.val())
+        addDishInMenu(selectedDay, newMenuDish.key, newMenuDish.val())
       );
     });
 
-    db.ref(`menus/${ selectedDay.format(this.datePattern) }`).on('child_removed', exMenuDish => {
-      dispatch(removeDishFromMenu(selectedDay.format(this.datePattern), exMenuDish.key));
+    db.ref(`menus/${ selectedDay }`).on('child_removed', exMenuDish => {
+      dispatch(removeDishFromMenu(selectedDay, exMenuDish.key));
+    });
+
+    db.ref(`menus/${ selectedDay }`).on('child_changed', menuLock => {
+      dispatch(setMenuLock(selectedDay, menuLock.val()));
     });
 
     db.ref('caterings').on('child_added', newCatering => {
@@ -79,9 +87,19 @@ export default class Menus extends Component {
       dispatch(addDishInMenu(date, newMenuDish.key, newMenuDish.val()));
     });
 
+    db.ref(`menus/${ date }`).on('child_changed', menuLock => {
+      dispatch(setMenuLock(date, menuLock.val()));
+    });
+
     db.ref(`menus/${ date }`).on('child_removed', exMenuDish => {
       dispatch(removeDishFromMenu(date, exMenuDish.key));
     });
+  }
+
+  handleLockClick() {
+    const { menus } = this.props;
+    const { selectedDay } = this.state;
+    switchMenuLock(selectedDay, !menus[selectedDay].locked);
   }
 
   handleTabClick(event, selected) {
@@ -93,16 +111,17 @@ export default class Menus extends Component {
   handleDayChange(date) {
     event.preventDefault();
     this.setState({
-      selectedDay: date,
+      selectedDay: date.format(DATE_PATTERN),
     });
-    const formattedDate = date.format(this.datePattern);
-    this.updateFirebaseObservers(formattedDate);
+    this.updateFirebaseObservers(date.format(DATE_PATTERN));
   }
 
   selectedDateDishes() {
     const { menus } = this.props;
     const { selectedDay } = this.state;
-    return menus[selectedDay.format(this.datePattern)];
+    const selectedDateDishes = { ...menus[selectedDay] };
+    delete selectedDateDishes.locked;
+    return selectedDateDishes;
   }
 
   renderTabs() {
@@ -127,7 +146,7 @@ export default class Menus extends Component {
           categories={ categories }
           dishes={ dishes }
           menus={ menus }
-          lunchDay={ selectedDay.format(this.datePattern) }
+          lunchDay={ selectedDay }
         />
       );
     } else if (selectedTab === 'overview') {
@@ -138,7 +157,7 @@ export default class Menus extends Component {
           caterings={ caterings }
           categories={ categories }
           dishes={ this.selectedDateDishes() }
-          lunchDay={ selectedDay.format(this.datePattern) }
+          lunchDay={ selectedDay }
         />
       );
     }
@@ -146,26 +165,28 @@ export default class Menus extends Component {
   }
 
   renderDateView() {
+    const { menus } = this.props;
     const { selectedTab, selectedDay } = this.state;
     if (selectedTab === 'select_dishes') {
       return (
         <div className='Menus-date'>
           <span>Choose lunch day: </span>
           <DatePicker
-            selected={ this.state.selectedDay }
+            selected={ moment(selectedDay, DATE_PATTERN) }
             onChange={ this.handleDayChange }
-            dateFormat='DD-MM-YYYY'
+            dateFormat={ DATE_PATTERN }
             readOnly
           />
-          { !selectedDay && <span className='Message--error'>No lunch day is selected. </span> }
+          <button className='Menus-lockButton' onClick={ this.handleLockClick }>
+            { menus[selectedDay] && menus[selectedDay].locked ? 'Unlock Menu' : 'Lock Menu' }
+          </button>
         </div>
       );
     } else if (selectedTab === 'overview') {
       return (
         <div className='Menus-date'>
           <span>Lunch day: </span>
-          <span><b>{ selectedDay && selectedDay.format(this.datePattern) }</b></span>
-          { !selectedDay && <span className='Message--error'>No lunch day is selected. </span> }
+          <span><b>{ selectedDay }</b></span>
         </div>
       );
     }

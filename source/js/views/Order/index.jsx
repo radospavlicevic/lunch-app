@@ -76,6 +76,11 @@ export default class Order extends Component {
     }
   }
 
+  getUserFirstName() {
+    const { loggedInUser } = this.props;
+    return loggedInUser.username.split(' ', 1);
+  }
+
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
 
@@ -117,8 +122,13 @@ export default class Order extends Component {
     return (category !== 'main_dish') ? filteredDishes : Object.assign({}, filteredDishes, standardDishes);
   }
 
-  renderMenuSections() {
-    const { menus, categories, selectedDate, orders } = this.props;
+  menuIsLocked(selectedDate) {
+    const { menus } = this.props;
+    return (menus[selectedDate] && menus[selectedDate].locked);
+  }
+
+  renderMenuSections(selectedDate) {
+    const { menus, categories, orders } = this.props;
     return Object.keys(categories).map((key, index) => {
       return (
         <MenuSection
@@ -134,6 +144,36 @@ export default class Order extends Component {
     });
   }
 
+  renderLockedScreen(selectedDate) {
+    return (
+      <div className='u-locked'>
+        <span>Lunch ordering for <p>{ selectedDate }</p> is locked.</span>
+      </div>
+    );
+  }
+
+  renderUnlockedScreen(selectedDate) {
+    return (
+      <div>
+        <div className='Order-label'>Hello, { this.getUserFirstName() } <br />
+          Choose your meal for { selectedDate }
+        </div>
+        <div className='Order-cancelLunch'>
+          <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
+        </div>
+        { this.renderMenuSections(selectedDate) }
+        <div className='Order-noteSection'>
+          <textarea
+            placeholder='Note...'
+            className='Order-noteInput'
+            ref={ node => this.noteInput = node }
+          />
+          <button onClick={ this.handleSaveNoteClick } className='Order-noteButton'>Save Note</button>
+        </div>
+      </div>
+    );
+  }
+
   render() {
     const { loggedInUser, selectedDate } = this.props;
     return (
@@ -141,21 +181,11 @@ export default class Order extends Component {
         { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
           <div className='MyOrder-wrapper'>
-            <span className='Order-label'>Hello, { loggedInUser.username.split(' ', 1) } <br />
-              Choose your meal for { selectedDate }
-            </span>
-            <div className='Order-cancelLunch'>
-              <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
-            </div>
-            { this.renderMenuSections() }
-            <div className='Order-noteSection'>
-              <textarea
-                placeholder='Note...'
-                className='Order-noteInput'
-                ref={ node => this.noteInput = node }
-              />
-              <button onClick={ this.handleSaveNoteClick } className='Order-noteButton'>Save Note</button>
-            </div>
+            {
+              this.menuIsLocked(selectedDate) ?
+              this.renderLockedScreen(selectedDate) :
+              this.renderUnlockedScreen(selectedDate)
+            }
           </div>
         }
       </div>

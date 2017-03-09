@@ -1,6 +1,6 @@
 .SideDate-wrapper {
   width: 300px;
-  height: 95vh;
+  height: 93vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   background-color: $light-gray;
@@ -12,6 +12,7 @@
   }
   @include sm-and-lower {
     width: 35%;
+    height: 93vh;
   }
 }
 

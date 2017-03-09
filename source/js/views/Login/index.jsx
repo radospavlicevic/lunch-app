@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { login } from 'actions/login';
+import { redirectTo } from 'utils/routing';
 import md5 from 'md5';
+import { routeCodes } from '../../routes';
 
 @connect(state => ({
+  loggedInUser: state.login.get('loggedInUser'),
   loginLoading: state.login.get('loginLoading'),
   loginError: state.login.get('loginError'),
   getUserLoading: state.login.get('getUserLoading'),
@@ -12,6 +15,7 @@ import md5 from 'md5';
 export default class Login extends Component {
 
   static propTypes = {
+    loggedInUser: PropTypes.object,
     loginError: PropTypes.object,
     getUserError: PropTypes.object,
     // from react-redux connect
@@ -21,6 +25,13 @@ export default class Login extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { loggedInUser } = this.props;
+    if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
+      redirectTo(routeCodes.ORDER);
+    }
   }
 
   handleSubmit(event) {

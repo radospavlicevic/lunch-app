@@ -4,16 +4,18 @@
 }
 
 .MyOrder-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: calc( 100% - 300px );
-  max-height: 95vh;
+  max-height: 93vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   @include md-and-lower {
     width: calc( 100% - 240px );
   }
   @include sm-and-lower {
+    max-height: 95vh;
     width: 65%;
   }
 }

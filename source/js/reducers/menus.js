@@ -4,6 +4,7 @@ import {
   ADD_DISH_IN_MENU,
   ADD_DISHES_IN_MENU,
   REMOVE_DISH_FROM_MENU,
+  SET_MENU_LOCK,
 } from 'actions/menus';
 
 const initialState = Map({
@@ -19,7 +20,7 @@ const actionsMap = {
       [action.date]: date,
     });
     return state.merge(Map({
-      'menus': menus,
+      menus,
     }));
   },
 
@@ -29,7 +30,7 @@ const actionsMap = {
         [action.date]: action.dishes,
       });
     return state.merge(Map({
-      'menus': menus,
+      menus,
     }));
   },
 
@@ -37,25 +38,17 @@ const actionsMap = {
     const menus = Object.assign({}, state.get('menus'));
     delete menus[action.date][action.key];
     return state.merge(Map({
-      'menus': menus,
+      menus,
     }));
   },
 
-  // [ADD_SELECTED_DISH]: (state, action) => {
-  // const selected = Object.assign({}, state.get('selectedDishes'), { [action.key]: action.data });
-  //   return state.merge(Map({
-  //     selectedDishes: selected,
-  //   }));
-  // },
-  //
-  // [REMOVE_SELECTED_DISH]: (state, action) => {
-  //   const selected = Object.assign({}, state.get('selectedDishes'));
-  //   delete selected[action.key];
-  //   return state.merge(Map({
-  //     selectedDishes: selected,
-  //   }));
-  // },
-
+  [SET_MENU_LOCK]: (state, action) => {
+    const menus = Object.assign({}, state.get('menus'));
+    menus[action.date].locked = action.lock;
+    return state.merge(Map({
+      menus,
+    }));
+  },
 };
 
 export default function reducer(state = initialState, action = {}) {

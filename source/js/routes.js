@@ -12,6 +12,7 @@ import Categories from 'views/Categories';
 import Caterings from 'views/Caterings';
 import Menus from 'views/Menus';
 import WeeklyOverview from 'views/WeeklyOverview';
+import Report from 'views/Report';
 import NotFound from 'views/NotFound';
 
 const publicPath = '/';
@@ -27,6 +28,7 @@ export const routeCodes = {
   CATERINGS: `${ publicPath }caterings`,
   MENUS: `${ publicPath }menus`,
   WEEKLY_OVERVIEW: `${ publicPath }weekly-overview`,
+  REPORT: `${ publicPath }report`,
 };
 
 export default class Routes extends Component {
@@ -45,9 +47,9 @@ export default class Routes extends Component {
           <Route path={ routeCodes.CATERINGS } component={ Caterings } />
           <Route path={ routeCodes.MENUS } component={ Menus } />
           <Route path={ routeCodes.WEEKLY_OVERVIEW } component={ WeeklyOverview } />
+          <Route path={ routeCodes.REPORT } component={ Report } />
           <Route path='*' component={ NotFound } />
         </Route>
-
       </Router>
     );
   }

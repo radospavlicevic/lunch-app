@@ -1,0 +1,67 @@
+.ReportDatePicker {
+  background: #fff;
+  h1 {
+    color: $dark-background;
+    text-align: center;
+    margin: 10px 0;
+  }
+}
+
+.ReportDatePicker-controls {
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+.ReportDatePicker-item {
+  border: 1px solid #fff;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 80px;
+  background: $dark-background;
+  color: white;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+  @include sm-and-lower {
+    width: 20%;
+    font-size: 0.8rem;
+    order: 1;
+  }
+  span {
+    font-size: 0.8rem;
+  }
+  p {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+}
+
+.ReportDatePicker-button {
+  background: none;
+  color: $dark-background;
+  display: block;
+  margin: 0 auto;
+  width: 200px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.ReportDatePicker-item--active {
+  @extend .ReportDatePicker-item;
+  background: $light-gray;
+  color: $dark-background;
+  font-weight: bold;
+  border: 1px solid $dark-background;
+}

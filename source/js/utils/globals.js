@@ -11,3 +11,7 @@ export const roles = {
 };
 
 export const DATE_PATTERN = 'DD-MM-YYYY';
+
+export const weekDays = ['Ponedeljak', 'Utorak', 'Sreda', 'Cetvrtak', 'Petak'];
+
+export const publicPages = ['/report'];

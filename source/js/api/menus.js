@@ -17,3 +17,7 @@ export function deleteDishFromMenu(date, key) {
 export function updateDishInMenu(date, key, data) {
   return db.ref(`menus/${ date }/${ key }`).update(data);
 }
+
+export function switchMenuLock(date, lock) {
+  return db.ref(`menus/${ date }`).set({ locked: lock });
+}

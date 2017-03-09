@@ -4,12 +4,14 @@ import moment from 'moment';
 
 import {
   SET_SELECTED_DATE,
+  SET_REPORT_DATE,
   UPDATE_ORDER,
   CANCEL_ORDER,
 } from 'actions/orders';
 
 const initialState = Map({
   selectedDate: moment().add(1, 'weeks').startOf('isoWeek').format(DATE_PATTERN),
+  reportDate: moment().format(DATE_PATTERN),
   orders: {},
 });
 
@@ -18,6 +20,12 @@ const actionsMap = {
   [SET_SELECTED_DATE]: (state, action) => {
     return state.merge(Map({
       selectedDate: action.date,
+    }));
+  },
+
+  [SET_REPORT_DATE]: (state, action) => {
+    return state.merge(Map({
+      reportDate: action.date,
     }));
   },
 

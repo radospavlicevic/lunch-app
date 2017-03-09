@@ -6,6 +6,7 @@ export default class DailyTable extends Component {
     selectedDate: PropTypes.string,
     categories: PropTypes.object,
     orders: PropTypes.array,
+    locked: PropTypes.bool,
   }
 
   rowData(order) {
@@ -32,7 +33,7 @@ export default class DailyTable extends Component {
   }
 
   renderOrderRows() {
-    const { orders, selectedDate } = this.props;
+    const { orders, selectedDate, locked } = this.props;
     if (!orders) return null;
     return orders.map((order, index) => {
       return (
@@ -42,13 +43,14 @@ export default class DailyTable extends Component {
           uid={ order.uid }
           data={ this.rowData(order) }
           canceled={ order.canceled }
+          locked={ locked }
         />
       );
     });
   }
 
   render() {
-    const { selectedDate } = this.props;
+    const { selectedDate, locked } = this.props;
     return (
       <div className='DailyTable'>
         <h1>All Orders for: { selectedDate }</h1>
@@ -58,7 +60,7 @@ export default class DailyTable extends Component {
               <th>Ime</th>
               { this.renderHeaderCategories() }
               <th>Napomena</th>
-              <th />
+              { !locked && <th /> }
             </tr>
           </thead>
           <tbody>

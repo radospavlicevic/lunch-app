@@ -29,6 +29,7 @@ export default class Dashboard extends Component {
           <Link className='AdminDashboard-link' to={ routeCodes.DISHES }>Dishes</Link>
           <Link className='AdminDashboard-link' to={ routeCodes.MENUS }>Menus</Link>
           <Link className='AdminDashboard-link' to={ routeCodes.WEEKLY_OVERVIEW }>Weekly Overview</Link>
+          <Link className='AdminDashboard-link' to={ routeCodes.REPORT } target='_blank'>Report</Link>
         </div>
       </div>
     );

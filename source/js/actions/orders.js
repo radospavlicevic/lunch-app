@@ -1,10 +1,18 @@
 export const SET_SELECTED_DATE = 'SET_SELECTED_DATE';
+export const SET_REPORT_DATE = 'SET_REPORT_DATE';
 export const UPDATE_ORDER = 'UPDATE_ORDER';
 export const CANCEL_ORDER = 'CANCEL_ORDER';
 
 export function setSelectedDate(date) {
   return {
     type: SET_SELECTED_DATE,
+    date,
+  };
+}
+
+export function setReportDate(date) {
+  return {
+    type: SET_REPORT_DATE,
     date,
   };
 }

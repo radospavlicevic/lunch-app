@@ -84,7 +84,9 @@ hr {
 
 .Menus-tabWrapper {
   height: auto;
+  position: relative;
   float: right;
+  z-index: 1;
 }
 
 .Menus-tabButton {
@@ -93,6 +95,17 @@ hr {
   border-right: none;
   width: 150px;
   background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.Menus-lockButton {
+  float: right;
+  width: 150px;
+  padding: 8px 0;
+  background: $dark-background;
+  color: #fff;
+  border: none;
   outline: none;
   cursor: pointer;
 }

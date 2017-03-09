@@ -108,6 +108,11 @@ export default class DishOverview extends Component {
     return filteredDishes;
   }
 
+  menuIsLocked() {
+    const { menus, lunchDay } = this.props;
+    return (menus && menus[lunchDay] && menus[lunchDay].locked);
+  }
+
   renderCateringSelect() {
     const { caterings } = this.props;
     const { filters } = this.state;
@@ -220,6 +225,14 @@ export default class DishOverview extends Component {
   render() {
     return (
       <div className='DishOverview'>
+        {
+          this.menuIsLocked() &&
+          <div className='u-locked'>
+            <span>Locked</span>
+            <span>Locked</span>
+            <span>Locked</span>
+          </div>
+        }
         <div className='DishOverview-header'>
           { this.renderTitle() }
           { this.renderFilters() }

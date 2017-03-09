@@ -1,4 +1,5 @@
 .DishOverview {
+  position: relative;
   border: 1px solid $light-gray;
   border-top: 1px solid $dark-background;
   h2 {
@@ -13,6 +14,7 @@
   flex-flow: row wrap;
   justify-content: space-between;
   align-items: center;
+  z-index: -1;
 }
 
 .DishItem-wrapper {

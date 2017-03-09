@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
 import { firebaseAuth } from 'utils/firebase_config';
+import { publicPages } from 'utils/globals';
 import { getUser, logout } from 'actions/login';
 import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
@@ -20,16 +21,20 @@ export default class App extends Component {
 
   componentWillMount() {
     const { dispatch } = this.props;
-    firebaseAuth().onAuthStateChanged((user) => {
-      localStorage.setItem('init-path', location.pathname);
-      if (this.handleReauth()) return;
-      if (user) {
-        dispatch(getUser(user.uid));
-      } else {
-        redirectTo(routeCodes.LOGIN);
-        dispatch(logout());
-      }
-    });
+    localStorage.setItem('init-path', location.pathname);
+    if (!this.isPublicPath()) {
+      firebaseAuth().onAuthStateChanged((user) => {
+        if (this.handleReauth()) return;
+        if (user) {
+          dispatch(getUser(user.uid));
+        } else {
+          redirectTo(routeCodes.LOGIN);
+          dispatch(logout());
+        }
+      });
+    } else {
+      redirectTo(location.pathname);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,18 +42,22 @@ export default class App extends Component {
     const path = localStorage.getItem('init-path');
     if (nextProps.loggedInUser !== loggedInUser) {
       if (nextProps.loggedInUser && path) {
-        if (this.isLoginPath(path)) {
-          redirectTo(routeCodes.ORDER);
-        } else {
-          redirectTo(path);
-        }
+        redirectTo(path);
         localStorage.removeItem('init-path');
       }
     }
   }
 
-  isLoginPath(path) {
-    return (path === '/login');
+  isPublicPath() {
+    return publicPages.includes(location.pathname);
+  }
+
+  checkLoadingScreen(loggedInUser) {
+    return (!this.isPublicPath() && userSignedIn() && !loggedInUser) && <div className='LoadingModal'>Loading...</div>;
+  }
+
+  checkMenu(loggedInUser) {
+    return (!this.isPublicPath() && userSignedIn() && loggedInUser) && <Menu />;
   }
 
   handleReauth() {
@@ -70,10 +79,12 @@ export default class App extends Component {
 
   render() {
     const { children, loggedInUser } = this.props;
+
     return (
       <div className='App'>
-        { (userSignedIn() && !loggedInUser) && <div className='LoadingModal'>Loading...</div> }
-        { (userSignedIn() && loggedInUser) && <Menu /> }
+
+        { this.checkLoadingScreen(loggedInUser) }
+        { this.checkMenu(loggedInUser) }
 
         <div className='Page'>
           { children }

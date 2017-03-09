@@ -1,3 +1,27 @@
 .u-invisible {
   display: none;
 }
+
+.u-locked {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  z-index: 10;
+  span {
+    text-align: center;
+    font-size: 4rem;
+  }
+  p {
+    font-size: 5rem;
+  }
+}
+
+.u-hidden {
+  opacity: 0;
+}

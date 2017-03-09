@@ -8,6 +8,7 @@ export default class DailyTableRow extends Component {
     uid: PropTypes.string,
     data: PropTypes.object,
     canceled: PropTypes.bool,
+    locked: PropTypes.bool,
   }
 
   constructor() {
@@ -35,17 +36,19 @@ export default class DailyTableRow extends Component {
   }
 
   render() {
-    const { canceled, data } = this.props;
+    const { canceled, data, locked } = this.props;
     return (
       <tr className={ canceled && 'table-danger' }>
         <td>{ data.name }</td>
         { this.renderDishes() }
         <td>{ data.note }</td>
-        <td>
-          <button onClick={ this.handleCancelClick } disabled={ canceled } className='AdminTable-button'>
-            { canceled ? 'Canceled' : 'Cancel' }
-          </button>
-        </td>
+        { !locked &&
+          <td>
+            <button onClick={ this.handleCancelClick } disabled={ canceled } className='AdminTable-button'>
+              { canceled ? 'Canceled' : 'Cancel' }
+            </button>
+          </td>
+        }
       </tr>
     );
   }
