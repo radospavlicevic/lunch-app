@@ -33,8 +33,12 @@ export default class CategoryItem extends Component {
     return (
       <tr>
         <td>{ category.name }</td>
-        <td><button onClick={ this.handleEditClick } disabled={ category.key === 'main_dish' } className='AdminTable-button'>Edit</button></td>
-        <td><button onClick={ this.handleDeleteClick } disabled={ category.key === 'main_dish' } className='AdminTable-button'>Delete</button></td>
+        <td>
+          { category.key !== 'main_dish' && <button onClick={ this.handleEditClick } className='AdminTable-button'>Edit</button> }
+        </td>
+        <td>
+          { category.key !== 'main_dish' && <button onClick={ this.handleDeleteClick } className='AdminTable-button' >Delete</button> }
+        </td>
       </tr>
     );
   }

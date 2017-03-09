@@ -1,4 +1,3 @@
-export const ADD_CATERING = 'ADD_CATERING';
 export const DELETE_CATERING = 'DELETE_CATERING';
 export const COUNT_CATERINGS = 'COUNT_CATERINGS';
 export const ADD_OR_UPDATE_CATEGORY = 'ADD_OR_UPDATE_CATEGORY';
@@ -9,10 +8,21 @@ export const ADD_OR_UPDATE_DISH = 'ADD_OR_UPDATE_DISH';
 export const DELETE_DISH = 'DELETE_DISH';
 export const PREPARE_DISH_UPDATE = 'PREPARE_DISH_UPDATE';
 export const UPDATE_DISH = 'UPDATE_DISH';
+export const ADD_OR_UPDATE_CATERING = 'ADD_OR_UPDATE_CATERING';
+export const PREPARE_CATERING_UPDATE = 'PREPARE_CATERING_UPDATE';
 
-export function addCatering(key, data) {
+
+export function addOrUpdateCatering(key, data) {
   return {
-    type: ADD_CATERING,
+    type: ADD_OR_UPDATE_CATERING,
+    key,
+    data,
+  };
+}
+
+export function prepareCateringUpdate(key, data) {
+  return {
+    type: PREPARE_CATERING_UPDATE,
     key,
     data,
   };

@@ -1,9 +1,10 @@
 import { Map } from 'immutable';
 
 import {
-  ADD_CATERING,
   DELETE_CATERING,
   COUNT_CATERINGS,
+  ADD_OR_UPDATE_CATERING,
+  PREPARE_CATERING_UPDATE,
   ADD_OR_UPDATE_CATEGORY,
   PREPARE_CATEGORY_UPDATE,
   DELETE_CATEGORY,
@@ -20,6 +21,7 @@ const initialState = Map({
     },
   },
   categoryForUpdate: null,
+  cateringForUpdate: null,
   categoriesNumber: 0,
   caterings: {},
   cateringsNumber: 0,
@@ -30,12 +32,27 @@ const initialState = Map({
 });
 
 const actionsMap = {
-  [ADD_CATERING]: (state, action) => {
+
+  [ADD_OR_UPDATE_CATERING]: (state, action) => {
     const newCatering = {};
-    newCatering[action.key] = action.data;
+    newCatering[action.key] = {
+      name: action.data.name,
+      contact: action.data.contact,
+    };
     const caterings = Object.assign({}, state.get('caterings'), newCatering);
     return state.merge(Map({
       caterings,
+      cateringForUpdate: null,
+    }));
+  },
+
+  [PREPARE_CATERING_UPDATE]: (state, action) => {
+    return state.merge(Map({
+      cateringForUpdate: {
+        key: action.key,
+        name: action.data.name,
+        contact: action.data.contact,
+      },
     }));
   },
 

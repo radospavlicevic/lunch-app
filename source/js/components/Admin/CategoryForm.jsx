@@ -14,7 +14,12 @@ export default class CategoryForm extends Component {
   constructor() {
     super();
 
-    this.initState();
+    this.state = {
+      name: '',
+      errors: '',
+      update: false,
+    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
   }
@@ -23,14 +28,6 @@ export default class CategoryForm extends Component {
     if (nextProps.categoryForUpdate) {
       this.initStateForUpdate(nextProps.categoryForUpdate);
     }
-  }
-
-  initState() {
-    this.state = {
-      name: '',
-      errors: '',
-      update: false,
-    };
   }
 
   initStateForUpdate(categoryForUpdate) {

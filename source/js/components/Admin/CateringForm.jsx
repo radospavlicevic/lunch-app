@@ -1,58 +1,110 @@
-import React, { Component } from 'react';
-import { saveCatering } from 'api/meals.js';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { saveCatering, updateCatering } from 'api/meals.js';
 
-export default class CategoryForm extends Component {
+@connect(state => ({
+  cateringForUpdate: state.meals.get('cateringForUpdate'),
+}))
+
+export default class CateringForm extends Component {
+
+  static propTypes = {
+    cateringForUpdate: PropTypes.object,
+  }
 
   constructor() {
     super();
+
     this.state = {
+      name: '',
+      contact: '',
       errors: '',
+      update: false,
     };
+
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleContactChange = this.handleContactChange.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.cateringForUpdate) {
+      this.initStateForUpdate(nextProps.cateringForUpdate);
+    }
+  }
+
+  initStateForUpdate(cateringForUpdate) {
+    this.setState({
+      name: cateringForUpdate.name,
+      contact: cateringForUpdate.contact,
+      errors: '',
+      update: true,
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    const cateringName = this.cateringNameInput.value;
-    const cateringContact = this.categoryContactInput.value;
+    const { cateringForUpdate } = this.props;
+    const { name, contact, update } = this.state;
     this.setState({
-      errors: cateringName ? '' : 'Catering Name field is required. ',
+      errors: name ? '' : 'Catering Name field is required. ',
     });
-    if (cateringName) {
-      saveCatering({
-        name: cateringName,
-        contact: cateringContact,
-      });
+    if (name || contact) {
+      if (update) {
+        updateCatering(cateringForUpdate.key, name, contact);
+      } else {
+        saveCatering(name, contact);
+      }
       this.resetInputs();
     }
   }
 
+  handleNameChange(event) {
+    event.preventDefault();
+    this.setState({
+      name: event.target.value,
+    });
+  }
+
+  handleContactChange(event) {
+    event.preventDefault();
+    this.setState({
+      contact: event.target.value,
+    });
+  }
+
   resetInputs() {
-    this.cateringNameInput.value = '';
-    this.categoryContactInput.value = '';
+    this.setState({
+      errors: '',
+      update: false,
+      name: '',
+      contact: '',
+    });
   }
 
   render() {
-    const { errors } = this.state;
+    const { errors, update, name, contact } = this.state;
     return (
       <div className='CateringForm'>
         <h1>Add Catering</h1>
         <form className='AdminForm' onSubmit={ this.handleSubmit }>
           <div className='AdminForm-item'>
             <input
-              ref={ input => this.cateringNameInput = input }
+              value={ name }
+              onChange={ this.handleNameChange }
               placeholder='Catering Name'
               className={ errors ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
             />
           </div>
           <div className='AdminForm-item'>
             <input
-              ref={ input => this.categoryContactInput = input }
+              value={ contact }
+              onChange={ this.handleContactChange }
               placeholder='Catering Contact'
-              className='AdminForm-input'
+              className={ errors ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
             />
           </div>
-          <button className='AdminForm-button'>Add</button>
+          <button className='AdminForm-button'>{ update ? 'Update' : 'Add' }</button>
         </form>
         { errors && <div className='Message--error'>{ errors }</div> }
       </div>
