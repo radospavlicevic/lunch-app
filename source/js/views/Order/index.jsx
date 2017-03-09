@@ -49,6 +49,7 @@ export default class Order extends Component {
         dispatch(updateOrder(selectedDate, order.key, order.val()));
       });
     }
+    document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
   }
 
   setupFirebaseObservers() {

@@ -41,6 +41,7 @@ export default class Overview extends Component {
         dispatch(updateOrder(selectedDate, order.key, order.val()));
       });
     }
+    document.title = `Overview, ${ selectedDate } - Yummy Yumzor`;
   }
 
   setupFirebaseObservers() {
@@ -67,10 +68,13 @@ export default class Overview extends Component {
     if (loggedInUser && orders[selectedDate] && orders[selectedDate][userSignedIn().uid]) {
       const { meal, note } = orders[selectedDate][userSignedIn().uid];
       Object.keys(meal).forEach(key => {
-        mealItems.push({
-          category: categories[key].name,
-          dish: menus[selectedDate][meal[key]] || standardDishes[meal[key]],
-        });
+        if (menus[selectedDate][meal[key]] || standardDishes[meal[key]]) {
+          const dish = menus[selectedDate][meal[key]] || standardDishes[meal[key]];
+          mealItems.push({
+            category: categories[key].name,
+            dish,
+          });
+        }
       });
       return {
         mealItems,
@@ -97,6 +101,7 @@ export default class Overview extends Component {
   render() {
     const { loggedInUser, selectedDate, orders } = this.props;
     const order = this.getOrder(loggedInUser, selectedDate, orders);
+
     return (
       <div className='Overview'>
         { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
@@ -105,6 +110,7 @@ export default class Overview extends Component {
           <h1 className='Overview-userName'>{ loggedInUser.username }&apos;s orders: </h1>
           <h1 className='Overview-selectedDate'>{ selectedDate }</h1>
           { (loggedInUser && order) && <MealOverview data={ order } /> }
+          { (loggedInUser && !order) && <h1 className='Overview-noOrder'>There is no order for today</h1>}
         </div>
         }
       </div>

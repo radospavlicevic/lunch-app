@@ -15,6 +15,7 @@ export default class Dashboard extends Component {
   componentWillMount() {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
+    document.title = 'Admin - Yummy Yumzor';
   }
 
   render() {

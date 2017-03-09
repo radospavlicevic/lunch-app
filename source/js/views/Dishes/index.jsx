@@ -30,6 +30,7 @@ export default class Dishes extends Component {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
+    document.title = 'Dishes, Admin - Yummy Yumzor';
   }
 
   setupFirebaseObservers() {

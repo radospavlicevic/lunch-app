@@ -25,6 +25,7 @@ export default class Categories extends Component {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
+    document.title = 'Categories, Admin - Yummy Yumzor';
   }
 
   setupFirebaseObservers() {

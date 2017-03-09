@@ -42,6 +42,7 @@ export default class Menus extends Component {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
+    document.title = 'Menus, Admin - Yummy Yumzor';
   }
 
   setupFirebaseObservers() {

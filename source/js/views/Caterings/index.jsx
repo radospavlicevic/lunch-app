@@ -27,6 +27,7 @@ export default class Caterings extends Component {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
+    document.title = 'Caterings, Admin - Yummy Yumzor';
   }
 
   setupFirebaseObservers() {

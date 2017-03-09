@@ -10,6 +10,7 @@ export default class MealOverview extends Component {
 
   renderDishes() {
     const { mealItems } = this.props.data;
+
     return (
     mealItems.map((data, index) => {
       return (
@@ -29,7 +30,7 @@ export default class MealOverview extends Component {
     return (
       <div className='Overview-wrap'>
         <h1 className='Overview-headerText'>meal overview :</h1>
-        { this.renderDishes() }
+        { data.mealItems ? this.renderDishes() : null }
         { data.note &&
         <p className='Overview-note'>Note: { data.note }</p>
         }

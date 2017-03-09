@@ -22,6 +22,7 @@ export default class Users extends Component {
     const { loggedInUser } = this.props;
     checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
+    document.title = 'Users, Admin - Yummy Yumzor';
   }
 
   setupFirebaseObservers() {
@@ -34,6 +35,7 @@ export default class Users extends Component {
       dispatch(deleteUser(removedUser.key));
     });
   }
+
 
   render() {
     const { loggedInUser, users } = this.props;
