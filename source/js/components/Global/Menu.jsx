@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link } from 'react-router';
+import AppBar from 'material-ui/AppBar';
+// import FlatButton from 'material-ui/FlatButton';
 import { connect } from 'react-redux';
 import { roles } from 'utils/globals';
 import { routeCodes } from '../../routes';
@@ -34,7 +36,11 @@ export default class Menu extends Component {
 
   render() {
     return (
-      <div className='Menu'>
+      <AppBar
+        className='Menu'
+        showMenuIconButton={ false }
+        title='Yummy Yumzor'
+      >
         <IndexLink to={ routeCodes.ORDER }>
           Order
         </IndexLink>
@@ -45,7 +51,7 @@ export default class Menu extends Component {
         <span className='Menu-right'>
           { userSignedIn() && <button className='Menu-button' onClick={ this.handleLogout }>Logout</button> }
         </span>
-      </div>
+      </AppBar>
     );
   }
 }

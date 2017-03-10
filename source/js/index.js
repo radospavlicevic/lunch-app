@@ -9,6 +9,7 @@ import logger from 'dev/logger';
 import rootReducer from 'reducers';
 import Routes from 'routes';
 import DevTools from 'dev/redux-dev-tools';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 // Load SCSS
 import '../scss/app.scss';
@@ -44,12 +45,15 @@ if (isProduction) {
 // Render it to DOM
 ReactDOM.render(
   <Provider store={ store }>
-    { isProduction ?
+    <MuiThemeProvider>
+      <Routes />
+    </MuiThemeProvider>
+    {/* { isProduction ?
       <Routes /> :
       <div>
         <Routes />
         <DevTools />
-      </div> }
+      </div> } */}
   </Provider>,
   document.getElementById('root')
 );
