@@ -10,6 +10,13 @@ export const roles = {
   ADMIN: 'ADMIN',
 };
 
+export const BREAKPOINTS = {
+  sm: 500,
+  md: 769,
+  lg: 1025,
+  xl: 2000,
+};
+
 export const DATE_PATTERN = 'DD-MM-YYYY';
 
 export const weekDays = ['Ponedeljak', 'Utorak', 'Sreda', 'Cetvrtak', 'Petak'];

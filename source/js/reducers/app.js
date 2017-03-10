@@ -1,46 +1,18 @@
 import { Map } from 'immutable';
 
 import {
-  TEST_ACTION,
-  TEST_ASYNC_ACTION_START,
-  TEST_ASYNC_ACTION_ERROR,
-  TEST_ASYNC_ACTION_SUCCESS,
+  SET_BREAKPOINT,
 } from 'actions/app';
 
 const initialState = Map({
-  counter: 0,
-  asyncLoading: false,
-  asyncError: null,
-  asyncData: null,
+  breakpoint: '',
 });
 
 const actionsMap = {
-  [TEST_ACTION]: (state) => {
-    const counter = state.get('counter') + 1;
-
+  [SET_BREAKPOINT]: (state, action) => {
     return state.merge(Map({
-      counter,
+      breakpoint: action.breakpoint,
     }));
-  },
-
-  // Async action
-  [TEST_ASYNC_ACTION_START]: (state) => {
-    return state.merge({
-      asyncLoading: true,
-      asyncError: null,
-    });
-  },
-  [TEST_ASYNC_ACTION_ERROR]: (state, action) => {
-    return state.merge({
-      asyncLoading: false,
-      asyncError: action.data,
-    });
-  },
-  [TEST_ASYNC_ACTION_SUCCESS]: (state, action) => {
-    return state.merge({
-      asyncLoading: false,
-      asyncData: action.data,
-    });
   },
 };
 

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
 import { firebaseAuth } from 'utils/firebase_config';
@@ -7,6 +8,8 @@ import { getUser, logout } from 'actions/login';
 import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
+
+injectTapEventPlugin();
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),

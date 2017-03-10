@@ -1,4 +1,4 @@
-import injectTapEventPlugin from 'react-tap-event-plugin';
+
 import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link } from 'react-router';
 import AppBar from 'material-ui/AppBar';
@@ -6,16 +6,20 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { roles } from 'utils/globals';
+import ComposedComponent from 'decorators/AppBreakpointsDecorator';
 import { routeCodes } from '../../routes';
 import { userSignedIn, firebaseLogout } from '../../api/auth';
 
+@ComposedComponent
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
+  breakpoint: state.app.get('breakpoint'),
 }))
 export default class Menu extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
+    breakpoint: PropTypes.string,
   }
 
   constructor() {
@@ -37,10 +41,11 @@ export default class Menu extends Component {
   }
 
   render() {
+    const { breakpoint } = this.props;
     return (
       <AppBar
         className='Menu'
-        showMenuIconButton={ false }
+        showMenuIconButton={ breakpoint === 'sm' }
         title='Yummy Yumzor'
       >
         <div className='Menu-navWrapper'>
