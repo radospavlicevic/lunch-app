@@ -1,7 +1,9 @@
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link } from 'react-router';
 import AppBar from 'material-ui/AppBar';
-// import FlatButton from 'material-ui/FlatButton';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { roles } from 'utils/globals';
 import { routeCodes } from '../../routes';
@@ -29,7 +31,7 @@ export default class Menu extends Component {
   renderDashboardMenuItem() {
     const { loggedInUser } = this.props;
     if (loggedInUser && loggedInUser.role === roles.ADMIN) {
-      return <Link to={ routeCodes.DASHBOARD }>Dashboard</Link>;
+      return <Link to={ routeCodes.DASHBOARD }><FlatButton label='Dashboard' /></Link>;
     }
     return '';
   }
@@ -41,16 +43,21 @@ export default class Menu extends Component {
         showMenuIconButton={ false }
         title='Yummy Yumzor'
       >
-        <IndexLink to={ routeCodes.ORDER }>
-          Order
-        </IndexLink>
-        <Link to={ routeCodes.OVERVIEW }>
-          Overview
-        </Link>
-        { this.renderDashboardMenuItem() }
-        <span className='Menu-right'>
-          { userSignedIn() && <button className='Menu-button' onClick={ this.handleLogout }>Logout</button> }
-        </span>
+        <div className='Menu-navWrapper'>
+          <IndexLink to={ routeCodes.ORDER }>
+            <FlatButton label='Order' />
+          </IndexLink>
+          <Link to={ routeCodes.OVERVIEW }>
+            <FlatButton label='Overview' />
+          </Link>
+          { this.renderDashboardMenuItem() }
+          { userSignedIn() &&
+            <RaisedButton
+              onClick={ this.handleLogout }
+              label='Logout'
+            />
+          }
+        </div>
       </AppBar>
     );
   }

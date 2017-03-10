@@ -1,16 +1,4 @@
 .Menu {
-  width: 100%;
-  height: 7vh;
-  background: $dark-background;
-  border-bottom: 1px solid $light-gray;
-  padding-left: 10px;
-  @include sm-and-lower {
-    height: 5vh;
-    display: flex;
-    align-items: center;
-    font-size: 0.88rem;
-    justify-content: space-around;
-  }
 }
 
 .Menu a {
