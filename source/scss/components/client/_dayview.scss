@@ -13,8 +13,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 92vh;
-  max-height: 92vh;
+  min-height: 85vh;
+  max-height: 85vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   @include sm {
