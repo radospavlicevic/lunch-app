@@ -5,14 +5,14 @@
   margin: 0 auto;
   height: 100vh;
   justify-content: center;
-  color: #fff;
+  color: #00BBD4;
   font-family: Avenir;
   align-items: center;
   h1 {
     font-size: 3.5rem;
   }
   input {
-    color: #fff;
+    color: #00BBD4;
   }
   @include md-and-lower {
     h1 {

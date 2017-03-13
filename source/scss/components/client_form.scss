@@ -11,7 +11,7 @@
   outline:none;
   background: none;
   border: none;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid #ececec;
   margin-bottom: 15px;
   padding-left: 10px;
 }
@@ -23,9 +23,13 @@
   border: 0;
   font-family: Avenir;
   font-size: 1.2rem;
+  color: #00BBD4;
   height: 35px;
   padding-top: 5px;
   outline: none;
+  &:hover {
+    cursor: pointer;
+  }
   @include md-and-lower {
     align-self: center;
   }

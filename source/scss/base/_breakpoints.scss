@@ -17,7 +17,7 @@ $breakpoint-xl: 2000px !default;
 
 // Small
 @mixin sm() {
-  @media (max-width: $breakpoint-sm) {
+  @media (min-width: $breakpoint-sm) {
     @content;
   }
 }

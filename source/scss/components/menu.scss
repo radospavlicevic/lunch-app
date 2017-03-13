@@ -1,4 +1,26 @@
+.Menu-button span {
+  color: #fff;
+}
+
+.Menu-navWrapper {
+  display: flex;
+  height: 50%;
+}
+
 .Menu {
+  height: 7vh;
+  h1 {
+    text-align: center;
+  }
+  @include sm {
+    h1 {
+    text-align: left;
+    }
+  }
+}
+
+.Menu-link {
+  width: 100%;
 }
 
 .Menu a {
@@ -7,9 +29,6 @@
   color: white;
   margin-right: 10px;
   text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 .Menu-right {

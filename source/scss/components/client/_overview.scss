@@ -1,6 +1,5 @@
 .Overview {
   display: flex;
-  color: #fff;
   font-family: Avenir;
 }
 
@@ -10,6 +9,7 @@
   flex-direction: column;
   justify-content: center;
   padding: 0 50px;
+  color: #00BBD4;
   @include md-and-lower {
     width: calc( 100% - 240px);
   }
