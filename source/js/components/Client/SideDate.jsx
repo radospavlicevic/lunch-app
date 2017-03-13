@@ -4,6 +4,9 @@ import SideDateItem from 'components/Client/SideDateItem';
 import { setSelectedDate } from 'actions/orders';
 import { DATE_PATTERN } from 'utils/globals';
 import moment from 'moment';
+import back from '../../../assets/img/back.png';
+import next from '../../../assets/img/next.png';
+
 
 @connect()
 export default class SideDate extends Component {
@@ -82,9 +85,13 @@ export default class SideDate extends Component {
   render() {
     return (
       <div className='SideDate-wrapper'>
-        <button onClick={ this.handlePreviousClick } className='SideDate-loadButton'>Previous</button>
+        <button onClick={ this.handlePreviousClick } className='SideDate-loadButton'>
+          <img src={ back } alt='previous' />
+        </button>
         { this.renderSideDateItems() }
-        <button onClick={ this.handleNextClick } className='SideDate-loadButton'>Next</button>
+        <button onClick={ this.handleNextClick } className='SideDate-loadButton'>
+          <img src={ next } alt='next' />
+        </button>
       </div>
     );
   }

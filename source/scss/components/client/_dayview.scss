@@ -1,21 +1,24 @@
 .Order {
   display: flex;
   font-family: Avenir;
+  flex-direction: column;
+  flex: 1;
+  @include sm {
+    flex-direction: row;
+  }
 }
 
 .MyOrder-wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc( 100% - 300px );
-  max-height: 93vh;
+  width: 100%;
+  min-height: 92vh;
+  max-height: 92vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  @include md-and-lower {
-    width: calc( 100% - 240px );
-  }
-  @include sm-and-lower {
-    max-height: 95vh;
-    width: 65%;
+  @include sm {
+    width: calc( 100% - 170px );
+    max-height: 93vh;
   }
 }

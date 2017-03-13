@@ -44,7 +44,6 @@ export default class SideDateItem extends Component {
       >
         <p className='SideDate-month'>{ this.getMonthName() }</p>
         <p className='SideDate-day'>{ this.getDay() }</p>
-        <p className='SideDate-viewOrders'>view orders</p>
       </button>
     );
   }

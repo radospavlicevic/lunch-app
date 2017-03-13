@@ -1,21 +1,23 @@
 .Overview {
   display: flex;
   font-family: Avenir;
+  flex-direction: column;
+  flex: 1;
+  @include sm {
+    flex-direction: row;
+  }
 }
 
 .Overview-top {
-  width: calc( 100% - 300px );
+  min-height: 92vh;
+  max-height: 92vh;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 0 50px;
-  color: #00BBD4;
-  @include md-and-lower {
-    width: calc( 100% - 240px);
-  }
-  @include sm-and-lower {
-    width: 65%;
-    padding: 0 30px;
+  @include sm {
+  width: calc( 100% - 170px );
   }
 }
 

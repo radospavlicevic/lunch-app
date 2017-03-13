@@ -13,7 +13,7 @@
 
 .MenuSection-tabWrapper {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   margin-bottom: 50px;
   @include sm-and-lower {
     flex-direction: column;
