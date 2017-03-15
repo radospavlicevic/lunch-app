@@ -71,7 +71,7 @@ export default class Menu extends Component {
   renderDashboardMenuItem() {
     const { loggedInUser } = this.props;
     if (loggedInUser && loggedInUser.role === roles.ADMIN) {
-      return <Link to={ routeCodes.MENUS }><FlatButton label='Admin' /></Link>;
+      return <Link to={ routeCodes.MENUS }><FlatButton className='Menu-button' label='Admin' /></Link>;
     }
     return '';
   }
