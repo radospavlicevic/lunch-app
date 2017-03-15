@@ -1,29 +1,23 @@
-.AdminForm-item {
-  margin: 10px 0;
-
-  input {
-    outline: none;
-  }
-}
-
-.AdminForm-input {
-  height: 40px;
+.AdminForm {
+  padding: 20px;
   width: 100%;
-  border: 1px solid gray;
-  &:focus {
-    border: 1px solid $dark-background;
+  @include lg {
+      width: 50%;
   }
 }
 
-.AdminForm-textarea {
-  @extend .AdminForm-input;
-  height: 80px;
-  outline: none;
+.AdminForm-wrapper {
+  margin-top: 10px;
+  border: 1px solid $light-gray;
+  width: 100%;
+  border-bottom: none;
 }
 
-.AdminForm-input--error {
-  border-color: $error-color;
-  box-shadow: 1px 1px 3px #651a1a;
+.AdminForm-item {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .AdminForm-radioItem {
@@ -42,17 +36,13 @@
   margin: 20px 0;
 }
 
-.AdminForm-select {
-  outline:none;
-  width: 50%;
-  min-width: 200px;
-  height: 40px;
-  &:focus {
-    border: 1px solid $dark-background;
-  }
+.AdminForm-radioGroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 20px 0;
 }
 
-.AdminForm-item-checkboxText {
-  margin-left: 5px;
-  cursor: pointer;
+.AdminForm-radioButton {
+  width: 120px !important;
 }

@@ -4,9 +4,12 @@ import {
   DELETE_CATERING,
   COUNT_CATERINGS,
   ADD_OR_UPDATE_CATERING,
+  CANCEL_CATERING_UPDATE,
   PREPARE_CATERING_UPDATE,
   ADD_OR_UPDATE_CATEGORY,
+  CANCEL_CATEGORY_UPDATE,
   PREPARE_CATEGORY_UPDATE,
+  CANCEL_DISH_UPDATE,
   DELETE_CATEGORY,
   COUNT_CATEGORIES,
   ADD_OR_UPDATE_DISH,
@@ -46,6 +49,12 @@ const actionsMap = {
     }));
   },
 
+  [CANCEL_CATERING_UPDATE]: (state) => {
+    return state.merge(Map({
+      cateringForUpdate: null,
+    }));
+  },
+
   [PREPARE_CATERING_UPDATE]: (state, action) => {
     return state.merge(Map({
       cateringForUpdate: {
@@ -79,6 +88,12 @@ const actionsMap = {
     const categories = Object.assign({}, state.get('categories'), newCategory);
     return state.merge(Map({
       categories,
+      categoryForUpdate: null,
+    }));
+  },
+
+  [CANCEL_CATEGORY_UPDATE]: (state) => {
+    return state.merge(Map({
       categoryForUpdate: null,
     }));
   },
@@ -136,6 +151,12 @@ const actionsMap = {
         key: action.key,
         data: action.data,
       },
+    }));
+  },
+
+  [CANCEL_DISH_UPDATE]: (state) => {
+    return state.merge(Map({
+      dishForUpdate: null,
     }));
   },
 

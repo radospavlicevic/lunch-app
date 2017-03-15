@@ -1,15 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
+import AdminMenu from 'components/Admin/AdminMenu';
 import DishForm from 'components/Admin/DishForm';
 import DishOverview from 'components/Admin/DishOverview';
 import { addOrUpdateDish, deleteDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals.js';
 import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
+@CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   caterings: state.meals.get('caterings'),
   categories: state.meals.get('categories'),
   dishes: state.meals.get('dishes'),
@@ -18,7 +19,6 @@ import { dishOverviewTypes } from 'utils/globals';
 export default class Dishes extends Component {
 
   static propTypes = {
-    loggedInUser: PropTypes.object,
     caterings: PropTypes.object,
     categories: PropTypes.object,
     dishes: PropTypes.object,
@@ -27,8 +27,6 @@ export default class Dishes extends Component {
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Dishes, Admin - Yummy Yumzor';
   }
@@ -80,14 +78,17 @@ export default class Dishes extends Component {
   render() {
     const { caterings, categories, dishes } = this.props;
     return (
-      <div className='Dishes Admin-wrapper'>
-        <DishForm caterings={ caterings } categories={ categories } />
-        <DishOverview
-          type={ dishOverviewTypes.EDITABLE }
-          caterings={ caterings }
-          categories={ categories }
-          dishes={ dishes }
-        />
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='Dishes'>
+          <DishForm caterings={ caterings } categories={ categories } />
+          <DishOverview
+            type={ dishOverviewTypes.EDITABLE }
+            caterings={ caterings }
+            categories={ categories }
+            dishes={ dishes }
+          />
+        </div>
       </div>
     );
   }

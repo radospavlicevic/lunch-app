@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { prepareCategoryUpdate } from 'actions/meals';
 import { removeCategory } from 'api/meals';
+import FlatButton from 'material-ui/FlatButton';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 
 @connect()
 export default class CategoryItem extends Component {
@@ -31,15 +33,15 @@ export default class CategoryItem extends Component {
   render() {
     const { category } = this.props;
     return (
-      <tr>
-        <td>{ category.name }</td>
-        <td>
-          { category.key !== 'main_dish' && <button onClick={ this.handleEditClick } className='AdminTable-button'>Edit</button> }
-        </td>
-        <td>
-          { category.key !== 'main_dish' && <button onClick={ this.handleDeleteClick } className='AdminTable-button' >Delete</button> }
-        </td>
-      </tr>
+      <TableRow>
+        <TableRowColumn>{ category.name }</TableRowColumn>
+        <TableRowColumn className='u-tableCellButton'>
+          <FlatButton label='Edit' primary={ true } onClick={ this.handleEditClick } />
+        </TableRowColumn>
+        <TableRowColumn className='u-tableCellButton'>
+          <FlatButton label='Delete' primary={ true } onClick={ this.handleDeleteClick } />
+        </TableRowColumn>
+      </TableRow>
     );
   }
 }

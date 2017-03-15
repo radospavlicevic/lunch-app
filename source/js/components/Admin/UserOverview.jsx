@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 import UserItem from './UserItem';
 
 export default class UserOverview extends Component {
@@ -18,19 +19,26 @@ export default class UserOverview extends Component {
   render() {
     return (
       <div className='UserOverview'>
-        <h1>User Overview</h1>
-        <table className='AdminTable table'>
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table
+          selectable={ false }
+        >
+          <TableHeader
+            adjustForCheckbox={ false }
+            displaySelectAll={ false }
+          >
+            <TableRow>
+              <TableHeaderColumn>Username</TableHeaderColumn>
+              <TableHeaderColumn>Email</TableHeaderColumn>
+              <TableHeaderColumn className='u-tableCellButton'>Role</TableHeaderColumn>
+              <TableHeaderColumn className='u-tableCellButton' />
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={ false }
+          >
             { this.renderUsers() }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     );
   }

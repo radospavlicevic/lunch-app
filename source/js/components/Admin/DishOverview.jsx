@@ -1,6 +1,9 @@
-
 import React, { Component, PropTypes } from 'react';
+import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { dishOverviewTypes } from 'utils/globals';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import SelectableDishItem from './SelectableDishItem';
 import RemovableDishItem from './RemovableDishItem';
 import EditableDishItem from './EditableDishItem';
@@ -16,6 +19,10 @@ export default class DishOverview extends Component {
   }
 
   componentWillMount() {
+    this.handleSearchFilterChange = this.handleSearchFilterChange.bind(this);
+    this.handleCategoryFilterChange = this.handleCategoryFilterChange.bind(this);
+    this.handleCateringFilterChange = this.handleCateringFilterChange.bind(this);
+
     this.state = {
       filters: {
         catering: 'all',
@@ -36,11 +43,52 @@ export default class DishOverview extends Component {
     }
   }
 
-  handleFilterChange(event, filterName) {
+  getTitle(type) {
+    if (type === dishOverviewTypes.SELECTABLE) {
+      return 'Select Dishes';
+    } else if (type === dishOverviewTypes.EDITABLE) {
+      return 'All Dishes';
+    } else if (type === dishOverviewTypes.REMOVABLE) {
+      return 'Selected Dishes';
+    }
+    return '';
+  }
+
+  handleCategoryFilterChange(event, index, value) {
     const { dishes } = this.props;
     const nextFilters = {
       ...this.state.filters,
-      [filterName]: event.target.value,
+      category: value,
+    };
+
+    const filtered = this.filterDishes(dishes, nextFilters);
+
+    this.setState({
+      filters: nextFilters,
+      filtered,
+    });
+  }
+
+  handleCateringFilterChange(event, index, value) {
+    const { dishes } = this.props;
+    const nextFilters = {
+      ...this.state.filters,
+      catering: value,
+    };
+
+    const filtered = this.filterDishes(dishes, nextFilters);
+
+    this.setState({
+      filters: nextFilters,
+      filtered,
+    });
+  }
+
+  handleSearchFilterChange(event) {
+    const { dishes } = this.props;
+    const nextFilters = {
+      ...this.state.filters,
+      search: event.target.value,
     };
 
     const filtered = this.filterDishes(dishes, nextFilters);
@@ -108,23 +156,22 @@ export default class DishOverview extends Component {
     return filteredDishes;
   }
 
-  menuIsLocked() {
-    const { menus, lunchDay } = this.props;
-    return (menus && menus[lunchDay] && menus[lunchDay].locked);
-  }
-
   renderCateringSelect() {
     const { caterings } = this.props;
     const { filters } = this.state;
     return (
-      <select className='DishOverview-filter' value={ filters.catering } onChange={ (e) => this.handleFilterChange(e, 'catering') }>
-        <option key={ -1 } value='all'>All</option>
+      <SelectField
+        className='DishOverview-filter'
+        value={ filters.catering }
+        onChange={ this.handleCateringFilterChange }
+      >
+        <MenuItem key={ 0 } value='all' primaryText='All' />
         {
           Object.keys(caterings).map((key, index) => {
-            return <option key={ index } value={ key }>{ caterings[key].name }</option>;
+            return <MenuItem key={ index + 1 } value={ key } primaryText={ caterings[key].name } />;
           })
         }
-      </select>
+      </SelectField>
     );
   }
 
@@ -133,17 +180,27 @@ export default class DishOverview extends Component {
     const { filters } = this.state;
     const standardOptionVisible = type === dishOverviewTypes.EDITABLE;
     return (
-      <select className='DishOverview-filter' value={ filters.category } onChange={ (e) => this.handleFilterChange(e, 'category') }>
-        <option key={ -1 } value='all'>All</option>
+      <SelectField
+        value={ filters.category }
+        onChange={ this.handleCategoryFilterChange }
+        className='DishOverview-filter'
+      >
+        <MenuItem key={ 0 } value='all' primaryText='All' />
         { standardOptionVisible &&
-          <option key={ -2 } value='standard'>Standardni meni</option>
+          <MenuItem key={ 1 } value='standard' primaryText='Standardni meni' />
         }
         {
           Object.keys(categories).map((key, index) => {
-            return <option key={ index } value={ key }>{ categories[key].name }</option>;
+            return (
+              <MenuItem
+                key={ index + 2 }
+                value={ key }
+                primaryText={ categories[key].name }
+              />
+            );
           })
         }
-      </select>
+      </SelectField>
     );
   }
 
@@ -151,12 +208,11 @@ export default class DishOverview extends Component {
     const { search } = this.state.filters;
     return (
       <div className='DishOverview-filterWrapper'>
-        <span>Filters: </span>
-        <input
-          onChange={ (e) => this.handleFilterChange(e, 'search') }
+        <TextField
+          hintText='Search'
           value={ search }
+          onChange={ this.handleSearchFilterChange }
           className='DishOverview-filter'
-          placeholder='Search'
         />
         { this.renderCateringSelect() }
         { this.renderCategorySelect() }
@@ -197,6 +253,93 @@ export default class DishOverview extends Component {
     return '';
   }
 
+  renderTableHeader(type) {
+    if (type === dishOverviewTypes.SELECTABLE) {
+      return (
+        <TableHeader
+          adjustForCheckbox={ true }
+          displaySelectAll={ false }
+        >
+          <TableRow>
+            <TableHeaderColumn>Name</TableHeaderColumn>
+            <TableHeaderColumn>Description</TableHeaderColumn>
+            <TableHeaderColumn>Price</TableHeaderColumn>
+          </TableRow>
+        </TableHeader>
+      );
+    } else if (type === dishOverviewTypes.REMOVABLE) {
+      return (
+        <TableHeader
+          adjustForCheckbox={ false }
+          displaySelectAll={ false }
+        >
+          <TableRow>
+            <TableHeaderColumn>Name</TableHeaderColumn>
+            <TableHeaderColumn>Description</TableHeaderColumn>
+            <TableHeaderColumn>Price</TableHeaderColumn>
+            <TableHeaderColumn />
+          </TableRow>
+        </TableHeader>
+      );
+    }
+    return (
+      <TableHeader
+        adjustForCheckbox={ false }
+        displaySelectAll={ false }
+      >
+        <TableRow>
+          <TableHeaderColumn className='u-tableCellName'>Name</TableHeaderColumn>
+          <TableHeaderColumn className='u-tableCellDesc'>Description</TableHeaderColumn>
+          <TableHeaderColumn>Price</TableHeaderColumn>
+          <TableHeaderColumn />
+          <TableHeaderColumn />
+        </TableRow>
+      </TableHeader>
+    );
+  }
+
+  renderTableFooter(type) {
+    if (type === dishOverviewTypes.SELECTABLE) {
+      return (
+        <TableFooter
+          adjustForCheckbox={ true }
+        >
+          <TableRow className='DishOverview-footer' style={ { color: 'rgb(158, 158, 158)' } }>
+            <TableRowColumn>Name</TableRowColumn>
+            <TableRowColumn>Description</TableRowColumn>
+            <TableRowColumn>Price</TableRowColumn>
+          </TableRow>
+        </TableFooter>
+      );
+    } else if (type === dishOverviewTypes.REMOVABLE) {
+      return (
+        <TableFooter
+          adjustForCheckbox={ false }
+        >
+          <TableRow className='DishOverview-footer' style={ { color: 'rgb(158, 158, 158)' } }>
+            <TableRowColumn>Name</TableRowColumn>
+            <TableRowColumn>Description</TableRowColumn>
+            <TableRowColumn>Price</TableRowColumn>
+            <TableRowColumn />
+          </TableRow>
+        </TableFooter>
+      );
+    }
+    return (
+      <TableFooter
+        adjustForCheckbox={ false }
+      >
+        <TableRow className='DishOverview-footer' style={ { color: 'rgb(158, 158, 158)' } }>
+          <TableRowColumn className='u-tableCellName'>Name</TableRowColumn>
+          <TableRowColumn className='u-tableCellDesc'>Description</TableRowColumn>
+          <TableRowColumn>Price</TableRowColumn>
+          <TableRowColumn />
+          <TableRowColumn />
+        </TableRow>
+      </TableFooter>
+    );
+  }
+
   renderDishes() {
     const { filtered } = this.state;
     if (!filtered) {
@@ -210,36 +353,30 @@ export default class DishOverview extends Component {
     });
   }
 
-  renderTitle() {
-    const { type } = this.props;
-    if (type === dishOverviewTypes.SELECTABLE) {
-      return <h2>Select Dishes</h2>;
-    } else if (type === dishOverviewTypes.EDITABLE) {
-      return <h2>All Dishes</h2>;
-    } else if (type === dishOverviewTypes.REMOVABLE) {
-      return <h2>Selected Dishes</h2>;
-    }
-    return '';
-  }
-
   render() {
+    const { type } = this.props;
     return (
       <div className='DishOverview'>
-        {
-          this.menuIsLocked() &&
-          <div className='u-locked'>
-            <span>Locked</span>
-            <span>Locked</span>
-            <span>Locked</span>
-          </div>
-        }
+        {/* <p>{ this.getTitle(type) }</p> */}
         <div className='DishOverview-header'>
-          { this.renderTitle() }
           { this.renderFilters() }
         </div>
-        <div className='DishItem-wrapper'>
-          { this.renderDishes() }
-        </div>
+        <Table
+          fixedHeader={ true }
+          fixedFooter={ true }
+          selectable={ type === dishOverviewTypes.SELECTABLE }
+          multiSelectable={ type === dishOverviewTypes.SELECTABLE }
+        >
+          { this.renderTableHeader(type) }
+          <TableBody
+            displayRowCheckbox={ true }
+            adjustForCheckbox={ false }
+            showRowHover={ true }
+          >
+            { this.renderDishes() }
+          </TableBody>
+          { this.renderTableFooter(type) }
+        </Table>
       </div>
     );
   }

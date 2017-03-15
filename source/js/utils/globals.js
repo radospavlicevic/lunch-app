@@ -1,3 +1,6 @@
+import moment from 'moment';
+import { routeCodes } from '../routes';
+
 export const dishOverviewTypes = {
   SELECTABLE: 'selectable',
   REMOVABLE: 'removable',
@@ -19,6 +22,17 @@ export const BREAKPOINTS = {
 
 export const DATE_PATTERN = 'DD-MM-YYYY';
 
+export const formatDate = (date) => { return moment(date).format(DATE_PATTERN); };
+
 export const weekDays = ['Ponedeljak', 'Utorak', 'Sreda', 'Cetvrtak', 'Petak'];
 
 export const publicPages = ['/report'];
+
+export const adminPages = [
+  routeCodes.MENUS,
+  routeCodes.USERS,
+  routeCodes.CATEGORIES,
+  routeCodes.CATERINGS,
+  routeCodes.DISHES,
+  routeCodes.WEEKLY_OVERVIEW,
+];

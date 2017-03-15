@@ -4,6 +4,9 @@ import { firebaseRegister } from 'api/auth.js';
 import { saveUser } from 'api/users.js';
 import { getUserValidationErrors } from 'utils/validation';
 import { prepareForReauthentication, reauthenticateAdmin } from 'utils/reauth';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import md5 from 'md5';
 
 export default class Register extends Component {
@@ -27,10 +30,7 @@ export default class Register extends Component {
         password: '',
       },
     };
-    this.handleRoleChange = this.handleRoleChange.bind(this);
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -50,38 +50,11 @@ export default class Register extends Component {
     });
   }
 
-  handleUsernameChange(event) {
+  handleChange(event, value, propertyName) {
     this.setState({
       user: {
         ...this.state.user,
-        username: event.target.value,
-      },
-    });
-  }
-
-  handleEmailChange(event) {
-    this.setState({
-      user: {
-        ...this.state.user,
-        email: event.target.value,
-      },
-    });
-  }
-
-  handlePasswordChange(event) {
-    this.setState({
-      user: {
-        ...this.state.user,
-        password: event.target.value,
-      },
-    });
-  }
-
-  handleRoleChange(changeEvent) {
-    this.setState({
-      user: {
-        ...this.state.user,
-        role: changeEvent.target.value,
+        [propertyName]: value,
       },
     });
   }
@@ -119,68 +92,62 @@ export default class Register extends Component {
     }
   }
 
-  renderRegisterErrors() {
-    const { errors } = this.state;
-    const registerErrors = [];
-    if (errors) {
-      Object.keys(errors).forEach(key => {
-        registerErrors.push(errors[key]);
-      });
-    }
-    return registerErrors.map((error, index) => <div key={ index } className='Message--error'>{ error }</div>);
-  }
-
   render() {
     const { user, errors } = this.state;
     return (
       <div className='Register'>
-        <h1>Register User</h1>
-        <form className='AdminForm' onSubmit={ this.handleSubmit }>
-          <div className='AdminForm-item'>
-            <input
-              placeholder='Username'
-              className={ errors && errors.username ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+        <div className='AdminForm-wrapper'>
+          <form className='AdminForm' onSubmit={ this.handleSubmit }>
+            <h2>Users</h2>
+            <TextField
+              hintText='Username Field'
+              floatingLabelText='Username'
+              fullWidth={ true }
               value={ user.username }
-              onChange={ this.handleUsernameChange }
+              onChange={ (e, value) => { this.handleChange(e, value, 'username'); } }
+              errorText={ errors.username }
             />
-          </div>
-          <div className='AdminForm-item'>
-            <input
-              placeholder='Email'
-              className={ errors && errors.email ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+            <TextField
+              hintText='Email Field'
+              floatingLabelText='Email'
+              fullWidth={ true }
               value={ user.email }
-              onChange={ this.handleEmailChange }
+              onChange={ (e, value) => { this.handleChange(e, value, 'email'); } }
+              errorText={ errors.email }
             />
-          </div>
-          <div className='AdminForm-item'>
-            <input
-              placeholder='Password' type='password'
-              className={ errors && errors.password ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+            <TextField
+              hintText='Password Field'
+              floatingLabelText='Password'
+              fullWidth={ true }
               value={ user.password }
-              onChange={ this.handlePasswordChange }
+              onChange={ (e, value) => { this.handleChange(e, value, 'password'); } }
+              errorText={ errors.password }
             />
-          </div>
-          <div className='AdminForm-radioItem'>
-            <span>
-              <input
-                type='radio' name='role' value={ roles.USER }
-                checked={ user.role === roles.USER }
-                onChange={ this.handleRoleChange }
+            <RadioButtonGroup
+              className='AdminForm-radioGroup'
+              name='userRole'
+              defaultSelected={ user.role }
+              onChange={ (e, value) => { this.handleChange(e, value, 'role'); } }
+            >
+              <RadioButton
+                className='AdminForm-radioButton'
+                value={ roles.USER }
+                label={ roles.USER }
               />
-              { roles.USER }
-            </span>
-            <span>
-              <input
-                type='radio' name='role' value={ roles.ADMIN }
-                checked={ user.role === roles.ADMIN }
-                onChange={ this.handleRoleChange }
+              <RadioButton
+                className='AdminForm-radioButton'
+                value={ roles.ADMIN }
+                label={ roles.ADMIN }
               />
-              { roles.ADMIN }
-            </span>
-          </div>
-          <button className='AdminForm-button'>Register</button>
-        </form>
-        { this.renderRegisterErrors() }
+            </RadioButtonGroup>
+            <RaisedButton
+              type='submit'
+              className='AdminForm-button'
+              label='Register'
+              primary={ true }
+            />
+          </form>
+        </div>
       </div>
     );
   }

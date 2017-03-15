@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
 import WeekPicker from 'components/Global/WeekPicker';
 import DailyTable from 'components/Admin/DailyTable';
 import { updateOrder, cancelOrder } from 'actions/orders';
 import { addUser } from 'actions/users';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
+@CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   menus: state.menus.get('menus'),
   categories: state.meals.get('categories'),
   standardDishes: state.meals.get('standardDishes'),
@@ -20,7 +20,6 @@ import { addDishInMenu } from 'actions/menus';
 }))
 export default class WeeklyOverview extends Component {
   static propTypes = {
-    loggedInUser: PropTypes.object,
     selectedDate: PropTypes.string,
     menus: PropTypes.object,
     standardDishes: PropTypes.object,
@@ -31,8 +30,6 @@ export default class WeeklyOverview extends Component {
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Weekly Overview, Admin - Yummy Yumzor';
   }

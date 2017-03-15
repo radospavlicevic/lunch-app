@@ -14,6 +14,7 @@ injectTapEventPlugin();
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   getUserLoading: state.login.get('getUserLoading'),
+  adminMenuVisibile: state.app.get('adminMenuVisibile'),
 }))
 export default class App extends Component {
   static propTypes = {
@@ -82,7 +83,6 @@ export default class App extends Component {
 
   render() {
     const { children, loggedInUser } = this.props;
-
     return (
       <div className='App'>
 

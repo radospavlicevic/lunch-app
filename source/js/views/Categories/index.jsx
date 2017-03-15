@@ -3,27 +3,25 @@ import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
 import { addOrUpdateCategory, deleteCategory, countCategories } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
 import CategoryForm from 'components/Admin/CategoryForm';
 import CategoryOverview from 'components/Admin/CategoryOverview';
+import AdminMenu from 'components/Admin/AdminMenu';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
+@CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   categories: state.meals.get('categories'),
   dishes: state.meals.get('dishes'),
 }))
 export default class Categories extends Component {
 
   static propTypes = {
-    loggedInUser: PropTypes.object,
     categories: PropTypes.object,
     dishes: PropTypes.object,
     dispatch: PropTypes.func,
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Categories, Admin - Yummy Yumzor';
   }
@@ -60,9 +58,12 @@ export default class Categories extends Component {
   render() {
     const { categories } = this.props;
     return (
-      <div className='Categories Admin-wrapper'>
-        <CategoryForm />
-        <CategoryOverview categories={ categories } />
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='Categories'>
+          <CategoryForm />
+          <CategoryOverview categories={ categories } />
+        </div>
       </div>
     );
   }

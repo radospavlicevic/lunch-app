@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { saveCatering, updateCatering } from 'api/meals.js';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import { saveCatering, updateCatering } from 'api/meals';
+import { cancelCateringUpdate } from 'actions/meals';
 
 @connect(state => ({
   cateringForUpdate: state.meals.get('cateringForUpdate'),
@@ -10,26 +13,25 @@ export default class CateringForm extends Component {
 
   static propTypes = {
     cateringForUpdate: PropTypes.object,
+    dispatch: PropTypes.func,
   }
 
   constructor() {
     super();
 
-    this.state = {
-      name: '',
-      contact: '',
-      errors: '',
-      update: false,
-    };
+    this.initState();
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleContactChange = this.handleContactChange.bind(this);
+    this.handleCancelClick = this.handleCancelClick.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.cateringForUpdate) {
       this.initStateForUpdate(nextProps.cateringForUpdate);
+    } else {
+      this.initState();
     }
   }
 
@@ -42,6 +44,15 @@ export default class CateringForm extends Component {
     });
   }
 
+  initState() {
+    this.state = {
+      name: '',
+      contact: '',
+      errors: '',
+      update: false,
+    };
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     const { cateringForUpdate } = this.props;
@@ -49,7 +60,7 @@ export default class CateringForm extends Component {
     this.setState({
       errors: name ? '' : 'Catering Name field is required. ',
     });
-    if (name || contact) {
+    if (name) {
       if (update) {
         updateCatering(cateringForUpdate.key, name, contact);
       } else {
@@ -59,18 +70,23 @@ export default class CateringForm extends Component {
     }
   }
 
-  handleNameChange(event) {
+  handleNameChange(event, value) {
     event.preventDefault();
     this.setState({
-      name: event.target.value,
+      name: value,
     });
   }
 
-  handleContactChange(event) {
+  handleContactChange(event, value) {
     event.preventDefault();
     this.setState({
-      contact: event.target.value,
+      contact: value,
     });
+  }
+
+  handleCancelClick() {
+    const { dispatch } = this.props;
+    dispatch(cancelCateringUpdate());
   }
 
   resetInputs() {
@@ -86,27 +102,42 @@ export default class CateringForm extends Component {
     const { errors, update, name, contact } = this.state;
     return (
       <div className='CateringForm'>
-        <h1>Add Catering</h1>
-        <form className='AdminForm' onSubmit={ this.handleSubmit }>
-          <div className='AdminForm-item'>
-            <input
+        <div className='AdminForm-wrapper'>
+          <form className='AdminForm' onSubmit={ this.handleSubmit }>
+            <h2>Caterings</h2>
+            <TextField
               value={ name }
+              hintText='Catering Name Field'
+              floatingLabelText='Catering Name'
+              fullWidth={ true }
               onChange={ this.handleNameChange }
-              placeholder='Catering Name'
-              className={ errors ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+              errorText={ errors }
             />
-          </div>
-          <div className='AdminForm-item'>
-            <input
+            <TextField
               value={ contact }
+              hintText='Catering Contact Field'
+              floatingLabelText='Catering Contact'
+              fullWidth={ true }
               onChange={ this.handleContactChange }
-              placeholder='Catering Contact'
-              className={ errors ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
             />
-          </div>
-          <button className='AdminForm-button'>{ update ? 'Update' : 'Add' }</button>
-        </form>
-        { errors && <div className='Message--error'>{ errors }</div> }
+            <RaisedButton
+              type='submit'
+              className='AdminForm-button'
+              label={ update ? 'Update' : 'Add' }
+              primary={ true }
+            />
+            {
+              update &&
+              <RaisedButton
+                style={ { marginLeft: 10 } }
+                className='AdminForm-button'
+                label='Cancel'
+                primary={ true }
+                onClick={ this.handleCancelClick }
+              />
+            }
+          </form>
+        </div>
       </div>
     );
   }

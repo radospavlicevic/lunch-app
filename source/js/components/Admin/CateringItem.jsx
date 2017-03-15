@@ -1,8 +1,9 @@
-
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeCatering } from 'api/meals';
 import { prepareCateringUpdate } from 'actions/meals';
+import FlatButton from 'material-ui/FlatButton';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 
 @connect()
 export default class CateringItem extends Component {
@@ -34,16 +35,19 @@ export default class CateringItem extends Component {
     ));
   }
 
-
   render() {
     const { catering } = this.props;
     return (
-      <tr>
-        <td>{ catering.name }</td>
-        <td>{ catering.contact }</td>
-        <td><button onClick={ this.handleEditClick } className='AdminTable-button'>Edit</button></td>
-        <td><button onClick={ this.handleDeleteClick } className='AdminTable-button'>Delete</button></td>
-      </tr>
+      <TableRow>
+        <TableRowColumn>{ catering.name }</TableRowColumn>
+        <TableRowColumn>{ catering.contact }</TableRowColumn>
+        <TableRowColumn className='u-tableCellButton'>
+          <FlatButton label='Edit' primary={ true } onClick={ this.handleEditClick } />
+        </TableRowColumn>
+        <TableRowColumn className='u-tableCellButton'>
+          <FlatButton label='Delete' primary={ true } onClick={ this.handleDeleteClick } />
+        </TableRowColumn>
+      </TableRow>
     );
   }
 }

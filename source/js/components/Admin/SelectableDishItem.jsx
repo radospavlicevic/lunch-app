@@ -1,6 +1,8 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
+import Checkbox from 'material-ui/Checkbox';
 import { saveDishInMenu, deleteDishFromMenu } from 'api/menus';
 
 @connect()
@@ -29,7 +31,7 @@ export default class SelectableDishItem extends Component {
 
   checkSelect(menus, lunchDay, init) {
     const { dishKey } = this.props;
-    const selected = menus[lunchDay] && menus[lunchDay][dishKey];
+    const selected = menus && menus[lunchDay] && menus[lunchDay][dishKey];
     if (init) {
       this.state = {
         selected,
@@ -51,20 +53,20 @@ export default class SelectableDishItem extends Component {
 
   render() {
     const { dishData } = this.props;
-    const { selected } = this.state;
+    const selected = this.state.selected ? true : false; // eslint-disable-line
     return (
-      <button
-        className={ selected ? 'DishItem--selectable DishItem--selected' : 'DishItem--selectable' }
-        onClick={ this.handleClick }
+      <TableRow
+        className='DishItem'
+        selected={ selected }
+        onRowClick={ this.handleClick }
       >
-        <h2>{ dishData.name }</h2>
-        { dishData.description && <div className='DishItem-desc' >{ dishData.description }</div> }
-        <hr />
-        <div className='DishItem-footer'>
-          <div className='DishItem-price'>{ dishData.price ? dishData.price : 0 }din</div>
-          { selected && <div className='DishItem-checkMark' /> }
-        </div>
-      </button>
+        <TableRowColumn className='u-tableCellCheckIcon'>
+          <Checkbox checked={ selected } />
+        </TableRowColumn>
+        <TableRowColumn>{ dishData.name }</TableRowColumn>
+        <TableRowColumn>{ dishData.description }</TableRowColumn>
+        <TableRowColumn>{ dishData.price ? dishData.price : 0 } din</TableRowColumn>
+      </TableRow>
     );
   }
 }

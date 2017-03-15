@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 import CategoryItem from './CategoryItem';
 
 export default class CategoryOverview extends Component {
@@ -21,17 +22,25 @@ export default class CategoryOverview extends Component {
   render() {
     return (
       <div className='CategoryOverview'>
-        <h1>All Categories</h1>
-        <table className='AdminTable table'>
-          <thead>
-            <tr>
-              <th>Category Name</th>
-            </tr>
-          </thead>
-          <tbody>
+        <Table
+          selectable={ false }
+        >
+          <TableHeader
+            adjustForCheckbox={ false }
+            displaySelectAll={ false }
+          >
+            <TableRow>
+              <TableHeaderColumn>Category Name</TableHeaderColumn>
+              <TableHeaderColumn className='u-tableCellButton' />
+              <TableHeaderColumn className='u-tableCellButton' />
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={ false }
+          >
             { this.renderCategories() }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     );
   }

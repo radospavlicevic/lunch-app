@@ -22,26 +22,3 @@
 .Menu-link {
  width: 100%;
 }
-
-.Menu a {
- display: inline-block;
- padding: 15px 0;
- color: white;
- margin-right: 10px;
- text-decoration: none;
-}
-
-.Menu-right {
- float: right;
- margin-right: 2vh;
- margin-top: 1vh;
- @include sm-and-lower {
-   margin-top: 0;
- }
-}
-
-.Menu-button {
- background-color: #fff;
- border: none;
- height: 30px;
-}

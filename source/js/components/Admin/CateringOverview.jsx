@@ -1,5 +1,6 @@
 
 import React, { Component, PropTypes } from 'react';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 import CateringItem from './CateringItem';
 
 export default class CateringOverview extends Component {
@@ -22,19 +23,27 @@ export default class CateringOverview extends Component {
 
   render() {
     return (
-      <div className='CategoryOverview'>
-        <h1>All Caterings</h1>
-        <table className='AdminTable table'>
-          <thead>
-            <tr>
-              <th>Catering Name</th>
-              <th>Catering Contact</th>
-            </tr>
-          </thead>
-          <tbody>
+      <div className='CateringOverview'>
+        <Table
+          selectable={ false }
+        >
+          <TableHeader
+            adjustForCheckbox={ false }
+            displaySelectAll={ false }
+          >
+            <TableRow>
+              <TableHeaderColumn>Catering Name</TableHeaderColumn>
+              <TableHeaderColumn>Catering Contact</TableHeaderColumn>
+              <TableHeaderColumn className='u-tableCellButton' />
+              <TableHeaderColumn className='u-tableCellButton' />
+            </TableRow>
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={ false }
+          >
             { this.renderCaterings() }
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       </div>
     );
   }

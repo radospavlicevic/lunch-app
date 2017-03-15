@@ -12,10 +12,12 @@
 @import "components/admin_form";
 @import "components/daily_table";
 @import "components/dishes";
+@import "components/admin/adminMenu";
 @import "components/pages/login";
 @import "components/pages/order";
 @import "components/pages/weeklyOverview";
 @import "components/pages/report";
+@import "components/pages/menus";
 @import "components/client/dayview";
 @import "components/client/reportDatePicker";
 @import "components/client/menuSection";
@@ -24,4 +26,3 @@
 @import "components/client/sidedate";
 @import "components/client/overview";
 @import "components/dishes";
-@import "../../node_modules/react-datepicker/dist/react-datepicker.css";

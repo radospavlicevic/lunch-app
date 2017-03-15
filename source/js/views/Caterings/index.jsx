@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
 import { addOrUpdateCatering, deleteCatering, countCaterings } from 'actions/meals.js';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
+import AdminMenu from 'components/Admin/AdminMenu';
 import CateringForm from 'components/Admin/CateringForm';
 import CateringOverview from 'components/Admin/CateringOverview';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
+@CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   caterings: state.meals.get('caterings'),
   cateringsNumber: state.meals.get('cateringsNumber'),
   dishes: state.meals.get('dishes'),
@@ -16,7 +17,6 @@ import CateringOverview from 'components/Admin/CateringOverview';
 export default class Caterings extends Component {
 
   static propTypes = {
-    loggedInUser: PropTypes.object,
     caterings: PropTypes.object,
     cateringsNumber: PropTypes.number,
     dishes: PropTypes.object,
@@ -24,8 +24,6 @@ export default class Caterings extends Component {
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Caterings, Admin - Yummy Yumzor';
   }
@@ -62,9 +60,12 @@ export default class Caterings extends Component {
   render() {
     const { caterings, cateringsNumber } = this.props;
     return (
-      <div className='Caterings Admin-wrapper'>
-        <CateringForm />
-        <CateringOverview caterings={ caterings } number={ cateringsNumber } />
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='Caterings'>
+          <CateringForm />
+          <CateringOverview caterings={ caterings } number={ cateringsNumber } />
+        </div>
       </div>
     );
   }

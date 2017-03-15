@@ -1,0 +1,73 @@
+.Menus {
+  padding: 16px 0;
+}
+
+.Menus-wrapper {
+  position: relative;
+  width: 100%;
+  height: auto;
+  padding: 10px;
+}
+
+.Menus-date {
+  margin-bottom: 20px;
+  span {
+    font-size: 1rem;
+  }
+  h2 {
+    text-align: left;
+  }
+  .Message--error {
+    font-size: 1rem;
+  }
+}
+
+.Menus-tabButton {
+  margin: 0;
+  border: 1px solid $light-gray;
+  border-right: none;
+  width: 150px;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.Menus-lockToggle {
+  float: right;
+  width: 100px !important;
+}
+
+.Menus-tabButton--active {
+  @extend .Menus-tabButton;
+  border: 2px solid $dark-background;
+  border-top: 1px solid $light-gray;
+}
+
+.MenuForm {
+  padding: 16px;
+}
+
+.MenuOverview {
+  padding: 16px;
+}
+
+.Menus-button {
+  border: none;
+  outline: none;
+  margin-top: 0px;
+  background: $dark-background;
+  padding: 16px;
+  color: #fff;
+  float:right;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+  @include sm-and-lower {
+    margin-top: 30px;
+  }
+}
+
+.MenuOverview-item {
+  margin-bottom: 40px;
+}

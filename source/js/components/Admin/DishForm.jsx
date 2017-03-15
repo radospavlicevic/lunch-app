@@ -1,6 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
+import RaisedButton from 'material-ui/RaisedButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import { saveDish, updateDish } from 'api/meals';
+import { cancelDishUpdate } from 'actions/meals';
 
 @connect(state => ({
   dishForUpdate: state.meals.get('dishForUpdate'),
@@ -11,6 +17,7 @@ export default class DishForm extends Component {
     caterings: PropTypes.object,
     categories: PropTypes.object,
     dishForUpdate: PropTypes.object,
+    dispatch: PropTypes.func,
   }
 
   constructor() {
@@ -18,7 +25,9 @@ export default class DishForm extends Component {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCategoryChange = this.handleCategoryChange.bind(this);
-    this.handleStandardChange = this.handleStandardChange.bind(this);
+    this.handleCateringChange = this.handleCateringChange.bind(this);
+    this.handleStandardCheck = this.handleStandardCheck.bind(this);
+    this.handleCancelClick = this.handleCancelClick.bind(this);
   }
 
   componentWillMount() {
@@ -28,6 +37,8 @@ export default class DishForm extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.dishForUpdate) {
       this.initStateForUpdate(nextProps.dishForUpdate);
+    } else {
+      this.initState();
     }
   }
 
@@ -75,7 +86,7 @@ export default class DishForm extends Component {
     });
   }
 
-  handleChange(event, propertyName) {
+  handleTextFieldChange(event, value, propertyName) {
     event.preventDefault();
     this.setState({
       dish: {
@@ -85,9 +96,8 @@ export default class DishForm extends Component {
     });
   }
 
-  handleCategoryChange(event) {
-    event.preventDefault();
-    const nextCategory = event.target.value;
+  handleCategoryChange(event, index, value) {
+    const nextCategory = value;
     const nextStandard = nextCategory === 'main_dish' ? this.state.dish.standard : false;
     this.setState({
       dish: {
@@ -98,7 +108,16 @@ export default class DishForm extends Component {
     });
   }
 
-  handleStandardChange() {
+  handleCateringChange(event, index, value) {
+    this.setState({
+      dish: {
+        ...this.state.dish,
+        catering: value,
+      },
+    });
+  }
+
+  handleStandardCheck() {
     const checked = !this.state.dish.standard;
     this.setState({
       dish: {
@@ -122,13 +141,17 @@ export default class DishForm extends Component {
     }
   }
 
+  handleCancelClick() {
+    const { dispatch } = this.props;
+    dispatch(cancelDishUpdate());
+  }
+
   validationPassed() {
     let passed = true;
     const { categories } = this.props;
     const { name, price, category } = this.state.dish;
     const errors = {
       name: '',
-      price: '',
     };
 
     if (!name) {
@@ -141,7 +164,7 @@ export default class DishForm extends Component {
       passed = false;
     }
     this.setState({
-      'errors': errors,
+      errors,
     });
     return passed;
   }
@@ -150,13 +173,23 @@ export default class DishForm extends Component {
     const { caterings } = this.props;
     const { dish } = this.state;
     return (
-      <select className='AdminForm-select' value={ dish.catering } onChange={ (e) => this.handleChange(e, 'catering') }>
+      <SelectField
+        floatingLabelText='Catering'
+        value={ dish.catering }
+        onChange={ this.handleCateringChange }
+      >
         {
           Object.keys(caterings).map((key, index) => {
-            return <option key={ index } value={ key }>{ caterings[key].name }</option>;
+            return (
+              <MenuItem
+                key={ index }
+                value={ key }
+                primaryText={ caterings[key].name }
+              />
+            );
           })
         }
-      </select>
+      </SelectField>
     );
   }
 
@@ -164,13 +197,23 @@ export default class DishForm extends Component {
     const { categories } = this.props;
     const { dish } = this.state;
     return (
-      <select className='AdminForm-select' value={ dish.category } onChange={ this.handleCategoryChange }>
+      <SelectField
+        floatingLabelText='Category'
+        value={ dish.category }
+        onChange={ this.handleCategoryChange }
+      >
         {
           Object.keys(categories).map((key, index) => {
-            return <option key={ index } value={ key }>{ categories[key].name }</option>;
+            return (
+              <MenuItem
+                key={ index }
+                value={ key }
+                primaryText={ categories[key].name }
+              />
+            );
           })
         }
-      </select>
+      </SelectField>
     );
   }
 
@@ -178,54 +221,62 @@ export default class DishForm extends Component {
     const { errors, update, dish } = this.state;
     return (
       <div className='DishForm'>
-        <h1>Add Dish</h1>
-        <form className='AdminForm' onSubmit={ this.handleSubmit }>
-          <div className='AdminForm-item'>
-            { this.renderCateringSelect() }
-          </div>
-          <div className='AdminForm-item'>
-            { this.renderCategorySelect() }
-          </div>
-          <div className='AdminForm-item'>
-            <input
-              id='standard-checkbox'
-              type='checkbox'
+        <div className='AdminForm-wrapper'>
+          <form className='AdminForm' onSubmit={ this.handleSubmit }>
+            <h2>Dishes</h2>
+            <div className='AdminForm-item'>
+              { this.renderCateringSelect() }
+              { this.renderCategorySelect() }
+            </div>
+            <Checkbox
+              label='Standard'
               disabled={ dish.category !== 'main_dish' }
               checked={ dish.standard }
-              onChange={ this.handleStandardChange }
+              onCheck={ this.handleStandardCheck }
             />
-            <label className='AdminForm-item-checkboxText' htmlFor='standard-checkbox'>
-              Standard
-            </label>
-          </div>
-          <div className='AdminForm-item'>
-            <input
-              onChange={ (e) => this.handleChange(e, 'name') }
+            <TextField
+              hintText='Name Field'
+              floatingLabelText='Name'
+              fullWidth={ true }
               value={ dish.name }
-              placeholder='Name'
-              className={ errors.name ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+              onChange={ (e, value) => this.handleTextFieldChange(e, value, 'name') }
+              errorText={ errors.name }
             />
-          </div>
-          <div className='AdminForm-item'>
-            <textarea
-              onChange={ (e) => this.handleChange(e, 'description') }
+            <TextField
+              hintText='Description Field'
+              floatingLabelText='Description'
+              fullWidth={ true }
+              multiLine={ true }
+              rows={ 3 }
+              rowsMax={ 3 }
               value={ dish.description }
-              placeholder='Description'
-              className='AdminForm-textarea'
+              onChange={ (e, value) => this.handleTextFieldChange(e, value, 'description') }
             />
-          </div>
-          <div className='AdminForm-item'>
-            <input
-              onChange={ (e) => this.handleChange(e, 'price') }
+            <TextField
+              hintText='Price Field'
+              floatingLabelText='Price'
+              fullWidth={ true }
               value={ dish.price }
-              placeholder='Price'
-              className={ errors.price ? 'AdminForm-input AdminForm-input--error' : 'AdminForm-input' }
+              onChange={ (e, value) => this.handleTextFieldChange(e, value, 'price') }
             />
-          </div>
-          <button className='AdminForm-button'>{ update ? 'Update Dish' : 'Add Dish' }</button>
-        </form>
-        { errors.name && <div className='Message--error'>{ errors.name }</div> }
-        { errors.price && <div className='Message--error'>{ errors.price }</div> }
+            <RaisedButton
+              type='submit'
+              className='AdminForm-button'
+              label={ update ? 'Update Dish' : 'Add Dish' }
+              primary={ true }
+            />
+            {
+              update &&
+              <RaisedButton
+                style={ { marginLeft: 10 } }
+                className='AdminForm-button'
+                label='Cancel'
+                primary={ true }
+                onClick={ this.handleCancelClick }
+              />
+            }
+          </form>
+        </div>
       </div>
     );
   }

@@ -2,9 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addUser, deleteUser } from 'actions/users';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
 import Register from 'components/Admin/Register';
 import UserOverview from 'components/Admin/UserOverview';
+import AdminMenu from 'components/Admin/AdminMenu';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
+
+@CheckAdminRole
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
@@ -19,8 +22,6 @@ export default class Users extends Component {
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Users, Admin - Yummy Yumzor';
   }
@@ -36,13 +37,15 @@ export default class Users extends Component {
     });
   }
 
-
   render() {
     const { loggedInUser, users } = this.props;
     return (
-      <div className='Users Admin-wrapper'>
-        <Register loggedInUser={ loggedInUser } />
-        <UserOverview users={ users } admin={ loggedInUser } />
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='Users'>
+          <Register loggedInUser={ loggedInUser } />
+          <UserOverview users={ users } admin={ loggedInUser } />
+        </div>
       </div>
     );
   }

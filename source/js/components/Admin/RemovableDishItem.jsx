@@ -1,5 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
+import FlatButton from 'material-ui/FlatButton';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 import { deleteDishFromMenu } from 'api/menus';
 import { connect } from 'react-redux';
 
@@ -26,15 +28,14 @@ export default class RemovableDishItem extends Component {
   render() {
     const { dishData } = this.props;
     return (
-      <div className='DishItem'>
-        <h2>{ dishData.name }</h2>
-        { dishData.description && <div className='DishItem-desc' >{ dishData.description }</div> }
-        <hr />
-        <div className='DishItem-footer'>
-          <div className='DishItem-price'>{ dishData.price ? dishData.price : 0 }din</div>
-          <button className='DishItem-button' onClick={ this.handleDeleteClick }>Delete</button>
-        </div>
-      </div>
+      <TableRow className='DishItem'>
+        <TableRowColumn>{ dishData.name }</TableRowColumn>
+        <TableRowColumn>{ dishData.description }</TableRowColumn>
+        <TableRowColumn>{ dishData.price ? dishData.price : 0 } din</TableRowColumn>
+        <TableRowColumn>
+          <FlatButton label='Delete' primary={ true } onClick={ this.handleDeleteClick } />
+        </TableRowColumn>
+      </TableRow>
     );
   }
 }

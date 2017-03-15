@@ -1,0 +1,22 @@
+.AdminMenu {
+  div {
+    z-index: 1000 !important;
+  }
+  h2 {
+    padding: 0px 24px 8px 24px;
+  }
+}
+
+.AdminMenu-link {
+  text-decoration: none;
+  div {
+    padding-left: 5px;
+  }
+}
+
+.AdminMenu-link--active {
+  span {
+    background: $primary !important;
+    color: #fff !important;
+  }
+}

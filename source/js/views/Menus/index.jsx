@@ -1,17 +1,20 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
-import { checkAdminRole } from 'utils/routing';
-import DatePicker from 'react-datepicker';
+import AdminMenu from 'components/Admin/AdminMenu';
+import Toggle from 'material-ui/Toggle';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import DatePicker from 'material-ui/DatePicker';
 import DishOverview from 'components/Admin/DishOverview';
-import { dishOverviewTypes, DATE_PATTERN } from 'utils/globals';
+import { dishOverviewTypes, DATE_PATTERN, formatDate } from 'utils/globals';
 import { addDishInMenu, removeDishFromMenu, setMenuLock } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
 import { addOrUpdateDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
 import moment from 'moment';
+import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
+@CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   caterings: state.meals.get('caterings'),
   categories: state.meals.get('categories'),
   dishes: state.meals.get('noStandardDishes'),
@@ -21,7 +24,6 @@ import moment from 'moment';
 export default class Menus extends Component {
 
   static propTypes = {
-    loggedInUser: PropTypes.object,
     caterings: PropTypes.object,
     categories: PropTypes.object,
     dishes: PropTypes.object,
@@ -39,12 +41,11 @@ export default class Menus extends Component {
     };
 
     this.handleDayChange = this.handleDayChange.bind(this);
-    this.handleLockClick = this.handleLockClick.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
+    this.handleLockToggle = this.handleLockToggle.bind(this);
   }
 
   componentWillMount() {
-    const { loggedInUser } = this.props;
-    checkAdminRole(loggedInUser && loggedInUser.role);
     this.setupFirebaseObservers();
     document.title = 'Menus, Admin - Yummy Yumzor';
   }
@@ -96,24 +97,23 @@ export default class Menus extends Component {
     });
   }
 
-  handleLockClick() {
+  handleLockToggle() {
     const { menus } = this.props;
     const { selectedDay } = this.state;
     switchMenuLock(selectedDay, !menus[selectedDay].locked);
   }
 
-  handleTabClick(event, selected) {
+  handleTabChange(value) {
     this.setState({
-      selectedTab: selected,
+      selectedTab: value,
     });
   }
 
-  handleDayChange(date) {
-    event.preventDefault();
+  handleDayChange(event, date) {
     this.setState({
-      selectedDay: date.format(DATE_PATTERN),
+      selectedDay: moment(date).format(DATE_PATTERN),
     });
-    this.updateFirebaseObservers(date.format(DATE_PATTERN));
+    this.updateFirebaseObservers(moment(date).format(DATE_PATTERN));
   }
 
   selectedDateDishes() {
@@ -124,13 +124,55 @@ export default class Menus extends Component {
     return selectedDateDishes;
   }
 
-  renderTabs() {
-    const { selectedTab } = this.state;
+  menuIsLocked() {
+    const { menus } = this.props;
+    const { selectedDay } = this.state;
+    return (menus && menus[selectedDay] && menus[selectedDay].locked);
+  }
+
+  checkLockedSreen() {
+    if (!this.menuIsLocked()) return '';
     return (
-      <div className='Menus-tabWrapper'>
-        <button className={ selectedTab === 'select_dishes' ? 'Menus-tabButton--active' : 'Menus-tabButton' } onClick={ (e) => this.handleTabClick(e, 'select_dishes') }>Select dishes</button>
-        <button className={ selectedTab === 'overview' ? 'Menus-tabButton--active' : 'Menus-tabButton' } onClick={ (e) => this.handleTabClick(e, 'overview') }>Overview</button>
+      <div className='u-locked'>
+        <span>Locked</span>
+        <span>Locked</span>
+        <span>Locked</span>
       </div>
+    );
+  }
+
+  renderTabs() {
+    const { selectedTab, selectedDay } = this.state;
+    const { caterings, categories, dishes, menus } = this.props;
+    return (
+      <Tabs
+        value={ this.state.selectedTab }
+        onChange={ this.handleTabChange }
+      >
+        <Tab label='Select dishes' value='select_dishes'>
+          { this.checkLockedSreen() }
+          <DishOverview
+            key={ selectedTab }
+            type={ dishOverviewTypes.SELECTABLE }
+            caterings={ caterings }
+            categories={ categories }
+            dishes={ dishes }
+            menus={ menus }
+            lunchDay={ selectedDay }
+          />
+        </Tab>
+        <Tab label='Overview' value='overview'>
+          { this.checkLockedSreen() }
+          <DishOverview
+            key={ selectedTab }
+            type={ dishOverviewTypes.REMOVABLE }
+            caterings={ caterings }
+            categories={ categories }
+            dishes={ this.selectedDateDishes() }
+            lunchDay={ selectedDay }
+          />
+        </Tab>
+      </Tabs>
     );
   }
 
@@ -156,8 +198,8 @@ export default class Menus extends Component {
           type={ dishOverviewTypes.REMOVABLE }
           caterings={ caterings }
           categories={ categories }
-          dishes={ this.selectedDateDishes() }
           lunchDay={ selectedDay }
+          dishes={ this.selectedDateDishes() }
         />
       );
     }
@@ -165,28 +207,31 @@ export default class Menus extends Component {
   }
 
   renderDateView() {
-    const { menus } = this.props;
     const { selectedTab, selectedDay } = this.state;
     if (selectedTab === 'select_dishes') {
       return (
         <div className='Menus-date'>
           <span>Choose lunch day: </span>
-          <DatePicker
-            selected={ moment(selectedDay, DATE_PATTERN) }
-            onChange={ this.handleDayChange }
-            dateFormat={ DATE_PATTERN }
-            readOnly
+          <Toggle
+            label={ this.menuIsLocked() ? 'Locked' : 'Unlocked' }
+            defaultToggled={ true }
+            className='Menus-lockToggle'
+            onToggle={ this.handleLockToggle }
           />
-          <button className='Menus-lockButton' onClick={ this.handleLockClick }>
-            { menus[selectedDay] && menus[selectedDay].locked ? 'Unlock Menu' : 'Lock Menu' }
-          </button>
+          <DatePicker
+            id='material-ui-date-picker'
+            defaultDate={ moment(selectedDay, DATE_PATTERN).toDate() }
+            autoOk={ true }
+            onChange={ this.handleDayChange }
+            formatDate={ formatDate }
+          />
         </div>
       );
     } else if (selectedTab === 'overview') {
       return (
         <div className='Menus-date'>
-          <span>Lunch day: </span>
-          <span><b>{ selectedDay }</b></span>
+          <span>Lunch day:</span>
+          <h2>{ selectedDay }</h2>
         </div>
       );
     }
@@ -195,12 +240,13 @@ export default class Menus extends Component {
 
   render() {
     return (
-      <div className='Menus Admin-wrapper'>
-        <h1>Menus</h1>
-        <div className='Menus-wrapper'>
-          { this.renderDateView() }
-          { this.renderTabs() }
-          { this.renderTabContent() }
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='Menus'>
+          <div className='Menus-wrapper'>
+            { this.renderDateView() }
+            { this.renderTabs() }
+          </div>
         </div>
       </div>
     );
