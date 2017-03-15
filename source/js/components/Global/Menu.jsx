@@ -99,6 +99,7 @@ export default class Menu extends Component {
     return (
       <AppBar
         className='Menu'
+        style={ { position: 'fixed' } }
         showMenuIconButton={ breakpoint === 'sm' }
         title='Yummy Yumzor'
         onLeftIconButtonTouchTap={ this.handleToggle }

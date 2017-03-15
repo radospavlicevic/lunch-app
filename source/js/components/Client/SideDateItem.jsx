@@ -26,7 +26,7 @@ export default class SideDateItem extends Component {
   // function returns formatted date as month name
   getMonthName() {
     const { date } = this.props;
-    return moment(date, DATE_PATTERN).format('MMMM');
+    return moment(date, DATE_PATTERN).format('MMM');
   }
 
   handleClick(event) {

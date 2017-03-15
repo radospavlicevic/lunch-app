@@ -1,19 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import { deleteDishFromOrder } from 'api/orders';
 import Grid from 'components/Client/Grid';
+import { Tabs, Tab } from 'material-ui/Tabs';
+import ComposedComponent from 'decorators/AppBreakpointsDecorator';
+import { connect } from 'react-redux';
 
+@ComposedComponent
+@connect(state => ({
+  breakpoint: state.app.get('breakpoint'),
+}))
 export default class MenuSection extends Component {
   static propTypes = {
     dishes: PropTypes.object,
     category: PropTypes.object,
     orders: PropTypes.object,
     selectedDate: PropTypes.string,
-  }
-
-  constructor() {
-    super();
-
-    this.handleCancelClick = this.handleCancelClick.bind(this);
+    breakpoint: PropTypes.string,
   }
 
   componentWillMount() {
@@ -64,11 +65,6 @@ export default class MenuSection extends Component {
     });
   }
 
-  handleCancelClick() {
-    const { selectedDate, category } = this.props;
-    deleteDishFromOrder(selectedDate, category.key);
-  }
-
   isMainDish() {
     const { category } = this.props;
     return category.key === 'main_dish';
@@ -80,19 +76,23 @@ export default class MenuSection extends Component {
   }
 
   renderTabs() {
-    const { selectedTab } = this.state;
+    const { breakpoint } = this.props;
     return (
       <div className='MenuSection-tabWrapper'>
-        <button
-          className={ selectedTab === 'main' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
-          onClick={ (e) => this.handleTabClick(e, 'main') }
-        >
-        Glavna jela</button>
-        <button
-          className={ selectedTab === 'standard' ? 'MenuSection-tab--selected' : 'MenuSection-tab' }
-          onClick={ (e) => this.handleTabClick(e, 'standard') }
-        >
-        Standardni meni</button>
+        <Tabs>
+          <Tab
+            style={ { fontFamily: 'Avenir', fontSize: breakpoint === 'sm' ? '0.7rem' : '0.8rem' } }
+            label='Glavna jela'
+            onClick={ (e) => this.handleTabClick(e, 'main') }
+            className='MenuSection-tab'
+          />
+          <Tab
+            style={ { fontFamily: 'Avenir', fontSize: breakpoint === 'sm' ? '0.7rem' : '0.8rem' } }
+            label='Standardni meni'
+            onClick={ (e) => this.handleTabClick(e, 'standard') }
+            className='MenuSection-tab'
+          />
+        </Tabs>
       </div>
     );
   }
@@ -110,7 +110,6 @@ export default class MenuSection extends Component {
           category={ category }
           orders={ orders }
         />
-        <button onClick={ this.handleCancelClick } className='ManuSection-cancelButton'>Cancel</button>
       </div>
     );
   }

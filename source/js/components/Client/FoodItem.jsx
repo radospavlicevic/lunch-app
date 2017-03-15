@@ -1,7 +1,7 @@
-
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { saveDishInOrder } from 'api/orders';
+import IconCheckmark from 'components/Global/IconCheckmark';
 
 @connect()
 export default class FoodItem extends Component {
@@ -30,8 +30,11 @@ export default class FoodItem extends Component {
         className={ selected ? 'FoodItem--selected' : 'FoodItem' }
         onClick={ this.handleClick }
       >
-        <p>{ dishData.name }</p>
-        { dishData.description && <div className='FoodItem-desc' >{ dishData.description }</div> }
+        <div>
+          { selected && <IconCheckmark /> }
+          <p>{ dishData.name }</p>
+          { dishData.description && <div className='FoodItem-desc' >{ dishData.description }</div> }
+        </div>
       </button>
     );
   }

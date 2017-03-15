@@ -29,6 +29,7 @@ export default class Report extends Component {
 
   componentWillMount() {
     this.setupFirebaseObservers();
+    document.title = 'Report - Yummy Yumzor';
   }
 
   componentWillReceiveProps(nextProps) {

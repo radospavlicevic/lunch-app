@@ -8,6 +8,8 @@ import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
@@ -79,6 +81,28 @@ export default class Order extends Component {
   getUserFirstName() {
     const { loggedInUser } = this.props;
     return loggedInUser.username.split(' ', 1);
+  }
+
+  getOrder(loggedInUser, selectedDate, orders) {
+    const mealItems = [];
+    const { menus, categories, standardDishes } = this.props;
+    if (loggedInUser && orders[selectedDate] && orders[selectedDate][userSignedIn().uid]) {
+      const { meal, note } = orders[selectedDate][userSignedIn().uid];
+      Object.keys(meal).forEach(key => {
+        if (menus[selectedDate][meal[key]] || standardDishes[meal[key]]) {
+          const dish = menus[selectedDate][meal[key]] || standardDishes[meal[key]];
+          mealItems.push({
+            category: categories[key].name,
+            dish,
+          });
+        }
+      });
+      return {
+        mealItems,
+        note,
+      };
+    }
+    return null;
   }
 
   updateFirebaseObservers(selectedDate) {
@@ -173,20 +197,34 @@ export default class Order extends Component {
   renderUnlockedScreen(selectedDate) {
     return (
       <div>
-        <div className='Order-label'>Hello, { this.getUserFirstName() } <br />
-          Choose your meal for { selectedDate }
-        </div>
-        <div className='Order-cancelLunch'>
-          <button onClick={ this.handleCancelLunchClick } className='Order-cancelLunchButton'>Cancel Lunch</button>
+        <div className='Order-label'>
+          <p>Hello, { this.getUserFirstName() }</p>
+          <p>Choose your meal for { selectedDate }</p>
         </div>
         { this.renderMenuSections(selectedDate) }
         <div className='Order-noteSection'>
-          <textarea
-            placeholder='Note...'
+          <TextField
+            style={ { width: '100%' } }
+            hintText='Note...'
+            multiLine={ true }
+            rows={ 2 }
+            rowsMax={ 2 }
             className='Order-noteInput'
             ref={ node => this.noteInput = node }
           />
-          <button onClick={ this.handleSaveNoteClick } className='Order-noteButton'>Save Note</button>
+          <RaisedButton
+            label='Save note'
+            onClick={ this.handleSaveNoteClick }
+            className='Order-noteButton'
+          />
+        </div>
+        <div className='Order-cancelLunch'>
+          <RaisedButton
+            style={ { width: '50%' } }
+            onClick={ this.handleCancelLunchClick }
+            className='Order-cancelLunchButton'
+            label={ 'Cancel Lunch' }
+          />
         </div>
       </div>
     );

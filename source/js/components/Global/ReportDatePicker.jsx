@@ -5,6 +5,7 @@ import ReportDatePickerItem from 'components/Global/ReportDatePickerItem';
 import { setReportDate } from 'actions/orders';
 import { DATE_PATTERN, weekDays } from 'utils/globals';
 import moment from 'moment';
+import RaisedButton from 'material-ui/RaisedButton';
 
 @connect()
 export default class ReportDatePicker extends Component {
@@ -89,12 +90,13 @@ export default class ReportDatePicker extends Component {
         <div className='ReportDatePicker-controls'>
           { this.renderReportDatePickerItems() }
         </div>
-        <button
-          onClick={ this.handleWeekSwitch }
-          className='ReportDatePicker-button'
-        >
-          { week === 0 ? 'Next Week' : 'Current Week' }
-        </button>
+        <div className='ReportDatePicker-weekSwitch'>
+          <RaisedButton
+            onClick={ this.handleWeekSwitch }
+            className='ReportDatePicker-button'
+            label={ week === 0 ? 'Next Week' : 'Current Week' }
+          />
+        </div>
       </div>
     );
   }

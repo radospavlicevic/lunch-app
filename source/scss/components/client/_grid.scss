@@ -1,20 +1,57 @@
+$grid-gutter: 1.5rem;
+$grid-gutter-half: $grid-gutter / 2;
+$grid-columns: 12;
+
 .Grid {
   font-size: 1.5rem;
   font-family: Avenir;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  @mixin md-and-lower() {
-    height: calc(100% - 240px);
-  }
+  justify-content: flex-start;
+  padding: 0 $grid-gutter-half;
+  margin: 0 -$grid-gutter;
 }
 
 .Grid-loading {
   font-size: 2.5rem;
-  @include md-and-lower {
-    font-size: 2rem;
+}
+
+.Col {
+  padding: 0 $grid-gutter-half;
+  flex-basis: 100%;
+  max-width: 100%;
+}
+
+@for $i from 1 through $grid-columns {
+  .Col--xs-#{$i} {
+    flex-basis: (100% / $grid-columns) * $i;
+    max-width: (100% / $grid-columns) * $i;
   }
-  @include sm-and-lower {
-    font-size: 1rem;
+}
+
+@include sm {
+  @for $i from 1 through $grid-columns {
+    .Col--sm-#{$i} {
+      flex-basis: (100% / $grid-columns) * $i;
+      max-width: (100% / $grid-columns) * $i;
+    }
+  }
+}
+
+@include md {
+  @for $i from 1 through $grid-columns {
+    .Col--md-#{$i} {
+      flex-basis: (100% / $grid-columns) * $i;
+      max-width: (100% / $grid-columns) * $i;
+    }
+  }
+}
+
+@include lg {
+  @for $i from 1 through $grid-columns {
+    .Col--lg-#{$i} {
+      flex-basis: (100% / $grid-columns) * $i;
+      max-width: (100% / $grid-columns) * $i;
+    }
   }
 }

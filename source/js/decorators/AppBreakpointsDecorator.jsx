@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { BREAKPOINTS } from 'utils/globals';
-import { setBreakpoint } from 'actions/app'; // moracete sami da napisete akciju
+import { setBreakpoint } from 'actions/app';
 
 @connect(state => ({
   breakpoint: state.app.get('breakpoint'),

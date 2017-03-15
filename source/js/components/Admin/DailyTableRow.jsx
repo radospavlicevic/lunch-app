@@ -1,6 +1,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { deleteUserOrder } from 'api/orders';
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 
 export default class DailyTableRow extends Component {
   static propTypes = {
@@ -31,25 +32,18 @@ export default class DailyTableRow extends Component {
   renderDishes() {
     const { dishes } = this.props.data;
     return dishes.map((dish, index) => {
-      return <td key={ index }>{ this.resolveDish(dish) }</td>;
+      return <TableRowColumn key={ index }>{ this.resolveDish(dish) }</TableRowColumn>;
     });
   }
 
   render() {
     const { canceled, data, locked } = this.props;
     return (
-      <tr className={ canceled && 'table-danger' }>
-        <td>{ data.name }</td>
+      <TableRow>
+        <TableRowColumn>{ data.name }</TableRowColumn>
         { this.renderDishes() }
-        <td>{ data.note }</td>
-        { !locked &&
-          <td>
-            <button onClick={ this.handleCancelClick } disabled={ canceled } className='AdminTable-button'>
-              { canceled ? 'Canceled' : 'Cancel' }
-            </button>
-          </td>
-        }
-      </tr>
+        <TableRowColumn>{ data.note }</TableRowColumn>
+      </TableRow>
     );
   }
 }

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import DailyTableRow from 'components/Admin/DailyTableRow';
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 
 export default class DailyTable extends Component {
   static propTypes = {
@@ -28,7 +29,7 @@ export default class DailyTable extends Component {
   renderHeaderCategories() {
     const { categories } = this.props;
     return Object.keys(categories).map((key, index) => {
-      return <th key={ index }>{ categories[key].name }</th>;
+      return <TableHeaderColumn key={ index }>{ categories[key].name }</TableHeaderColumn>;
     });
   }
 
@@ -54,20 +55,22 @@ export default class DailyTable extends Component {
     return (
       <div className='DailyTable'>
         <h1>All Orders for: { selectedDate }</h1>
-        <table className='AdminTable table'>
-          <thead className='thead-inverse'>
-            <tr>
-              <th>Ime</th>
+        <Table>
+          <TableHeader
+            displaySelectAll={ false }
+            adjustForCheckbox={ false }
+          >
+            <TableRow>
+              <TableHeaderColumn>Ime</TableHeaderColumn>
               { this.renderHeaderCategories() }
-              <th>Napomena</th>
-              { !locked && <th /> }
-            </tr>
-          </thead>
-          <tbody>
+              <TableHeaderColumn>Napomena</TableHeaderColumn>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             { this.renderOrderRows() }
-          </tbody>
-        </table>
-        <span>* Standardni meni</span>
+          </TableBody>
+        </Table>
+        <p>* Standardni meni</p>
       </div>
     );
   }

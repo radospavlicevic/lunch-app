@@ -1,13 +1,24 @@
 .Report {
-  width: 90%;
+  padding: 0 10px;
+  max-width: 1200px;
   display: block;
   margin: 0 auto;
   background: #fff;
+  font-family: AvenirRoman;
+  @include sm {
+    padding: 0 20px;
+  }
   h2 {
     text-align: center;
-    border-bottom: 1px solid $dark-background;
-    background: $light-gray;
+    color: #fff;
+    border-bottom: $border;
+    background: $selected;
     padding: 20px 0;
-    margin-bottom: 0;
+    margin: 10px 0;
+    transition: 0.5s;
+    line-height: 26px;
+    &:hover {
+      background: #00b4d4;
+    }
   }
 }

@@ -24,7 +24,7 @@ export default class ReportDatePickerItem extends Component {
 
   getMonthName() {
     const { data } = this.props;
-    return moment(data.date, 'DD-MM-YYYY').format('MMMM');
+    return moment(data.date, 'DD-MM-YYYY').format('MMM');
   }
 
   handleClick(event) {

@@ -1,5 +1,6 @@
 body {
   min-height: 100%;
+  -webkit-overflow-scrolling: touch;
 }
 
 html {
@@ -153,9 +154,7 @@ hr {
   align-items: center;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.8);
   font-size: 2rem;
-  color: white;
   z-index: 10;
   font-family: Avenir;
 }
