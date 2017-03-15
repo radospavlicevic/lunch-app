@@ -13,6 +13,11 @@ html {
   display: block;
   margin-left: 256px;
   padding: 0 20px;
+  position: relative;
+  top: 64px;
+  @include sm {
+    top: 66px;
+  }
 }
 
 hr {
@@ -47,4 +52,67 @@ hr {
 
 .UserOverview {
   border: 1px solid $light-gray;
+  border-right: none;
+  width: 150px;
+  background: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.Menus-lockButton {
+  float: right;
+  width: 150px;
+  padding: 8px 0;
+  background: $dark-background;
+  color: #fff;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.Menus-tabButton--active {
+  @extend .Menus-tabButton;
+  border: 2px solid $dark-background;
+  border-top: 1px solid $light-gray;
+}
+
+.MenuForm {
+  padding: 16px;
+}
+
+.MenuOverview {
+  padding: 16px;
+}
+
+.Menus-button {
+  border: none;
+  outline: none;
+  margin-top: 0px;
+  background: $dark-background;
+  padding: 16px;
+  color: #fff;
+  float:right;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+  @include sm-and-lower {
+    margin-top: 30px;
+  }
+}
+
+.MenuOverview-item {
+  margin-bottom: 40px;
+}
+
+.LoadingModal {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  z-index: 10;
+  font-family: Avenir;
 }

@@ -3,6 +3,11 @@
   display: block;
   margin: 0 auto;
   background: #fff;
+  position: relative;
+  top: 64px;
+  @include sm {
+    top: 66px;
+  }
   h2 {
     text-align: center;
     border-bottom: 1px solid $dark-background;

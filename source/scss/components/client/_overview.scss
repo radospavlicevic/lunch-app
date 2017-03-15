@@ -9,24 +9,25 @@
 }
 
 .Overview-top {
- min-height: 92vh;
- max-height: 92vh;
- width: 100%;
- display: flex;
- flex-direction: column;
- padding: 0 50px;
- @include sm {
- width: calc( 100% - 170px );
+  position: relative;
+  top: 64px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  @include sm {
+   margin-left: 170px;
+   width: calc( 100% - 170px );
+   top: 66px;
  }
 }
 
 .Overview-meal {
   padding: 0 10px;
   @include sm {
-    padding: 0 20px;
+    padding: 0 30px;
   }
   @include md {
-    padding: 0 30px;
+    padding: 0 40px;
     max-width: 800px;
   }
   @include lg {
