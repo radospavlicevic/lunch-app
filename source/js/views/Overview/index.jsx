@@ -84,6 +84,11 @@ export default class Overview extends Component {
     return null;
   }
 
+  getUserFirstName() {
+    const { loggedInUser } = this.props;
+    return loggedInUser.username.split(' ', 1);
+  }
+
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
 
@@ -107,8 +112,10 @@ export default class Overview extends Component {
         { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
         <div className='Overview-top'>
-          <h1 className='Overview-userName'>{ loggedInUser.username }&apos;s orders: </h1>
-          <h1 className='Overview-selectedDate'>{ selectedDate }</h1>
+          <div className='Overview-header'>
+            <div className='Overview-header--name'>{ this.getUserFirstName() } </div>
+            <div className='Overview-header--date'>{ selectedDate } </div>
+          </div>
           { (loggedInUser && order) && <MealOverview data={ order } /> }
           { (loggedInUser && !order) && <h1 className='Overview-noOrder'>There is no order for today</h1>}
         </div>

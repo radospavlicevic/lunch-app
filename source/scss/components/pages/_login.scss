@@ -1,13 +1,57 @@
 .Login {
   display: flex;
+  justify-content: center;
   flex-direction: column;
-  max-width: 800px;
+  align-items: center;
+  width: 80%;
   margin: 0 auto;
   height: 100vh;
-  justify-content: center;
-  @include md-and-lower {
+  font-family: Avenir;
+  h1 {
+    font-size: 1.2rem;
+    align-self: center;
+    width: 100%;
+  }
+  @include sm {
+    h1 {
+      font-size: 1.8rem;
+    }
+  }
+  @include md {
     h1 {
       font-size: 2rem;
     }
   }
+  @include lg {
+    h1 {
+      font-size: 3rem;
+    }
+  }
+}
+
+.Login-container {
+  width: 80%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @include md {
+    width: 60%;
+  }
+}
+
+.Message-LoginError {
+  color: #f44336;
+  margin-top: 100px;
+}
+
+.ClientForm {
+  width: 100%;
+  align-items: flex-start;
+}
+
+.ClientForm-button {
+  border: 1px solid #999999 !important;
+  align-self: flex-start;
 }

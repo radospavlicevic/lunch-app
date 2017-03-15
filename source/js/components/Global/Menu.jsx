@@ -34,6 +34,7 @@ export default class Menu extends Component {
     this.renderMenu = this.renderMenu.bind(this);
     this.toggleNavigation = this.toggleNavigation.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleLogout() {
@@ -41,18 +42,25 @@ export default class Menu extends Component {
   }
 
   handleToggle = () => this.setState({ open: !this.state.open });
+  handleClose = () => this.setState({ open: false });
 
   toggleNavigation() {
     return (
       <div>
-        <Drawer open={ this.state.open }>
-          <Link className='Menu-link' to={ routeCodes.ORDER }><MenuItem>Order</MenuItem></Link>
-          <Link className='Menu-link' to={ routeCodes.OVERVIEW }><MenuItem>Overview</MenuItem></Link>
+        <Drawer
+          docked={ false }
+          open={ this.state.open }
+          onRequestChange={ (open) => this.setState({ open }) }
+        >
+          <Link className='Menu-link' to={ routeCodes.ORDER }><MenuItem onTouchTap={ this.handleClose }>Order</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>Overview</MenuItem></Link>
           { userSignedIn() &&
-            <MenuItem
-              onClick={ this.handleLogout }
-              primaryText='Logout'
-            />
+            <span className='Menu-link'>
+              <MenuItem
+                onClick={ this.handleLogout }
+                primaryText='Logout'
+              />
+            </span>
           }
           <Divider />
         </Drawer>
@@ -103,16 +111,9 @@ export default class Menu extends Component {
         showMenuIconButton={ breakpoint === 'sm' }
         title='Yummy Yumzor'
         onLeftIconButtonTouchTap={ this.handleToggle }
-        onTouchTap={ this.handleToggle }
       >
         <div className='Menu-navWrapper'>
           { breakpoint === 'sm' ? this.toggleNavigation() : this.renderMenu() }
-          {/* { userSignedIn() &&
-            <RaisedButton
-              onClick={ this.handleLogout }
-              label='Logout'
-            />
-          } */}
         </div>
       </AppBar>
     );

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
+import FlatButton from 'material-ui/FlatButton';
 import { routeCodes } from '../../routes';
 import pencilImg from '../../../assets/img/pencil.png';
 
@@ -10,15 +11,12 @@ export default class MealOverview extends Component {
 
   renderDishes() {
     const { mealItems } = this.props.data;
-
     return (
     mealItems.map((data, index) => {
       return (
         <div className='Overview-items' key={ index }>
-          <p className='Overview-itemName'>{ data.category }: { data.dish.name }</p>
-          { data.category === 'Glavna jela' &&
-            <p className='Overview-itemDesc'>{ data.dish.description }</p>
-          }
+          <div className='Overview-items--category'>{ data.category }:</div>
+          <div className='Overview-items--dish'>{ data.dish.name }</div>
         </div>
       );
     })
@@ -28,16 +26,16 @@ export default class MealOverview extends Component {
   render() {
     const { data } = this.props;
     return (
-      <div className='Overview-wrap'>
-        <h1 className='Overview-headerText'>meal overview :</h1>
+      <div className='Overview-meal'>
+        <h1 className='Overview-meal--h1'>Meal overview:</h1>
         { data.mealItems ? this.renderDishes() : null }
         { data.note &&
-        <p className='Overview-note'>Note: { data.note }</p>
+          <div className='Overview-note'>
+            <h1 className='Overview-meal--h1'>Note: </h1>
+            <div className='Overview-note--text'>{ data.note }</div>
+          </div>
         }
-        <Link className='Overview-edit' to={ routeCodes.ORDER }>
-          <img src={ pencilImg } className='Overview-editImage' alt='edit order' />
-          <p>Edit</p>
-        </Link>
+        <Link to={ routeCodes.ORDER }><FlatButton className='Overview-editButton' icon={ <pencilImg className='pencilImg' /> } >Edit</FlatButton></Link>
       </div>
     );
   }

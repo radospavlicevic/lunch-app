@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { login } from 'actions/login';
 import { redirectTo } from 'utils/routing';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
 import md5 from 'md5';
 import { routeCodes } from '../../routes';
 
@@ -24,6 +26,7 @@ export default class Login extends Component {
 
   constructor() {
     super();
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -38,8 +41,8 @@ export default class Login extends Component {
     event.preventDefault();
     const { dispatch } = this.props;
     const user = {
-      email: this.email.value,
-      password: md5(this.password.value),
+      email: this.email.input.value,
+      password: md5(this.password.input.value),
     };
     dispatch(login(user));
   }
@@ -48,14 +51,14 @@ export default class Login extends Component {
   renderLoginErrors() {
     const { loginError, getUserError } = this.props;
     if (loginError) {
-      return <span className='Message--error'>{ loginError.message }</span>;
+      return <span className='Message-LoginError'>{ loginError.message }</span>;
     } else if (getUserError) {
-      return <span className='Message--error'>{ getUserError.message }</span>;
+      return <span className='Message-LoginError'>{ getUserError.message }</span>;
     } else if (loginError && getUserError) {
       return (
         <div>
-          <span className='Message--error'>{ loginError.message }</span>
-          <span className='Message--error'>{ getUserError.message }</span>
+          <span className='Message-LoginError'>{ loginError.message }</span>
+          <span className='Message-LoginError'>{ getUserError.message }</span>
         </div>
       );
     }
@@ -65,13 +68,28 @@ export default class Login extends Component {
   render() {
     return (
       <div className='Login'>
-        <h1>Login with your email</h1>
-        <form className='ClientForm' onSubmit={ this.handleSubmit }>
-          <input ref={ node => this.email = node } className='ClientForm-input' placeholder='Email' />
-          <input ref={ node => this.password = node } className='ClientForm-input' placeholder='Password' type='password' />
-          <button className='ClientForm-button'>Login</button>
-        </form>
-        { this.renderLoginErrors() }
+        <div className='Login-container'>
+          <h1>Login with your email</h1>
+          <form className='ClientForm' onSubmit={ this.handleSubmit }>
+            <TextField
+              id='material-ui-ft-username'
+              className='ClientForm-input'
+              placeholder='E-mail'
+              fullWidth={ true }
+              ref={ node => this.email = node }
+            />
+            <TextField
+              id='material-ui-ft-password'
+              className='ClientForm-input'
+              fullWidth={ true }
+              type='password'
+              placeholder='Password'
+              ref={ node => this.password = node }
+            />
+            <FlatButton type='submit' className='ClientForm-button' style={ { marginTop: '1rem' } } >Login</FlatButton>
+          </form>
+          { this.renderLoginErrors() }
+        </div>
       </div>
     );
   }
