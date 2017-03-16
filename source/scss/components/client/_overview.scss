@@ -1,11 +1,11 @@
 .Overview {
- display: flex;
- font-family: Avenir;
- flex-direction: column;
- flex: 1;
- @include sm {
-   flex-direction: row;
- }
+  display: flex;
+  font-family: Avenir;
+  flex-direction: column;
+  flex: 1;
+  @include sm {
+    flex-direction: row;
+  }
 }
 
 .Overview-top {
