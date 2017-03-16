@@ -33,11 +33,14 @@ export default class Order extends Component {
   constructor() {
     super();
 
-    this.handleSaveNoteClick = this.handleSaveNoteClick.bind(this);
+    this.handleNoteChange = this.handleNoteChange.bind(this);
     this.handleCancelLunchClick = this.handleCancelLunchClick.bind(this);
   }
 
   componentWillMount() {
+    this.state = {
+      note: '',
+    };
     this.setupFirebaseObservers();
   }
 
@@ -45,13 +48,18 @@ export default class Order extends Component {
     const { selectedDate, loggedInUser, dispatch } = this.props;
     if (selectedDate !== nextProps.selectedDate) {
       this.updateFirebaseObservers(nextProps.selectedDate);
+      document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
     }
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
       db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
         dispatch(updateOrder(selectedDate, order.key, order.val()));
       });
     }
-    document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeoutID);
+    this.timeoutID = null;
   }
 
   setupFirebaseObservers() {
@@ -119,10 +127,15 @@ export default class Order extends Component {
     });
   }
 
-  handleSaveNoteClick() {
-    const { selectedDate } = this.props;
-    saveNoteInOrder(selectedDate, this.noteInput.value);
-    this.noteInput.value = '';
+  handleNoteChange(event, value) {
+    clearTimeout(this.timeoutID);
+    this.timeoutID = setTimeout(() => {
+      const { selectedDate } = this.props;
+      saveNoteInOrder(selectedDate, value);
+    }, 800);
+    this.setState({
+      note: value,
+    });
   }
 
   handleCancelLunchClick() {
@@ -180,15 +193,15 @@ export default class Order extends Component {
 
   renderLockedScreen(selectedDate) {
     return (
-      <div className='u-locked'>
-        <span>Lunch ordering for <p>{ selectedDate }</p> is locked.</span>
+      <div className='Order-locked'>
+        <span>Lunch ordering for { selectedDate } is locked.</span>
       </div>
     );
   }
 
   renderNoMenuScreen() {
     return (
-      <div className='u-locked'>
+      <div className='Order-locked'>
         <span>There is no menu for this day yet.</span>
       </div>
     );
@@ -209,18 +222,15 @@ export default class Order extends Component {
             multiLine={ true }
             rows={ 2 }
             rowsMax={ 2 }
-            className='Order-noteInput'
-            ref={ node => this.noteInput = node }
-          />
-          <RaisedButton
-            label='Save note'
-            onClick={ this.handleSaveNoteClick }
-            className='Order-noteButton'
+            className='Order-note'
+            value={ this.state.note }
+            onChange={ this.handleNoteChange }
           />
         </div>
         <div className='Order-cancelLunch'>
           <RaisedButton
-            style={ { width: '50%' } }
+            secondary={ true }
+            style={ { width: '40%' } }
             onClick={ this.handleCancelLunchClick }
             className='Order-cancelLunchButton'
             label={ 'Cancel Lunch' }

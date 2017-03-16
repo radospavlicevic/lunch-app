@@ -17,10 +17,18 @@
 }
 
 .Order-cancelLunch {
-  text-align: center;
-  margin-bottom: 50px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 30px;
+  margin-bottom: 100px;
   @include sm {
     margin-bottom: 0;
+  }
+  @include md {
+    padding: 0 40px;
+  }
+  @include lg {
+    padding: 0 80px;
   }
 }
 
@@ -35,5 +43,30 @@
   align-items: center;
   p {
     margin: 0;
+  }
+}
+
+.Order-locked {
+  position: relative;
+  width: 100%;
+  opacity: 0.7;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  -ms-flex-align: center;
+  align-items: center;
+  z-index: 10;
+  height: 80vh;
+  padding: 0 30px;
+  font-size: 1rem;
+  top: 66px;
+  @include md {
+    font-size: 1.5rem;
+  }
+  @include lg {
+    font-size: 2.5rem;
   }
 }
