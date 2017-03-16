@@ -21,7 +21,7 @@
   outline: none;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   width: 60px;
   background: #fff;
@@ -29,8 +29,10 @@
   cursor: pointer;
   transition: 0.5s;
   @include sm {
-    width: 100px;
-    height: 80px;
+    width: 120px;
+    height: 100px;
+    margin-right: 10px;
+    padding: 20px 0;
   }
   &:hover {
     background-color: #ececec;
@@ -41,6 +43,7 @@
   p {
     font-size: 0.7rem;
     font-weight: bold;
+    margin: 0;
     @include sm {
       font-size: 1rem;
     }

@@ -117,9 +117,10 @@ export default class Report extends Component {
 
   render() {
     const { reportDate, categories, standardDishes } = this.props;
+    console.log(reportDate);
     return (
       <div className='Report'>
-        <h2>Report</h2>
+        <h2>Izveštaj</h2>
         <ReportDatePicker reportDate={ reportDate } />
         <DailyTable
           selectedDate={ reportDate }

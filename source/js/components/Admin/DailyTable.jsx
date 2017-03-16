@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import DailyTableRow from 'components/Admin/DailyTableRow';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
+import { formatDateSr } from 'utils/globals';
 
 export default class DailyTable extends Component {
   static propTypes = {
@@ -58,7 +59,7 @@ export default class DailyTable extends Component {
     const { selectedDate, locked } = this.props;
     return (
       <div className='DailyTable'>
-        <h1>All Orders for: { selectedDate }</h1>
+        <h1>Sve narudžbine za: { formatDateSr(selectedDate) }</h1>
         <Table>
           <TableHeader
             displaySelectAll={ false }

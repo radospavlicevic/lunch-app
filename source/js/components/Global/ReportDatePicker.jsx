@@ -27,6 +27,11 @@ export default class ReportDatePicker extends Component {
     };
   }
 
+  getYear() {
+    const { reportDate } = this.props;
+    return moment(reportDate, DATE_PATTERN).format('YYYY');
+  }
+
   getWeek(week = 0) {
     const daysModel = [];
 
@@ -44,11 +49,6 @@ export default class ReportDatePicker extends Component {
       });
     }
     return daysModel;
-  }
-
-  getYear() {
-    const { reportDate } = this.props;
-    return moment(reportDate, DATE_PATTERN).format('YYYY');
   }
 
   handleWeekSwitch() {
@@ -94,7 +94,7 @@ export default class ReportDatePicker extends Component {
           <RaisedButton
             onClick={ this.handleWeekSwitch }
             className='ReportDatePicker-button'
-            label={ week === 0 ? 'Next Week' : 'Current Week' }
+            label={ week === 0 ? 'Sledeća nedelja' : 'Trenutna nedelja' }
           />
         </div>
       </div>

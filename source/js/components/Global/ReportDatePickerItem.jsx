@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { setReportDate } from 'actions/orders';
+import { DATE_PATTERN, months } from 'utils/globals';
 import moment from 'moment';
 
 @connect()
@@ -19,12 +20,16 @@ export default class ReportDatePickerItem extends Component {
 
   getDay() {
     const { data } = this.props;
-    return moment(data.date, 'DD-MM-YYYY').format('D');
+    return moment(data.date, 'DD-MM-YYYY').format('DD');
+  }
+
+  getMonth() {
+    const { data } = this.props;
+    return moment(data.date, DATE_PATTERN).format('M');
   }
 
   getMonthName() {
-    const { data } = this.props;
-    return moment(data.date, 'DD-MM-YYYY').format('MMM');
+    return months[this.getMonth() - 1];
   }
 
   handleClick(event) {
@@ -41,7 +46,7 @@ export default class ReportDatePickerItem extends Component {
         className={ selected ? 'ReportDatePicker-item ReportDatePicker-item--active' : 'ReportDatePicker-item' }
       >
         <p>{ data.day }</p>
-        <span>{ this.getMonthName() }<br />{ this.getDay() }</span>
+        <p>{ this.getDay() }. { this.getMonthName() }</p>
       </button>
     );
   }
