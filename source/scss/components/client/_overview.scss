@@ -43,6 +43,11 @@
  }
 }
 
+.Overview-mealHeader--note {
+  margin-bottom: 50px;
+  margin-top: 0;
+}
+
 .Overview-items {
   display: flex;
   align-items: flex-start;
@@ -75,20 +80,32 @@
 }
 
 .Overview-note {
- font-size: 1.5rem;
- margin-top: 3vh;
- margin-bottom: 5rem;
- @include sm-and-lower {
+  font-size: 1rem;
+
+  @include sm-and-lower {
    font-size: 1rem;
  }
 }
 
 .Overview-note--text {
   font-family: AvenirRoman;
-  font-size: 1rem;
-  border: 1px solid #999999;
-  padding: 0.5rem;
+  border: $border;
   word-wrap: break-word;
+  margin-bottom: 1.5rem;
+  background: none;
+  outline: none;
+  flex-basis: 100%;
+  max-width: 100%;
+  padding: 15px;
+  transition: 0.5s;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  height: 100%;
+  &:hover {
+    background: $light-gray;
+  }
 }
 
 .Overview-header {
@@ -116,4 +133,9 @@
 
 .Overview-header--date {
   margin-right: 2rem;
+}
+
+.Overview-editButton {
+  margin: 50px 0;
+
 }

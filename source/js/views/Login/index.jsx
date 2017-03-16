@@ -20,7 +20,6 @@ export default class Login extends Component {
     loggedInUser: PropTypes.object,
     loginError: PropTypes.object,
     getUserError: PropTypes.object,
-    // from react-redux connect
     dispatch: PropTypes.func,
   }
 
@@ -47,7 +46,6 @@ export default class Login extends Component {
     dispatch(login(user));
   }
 
-  // refactor
   renderLoginErrors() {
     const { loginError, getUserError } = this.props;
     if (loginError) {
@@ -88,7 +86,9 @@ export default class Login extends Component {
             />
             <RaisedButton type='submit' className='ClientForm-button' style={ { marginTop: '1rem' } } >Login</RaisedButton>
           </form>
-          { this.renderLoginErrors() }
+          <div className='errorContainer'>
+            { this.renderLoginErrors() }
+          </div>
         </div>
       </div>
     );

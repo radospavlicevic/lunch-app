@@ -31,6 +31,7 @@
 }
 
 .Login-container {
+  position: relative;
   width: 80%;
   max-width: 500px;
   display: flex;
@@ -42,9 +43,14 @@
   }
 }
 
+.errorContainer{
+  height: 20px;
+  margin-top: 10px;
+}
+
 .Message-LoginError {
+  width: 100%;
   color: #f44336;
-  margin-top: 100px;
 }
 
 .ClientForm {

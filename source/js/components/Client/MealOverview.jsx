@@ -31,7 +31,7 @@ export default class MealOverview extends Component {
         { data.mealItems ? this.renderDishes() : null }
         { data.note &&
           <div className='Overview-note'>
-            <h1 className='Overview-mealHeader'>Note: </h1>
+            <h1 className='Overview-mealHeader Overview-mealHeader--note'>Note: </h1>
             <div className='Overview-note--text'>{ data.note }</div>
           </div>
         }

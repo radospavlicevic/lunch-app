@@ -52,47 +52,60 @@ export default class Menu extends Component {
         >
           <Link className='Menu-link' to={ routeCodes.ORDER }><MenuItem onTouchTap={ this.handleClose }>Order</MenuItem></Link>
           <Link className='Menu-link' to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>Overview</MenuItem></Link>
+          <Divider />
+          { this.renderAdminNavigationMenu() }
           { userSignedIn() &&
             <MenuItem
               onClick={ this.handleLogout }
               primaryText='Logout'
             />
           }
-          <Divider />
         </Drawer>
       </div>
     );
   }
 
+  renderAdminNavigationMenu() {
+    const { loggedInUser } = this.props;
+    if (loggedInUser && loggedInUser.role === roles.ADMIN) {
+      return (
+        <div>
+          <Link className='Menu-link' to={ routeCodes.MENUS } onTouchTap={ this.handleClose }><MenuItem>Menus</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.DISHES } onTouchTap={ this.handleClose }><MenuItem>Dishes</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.CATEGORIES } onTouchTap={ this.handleClose }><MenuItem>Categories</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.CATERINGS } onTouchTap={ this.handleClose }><MenuItem>Caterings</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.USERS } onTouchTap={ this.handleClose }><MenuItem>Users</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.WEEKLY_OVERVIEW } onTouchTap={ this.handleClose }><MenuItem>Weekly Overview</MenuItem></Link>
+          <Link className='Menu-link' to={ routeCodes.REPORT } onTouchTap={ this.handleClose }><MenuItem>Report</MenuItem></Link>
+          <Divider />
+        </div>
+      );
+    }
+    return '';
+  }
+
   renderAdminMenuItem() {
     const { loggedInUser } = this.props;
     if (loggedInUser && loggedInUser.role === roles.ADMIN) {
-      return <Link to={ routeCodes.MENUS }><FlatButton className='Menu-button' label='Admin' /></Link>;
+      return <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.MENUS }><FlatButton label='Admin' /></IndexLink>;
     }
     return '';
   }
 
   renderMenu() {
     return (
-      <div>
-        <IndexLink to={ routeCodes.ORDER }>
-          <FlatButton
-            label='Order'
-            className='Menu-button'
-          />
+      <div className='menuButtonWrapper'>
+        <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.ORDER }>
+          <FlatButton label='Order' />
         </IndexLink>
-        <Link to={ routeCodes.OVERVIEW }>
-          <FlatButton
-            label='Overview'
-            className='Menu-button'
-          />
-        </Link>
+        <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.OVERVIEW }>
+          <FlatButton label='Overview' />
+        </IndexLink>
         { this.renderAdminMenuItem() }
         { userSignedIn() &&
           <RaisedButton
             onClick={ this.handleLogout }
             label='Logout'
-            className='Menu-button'
           />
         }
       </div>
