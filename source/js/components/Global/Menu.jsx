@@ -94,7 +94,7 @@ export default class Menu extends Component {
 
   renderMenu() {
     return (
-      <div className='menuButtonWrapper'>
+      <div>
         <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.ORDER }>
           <FlatButton label='Order' />
         </IndexLink>
