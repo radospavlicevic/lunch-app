@@ -33,8 +33,6 @@ export default class Menu extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.renderMenu = this.renderMenu.bind(this);
     this.toggleNavigation = this.toggleNavigation.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   handleLogout() {
@@ -55,12 +53,10 @@ export default class Menu extends Component {
           <Link className='Menu-link' to={ routeCodes.ORDER }><MenuItem onTouchTap={ this.handleClose }>Order</MenuItem></Link>
           <Link className='Menu-link' to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>Overview</MenuItem></Link>
           { userSignedIn() &&
-            <span className='Menu-link'>
-              <MenuItem
-                onClick={ this.handleLogout }
-                primaryText='Logout'
-              />
-            </span>
+            <MenuItem
+              onClick={ this.handleLogout }
+              primaryText='Logout'
+            />
           }
           <Divider />
         </Drawer>
@@ -68,7 +64,7 @@ export default class Menu extends Component {
     );
   }
 
-  renderDashboardMenuItem() {
+  renderAdminMenuItem() {
     const { loggedInUser } = this.props;
     if (loggedInUser && loggedInUser.role === roles.ADMIN) {
       return <Link to={ routeCodes.MENUS }><FlatButton className='Menu-button' label='Admin' /></Link>;
@@ -91,11 +87,12 @@ export default class Menu extends Component {
             className='Menu-button'
           />
         </Link>
-        { this.renderDashboardMenuItem() }
+        { this.renderAdminMenuItem() }
         { userSignedIn() &&
           <RaisedButton
             onClick={ this.handleLogout }
             label='Logout'
+            className='Menu-button'
           />
         }
       </div>
@@ -112,9 +109,7 @@ export default class Menu extends Component {
         title='Yummy Yumzor'
         onLeftIconButtonTouchTap={ this.handleToggle }
       >
-        <div className='Menu-navWrapper'>
-          { breakpoint === 'sm' ? this.toggleNavigation() : this.renderMenu() }
-        </div>
+        { breakpoint === 'sm' ? this.toggleNavigation() : this.renderMenu() }
       </AppBar>
     );
   }

@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { login } from 'actions/login';
 import { redirectTo } from 'utils/routing';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import md5 from 'md5';
 import { routeCodes } from '../../routes';
@@ -86,7 +86,7 @@ export default class Login extends Component {
               placeholder='Password'
               ref={ node => this.password = node }
             />
-            <FlatButton type='submit' className='ClientForm-button' style={ { marginTop: '1rem' } } >Login</FlatButton>
+            <RaisedButton type='submit' className='ClientForm-button' style={ { marginTop: '1rem' } } >Login</RaisedButton>
           </form>
           { this.renderLoginErrors() }
         </div>

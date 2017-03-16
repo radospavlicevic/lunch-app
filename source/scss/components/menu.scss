@@ -1,47 +1,37 @@
-.Menu-button span {
-color: #fff;
-}
-
-.Menu-navWrapper {
-display: flex;
-height: 50%;
-}
-
 .Menu {
  h1 {
    text-align: center;
    font-family: Avenir;
- }
- @include sm {
-   h1 {
-   text-align: left;
-   }
- }
+
+   @include md {
+     text-align: left;
+    }
+  }
 }
 
 .Menu-link {
-width: 100%;
-}
-
-.Menu a {
-display: inline-block;
-padding: 15px 0;
-color: white;
-margin-right: 10px;
-text-decoration: none;
+  text-decoration: none;
 }
 
 .Menu-right {
-float: right;
-margin-right: 2vh;
-margin-top: 1vh;
-@include sm-and-lower {
-  margin-top: 0;
-}
+  float: right;
+  margin-right: 2vh;
+  margin-top: 1vh;
+
+  @include sm-and-lower {
+    margin-top: 0;
+  }
 }
 
 .Menu-button {
-background-color: #fff;
-border: none;
-height: 30px;
+  color: #fff !important;
+  height: 30px;
+  display: inline-block;
+  margin: 15px 0;
+  color: #fff;
+  margin-right: 10px;
+
+  @include sm-and-lower{
+    padding: 0;
+  }
 }
