@@ -62,7 +62,6 @@
 }
 
 .ReportDatePicker-item--active {
-  @extend .ReportDatePicker-item;
   color: $selected;
 }
 

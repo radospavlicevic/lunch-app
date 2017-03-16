@@ -34,8 +34,8 @@ export default class CateringOverview extends Component {
             <TableRow>
               <TableHeaderColumn>Catering Name</TableHeaderColumn>
               <TableHeaderColumn>Catering Contact</TableHeaderColumn>
-              <TableHeaderColumn className='u-tableCellButton' />
-              <TableHeaderColumn className='u-tableCellButton' />
+              <TableHeaderColumn className='TableCell-button' />
+              <TableHeaderColumn className='TableCell-button' />
             </TableRow>
           </TableHeader>
           <TableBody

@@ -16,15 +16,23 @@
 }
 
 .WeekPicker-item {
-  border: 1px solid #fff;
+  border: $border;
   outline: none;
-  width: 100px;
-  height: 80px;
-  background: $dark-background;
-  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  background: #fff;
+  color: $dark-background;
   cursor: pointer;
+  transition: 0.5s;
+  @include sm {
+    width: 100px;
+    height: 80px;
+  }
   &:hover {
-    text-decoration: underline;
+    background-color: #ececec;
   }
   @include sm-and-lower {
     width: 20%;
@@ -43,9 +51,5 @@
 }
 
 .WeekPicker-item--active {
-  @extend .WeekPicker-item;
-  background: $light-gray;
-  color: $dark-background;
-  font-weight: bold;
-  border: 1px solid $dark-background;
+  color: $selected;
 }

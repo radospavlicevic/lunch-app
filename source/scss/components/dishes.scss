@@ -21,14 +21,6 @@
   width: 100%;
 }
 
-.DishItem {
-  td {
-    @include md {
-      white-space: normal !important;
-    }
-  }
-}
-
 .DishOverview-filterWrapper {
   margin-top: 5px;
   padding: 5px;

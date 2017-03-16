@@ -31,8 +31,8 @@ export default class CategoryOverview extends Component {
           >
             <TableRow>
               <TableHeaderColumn>Category Name</TableHeaderColumn>
-              <TableHeaderColumn className='u-tableCellButton' />
-              <TableHeaderColumn className='u-tableCellButton' />
+              <TableHeaderColumn className='TableCell-button' />
+              <TableHeaderColumn className='TableCell-button' />
             </TableRow>
           </TableHeader>
           <TableBody

@@ -1,9 +1,14 @@
 .AdminMenu {
-  div {
+  >div {
     z-index: 1000 !important;
+    padding-top: 92px;
   }
   h2 {
-    padding: 0px 24px 8px 24px;
+    padding-left: 21px;
+    margin: 16px 0;
+  }
+  @include sm-and-lower {
+    display: none;
   }
 }
 

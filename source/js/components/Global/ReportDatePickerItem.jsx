@@ -38,7 +38,7 @@ export default class ReportDatePickerItem extends Component {
     return (
       <button
         onClick={ this.handleClick }
-        className={ selected ? 'ReportDatePicker-item--active' : 'ReportDatePicker-item' }
+        className={ selected ? 'ReportDatePicker-item ReportDatePicker-item--active' : 'ReportDatePicker-item' }
       >
         <p>{ data.day }</p>
         <span>{ this.getMonthName() }<br />{ this.getDay() }</span>

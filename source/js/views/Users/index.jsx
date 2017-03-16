@@ -8,7 +8,6 @@ import AdminMenu from 'components/Admin/AdminMenu';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
-
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   users: state.users.get('users'),

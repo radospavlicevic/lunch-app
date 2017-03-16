@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
 import WeekPicker from 'components/Global/WeekPicker';
 import DailyTable from 'components/Admin/DailyTable';
+import AdminMenu from 'components/Admin/AdminMenu';
 import { updateOrder, cancelOrder } from 'actions/orders';
 import { addUser } from 'actions/users';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
@@ -120,15 +121,18 @@ export default class WeeklyOverview extends Component {
   render() {
     const { selectedDate, categories, standardDishes } = this.props;
     return (
-      <div className='WeeklyOverview'>
-        <h2>Weekly Overview</h2>
-        <WeekPicker selectedDate={ selectedDate } />
-        <DailyTable
-          selectedDate={ selectedDate }
-          categories={ categories }
-          orders={ this.tableOrders() }
-          standardDishes={ standardDishes }
-        />
+      <div className='Admin-wrapper'>
+        <AdminMenu />
+        <div className='WeeklyOverview'>
+          <h2>Weekly Overview</h2>
+          <WeekPicker selectedDate={ selectedDate } />
+          <DailyTable
+            selectedDate={ selectedDate }
+            categories={ categories }
+            orders={ this.tableOrders() }
+            standardDishes={ standardDishes }
+          />
+        </div>
       </div>
     );
   }

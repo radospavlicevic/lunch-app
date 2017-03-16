@@ -4,15 +4,17 @@
   margin: 0 auto;
   background: #fff;
   position: relative;
-  top: 64px;
-  @include sm {
-    top: 66px;
-  }
   h2 {
     text-align: center;
-    border-bottom: 1px solid $dark-background;
-    background: $light-gray;
+    color: #fff;
+    border-bottom: $border;
+    background: $primary;
     padding: 20px 0;
-    margin-bottom: 0;
+    margin: 10px 0;
+    transition: 0.5s;
+    line-height: 26px;
+    &:hover {
+      background: #00b4d4;
+    }
   }
 }

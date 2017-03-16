@@ -38,7 +38,7 @@ export default class WeekPickerItem extends Component {
     return (
       <button
         onClick={ this.handleClick }
-        className={ selected ? 'WeekPicker-item--active' : 'WeekPicker-item' }
+        className={ selected ? 'WeekPicker-item WeekPicker-item--active' : 'WeekPicker-item' }
       >
         <span>{ this.getMonthName() }<br />{ this.getDay() }</span>
       </button>

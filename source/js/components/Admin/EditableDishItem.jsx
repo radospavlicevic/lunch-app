@@ -36,8 +36,8 @@ export default class EditableDishItem extends Component {
     const { dishData } = this.props;
     return (
       <TableRow className='DishItem'>
-        <TableRowColumn className='u-tableCellName'>{ dishData.name }</TableRowColumn>
-        <TableRowColumn className='u-tableCellDesc'>{ dishData.description }</TableRowColumn>
+        <TableRowColumn className='TableCell-name'>{ dishData.name }</TableRowColumn>
+        <TableRowColumn className='TableCell-desc'>{ dishData.description }</TableRowColumn>
         <TableRowColumn>{ dishData.price ? dishData.price : 0 } din</TableRowColumn>
         <TableRowColumn>
           <FlatButton label='Edit' primary={ true } onClick={ this.handleEditClick } />

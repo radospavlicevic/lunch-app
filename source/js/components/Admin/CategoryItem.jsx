@@ -35,10 +35,10 @@ export default class CategoryItem extends Component {
     return (
       <TableRow>
         <TableRowColumn>{ category.name }</TableRowColumn>
-        <TableRowColumn className='u-tableCellButton'>
+        <TableRowColumn className='TableCell-button'>
           <FlatButton label='Edit' primary={ true } onClick={ this.handleEditClick } />
         </TableRowColumn>
-        <TableRowColumn className='u-tableCellButton'>
+        <TableRowColumn className='TableCell-button'>
           <FlatButton label='Delete' primary={ true } onClick={ this.handleDeleteClick } />
         </TableRowColumn>
       </TableRow>

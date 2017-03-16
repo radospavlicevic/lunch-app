@@ -12,11 +12,18 @@ html {
   width: calc(100% - 256px);
   display: block;
   margin-left: 256px;
-  padding: 0 20px;
+  padding: 20px;
   position: relative;
   top: 64px;
   @include sm {
     top: 66px;
+  }
+  @include sm-and-lower {
+    margin-left: 0;
+    width: 100%;
+  }
+  h2 {
+    margin: 0;
   }
 }
 

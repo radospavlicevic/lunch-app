@@ -29,7 +29,11 @@ export default class DailyTable extends Component {
   renderHeaderCategories() {
     const { categories } = this.props;
     return Object.keys(categories).map((key, index) => {
-      return <TableHeaderColumn key={ index }>{ categories[key].name }</TableHeaderColumn>;
+      return (
+        <TableHeaderColumn className={ key === 'main_dish' ? 'TableCell-mainDish' : '' } key={ index }>
+          { categories[key].name }
+        </TableHeaderColumn>
+      );
     });
   }
 
@@ -64,6 +68,9 @@ export default class DailyTable extends Component {
               <TableHeaderColumn>Ime</TableHeaderColumn>
               { this.renderHeaderCategories() }
               <TableHeaderColumn>Napomena</TableHeaderColumn>
+              { !locked &&
+                <TableHeaderColumn />
+              }
             </TableRow>
           </TableHeader>
           <TableBody>

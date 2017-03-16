@@ -60,7 +60,7 @@ export default class SelectableDishItem extends Component {
         selected={ selected }
         onRowClick={ this.handleClick }
       >
-        <TableRowColumn className='u-tableCellCheckIcon'>
+        <TableRowColumn className='TableCell-checkIcon'>
           <Checkbox checked={ selected } />
         </TableRowColumn>
         <TableRowColumn>{ dishData.name }</TableRowColumn>

@@ -288,8 +288,8 @@ export default class DishOverview extends Component {
         displaySelectAll={ false }
       >
         <TableRow>
-          <TableHeaderColumn className='u-tableCellName'>Name</TableHeaderColumn>
-          <TableHeaderColumn className='u-tableCellDesc'>Description</TableHeaderColumn>
+          <TableHeaderColumn className='TableCell-name'>Name</TableHeaderColumn>
+          <TableHeaderColumn className='TableCell-desc'>Description</TableHeaderColumn>
           <TableHeaderColumn>Price</TableHeaderColumn>
           <TableHeaderColumn />
           <TableHeaderColumn />
@@ -330,8 +330,8 @@ export default class DishOverview extends Component {
         adjustForCheckbox={ false }
       >
         <TableRow className='DishOverview-footer' style={ { color: 'rgb(158, 158, 158)' } }>
-          <TableRowColumn className='u-tableCellName'>Name</TableRowColumn>
-          <TableRowColumn className='u-tableCellDesc'>Description</TableRowColumn>
+          <TableRowColumn className='TableCell-name'>Name</TableRowColumn>
+          <TableRowColumn className='TableCell-desc'>Description</TableRowColumn>
           <TableRowColumn>Price</TableRowColumn>
           <TableRowColumn />
           <TableRowColumn />

@@ -21,22 +21,3 @@
     font-size: 5rem;
   }
 }
-
-.u-tableCellCheckIcon {
-  width: 20px !important;
-}
-
-.u-tableCellName {
-  width: 30% !important;
-}
-
-.u-tableCellDesc {
-  width: 40% !important;
-}
-
-.u-tableCellButton {
-  width: 15% !important;
-  @include lg-and-lower {
-    width: 20% !important;
-  }
-}

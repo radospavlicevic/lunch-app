@@ -41,10 +41,10 @@ export default class CateringItem extends Component {
       <TableRow>
         <TableRowColumn>{ catering.name }</TableRowColumn>
         <TableRowColumn>{ catering.contact }</TableRowColumn>
-        <TableRowColumn className='u-tableCellButton'>
+        <TableRowColumn className='TableCell-button'>
           <FlatButton label='Edit' primary={ true } onClick={ this.handleEditClick } />
         </TableRowColumn>
-        <TableRowColumn className='u-tableCellButton'>
+        <TableRowColumn className='TableCell-button'>
           <FlatButton label='Delete' primary={ true } onClick={ this.handleDeleteClick } />
         </TableRowColumn>
       </TableRow>
