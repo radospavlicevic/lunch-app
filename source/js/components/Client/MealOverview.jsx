@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import { routeCodes } from '../../routes';
-import pencilImg from '../../../assets/img/pencil.png';
 
 export default class MealOverview extends Component {
   static propTypes = {
@@ -27,15 +26,15 @@ export default class MealOverview extends Component {
     const { data } = this.props;
     return (
       <div className='Overview-meal'>
-        <h1 className='Overview-mealHeader'>Meal overview:</h1>
+        <h1 className='Overview-Header'>Meal overview:</h1>
         { data.mealItems ? this.renderDishes() : null }
         { data.note &&
           <div className='Overview-note'>
-            <h1 className='Overview-mealHeader Overview-mealHeader--note'>Note: </h1>
+            <h1 className='Overview-Header Overview-Header--note'>Note: </h1>
             <div className='Overview-note--text'>{ data.note }</div>
           </div>
         }
-        <Link to={ routeCodes.ORDER }><RaisedButton className='Overview-editButton' icon={ <pencilImg className='pencilImg' /> } >Edit</RaisedButton></Link>
+        <Link to={ routeCodes.ORDER }><RaisedButton className='Overview-editButton'>Edit</RaisedButton></Link>
       </div>
     );
   }
