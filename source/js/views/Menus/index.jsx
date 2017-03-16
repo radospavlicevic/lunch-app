@@ -213,8 +213,8 @@ export default class Menus extends Component {
         <div className='Menus-date'>
           <span>Choose lunch day: </span>
           <Toggle
-            label={ this.menuIsLocked() ? 'Locked' : 'Unlocked' }
-            defaultToggled={ true }
+            label={ 'Locked' }
+            defaultToggled={ this.menuIsLocked() }
             className='Menus-lockToggle'
             onToggle={ this.handleLockToggle }
           />
