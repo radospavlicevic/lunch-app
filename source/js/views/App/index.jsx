@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import CircularProgress from 'material-ui/CircularProgress';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
 import { firebaseAuth } from 'utils/firebase_config';
@@ -57,7 +58,13 @@ export default class App extends Component {
   }
 
   checkLoadingScreen(loggedInUser) {
-    return (!this.isPublicPath() && userSignedIn() && !loggedInUser) && <div className='LoadingModal'>Loading...</div>;
+    return (!this.isPublicPath() && userSignedIn() && !loggedInUser) &&
+    <div className='LoadingModal'>
+      <CircularProgress />
+      <CircularProgress size={ 60 } thickness={ 7 } />
+      <CircularProgress size={ 80 } thickness={ 5 } />
+      <CircularProgress size={ 100 } thickness={ 3 } />
+    </div>;
   }
 
   checkMenu(loggedInUser) {

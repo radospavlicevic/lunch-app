@@ -10,6 +10,7 @@ import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
+import Dialog from 'material-ui/Dialog';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
@@ -40,6 +41,7 @@ export default class Order extends Component {
   componentWillMount() {
     this.state = {
       note: '',
+      open: false,
     };
     this.setupFirebaseObservers();
   }
@@ -48,13 +50,13 @@ export default class Order extends Component {
     const { selectedDate, loggedInUser, dispatch } = this.props;
     if (selectedDate !== nextProps.selectedDate) {
       this.updateFirebaseObservers(nextProps.selectedDate);
-      document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
     }
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
       db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
         dispatch(updateOrder(selectedDate, order.key, order.val()));
       });
     }
+    document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
   }
 
   componentWillUnmount() {
@@ -112,6 +114,14 @@ export default class Order extends Component {
     }
     return null;
   }
+
+  handleOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
 
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
@@ -208,6 +218,20 @@ export default class Order extends Component {
   }
 
   renderUnlockedScreen(selectedDate) {
+    const actions = [
+      <RaisedButton
+        label='Back'
+        primary={ true }
+        onTouchTap={ this.handleClose }
+      />,
+      <RaisedButton
+        secondary={ true }
+        onClick={ this.handleCancelLunchClick }
+        className='Order-cancelLunchButton'
+        label={ 'Cancel Lunch' }
+        onTouchTap={ this.handleClose }
+      />,
+    ];
     return (
       <div>
         <div className='Order-label'>
@@ -226,13 +250,14 @@ export default class Order extends Component {
           />
         </div>
         <div className='Order-cancelLunch'>
-          <RaisedButton
-            secondary={ true }
-            style={ { maxWidth: 500 } }
-            onClick={ this.handleCancelLunchClick }
-            className='Order-cancelLunchButton'
-            label={ 'Cancel Lunch' }
-          />
+          <RaisedButton label={ 'Cancel lunch' } onTouchTap={ this.handleOpen } secondary={ true } style={ { maxWidth: 500 } } />
+          <Dialog
+            actions={ actions }
+            modal={ false }
+            open={ this.state.open }
+            onRequestClose={ this.handleClose }
+          ><p className='Order-cancelLunchQuestion'>Are you sure you want to cancel your lunch?</p>
+          </Dialog>
         </div>
       </div>
     );
