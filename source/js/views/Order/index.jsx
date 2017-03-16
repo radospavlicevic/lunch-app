@@ -217,11 +217,9 @@ export default class Order extends Component {
         { this.renderMenuSections(selectedDate) }
         <div className='Order-noteSection'>
           <TextField
-            style={ { width: '100%' } }
-            hintText='Note...'
+            style={ { maxWidth: 500, width: '100%' } }
+            floatingLabelText='Note'
             multiLine={ true }
-            rows={ 2 }
-            rowsMax={ 2 }
             className='Order-note'
             value={ this.state.note }
             onChange={ this.handleNoteChange }
@@ -230,7 +228,7 @@ export default class Order extends Component {
         <div className='Order-cancelLunch'>
           <RaisedButton
             secondary={ true }
-            style={ { width: '40%' } }
+            style={ { maxWidth: 500 } }
             onClick={ this.handleCancelLunchClick }
             className='Order-cancelLunchButton'
             label={ 'Cancel Lunch' }
