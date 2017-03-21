@@ -5,6 +5,8 @@ import WeekPickerItem from 'components/Global/WeekPickerItem';
 import { setSelectedDate } from 'actions/orders';
 import { DATE_PATTERN } from 'utils/globals';
 import moment from 'moment';
+import back from '../../../assets/img/back.png';
+import next from '../../../assets/img/next.png';
 
 @connect()
 export default class WeekPicker extends Component {
@@ -90,9 +92,9 @@ export default class WeekPicker extends Component {
       <div className='WeekPicker'>
         <h1>{ this.getYear() }</h1>
         <div className='WeekPicker-controls'>
-          <button onClick={ this.handlePreviousClick } className='WeekPicker-button'>Previous</button>
+          <button onClick={ this.handlePreviousClick } className='WeekPicker-button'><img alt='prev' src={ back } /></button>
           { this.renderWeekPickerItems() }
-          <button onClick={ this.handleNextClick } className='WeekPicker-button'>Next</button>
+          <button onClick={ this.handleNextClick } className='WeekPicker-button'><img alt='next' src={ next } /></button>
         </div>
       </div>
     );

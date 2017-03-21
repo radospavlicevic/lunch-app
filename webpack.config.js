@@ -4,6 +4,7 @@ const path = require('path');
 const DashboardPlugin = require('webpack-dashboard/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const autoprefixer = require('autoprefixer');
 
 const nodeEnv = process.env.NODE_ENV || 'development';
@@ -63,7 +64,7 @@ const rules = [
     use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
   },
   {
-    test: /\.(png|gif|jpg|svg)$/,
+    test: /\.(png|gif|jpg|svg|ico)$/,
     include: imgPath,
     use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
   },
@@ -93,16 +94,19 @@ if (isProduction) {
         comments: false,
       },
     }),
-    new ExtractTextPlugin('style-[hash].css')
+    new ExtractTextPlugin('style-[hash].css'),
+    new CopyWebpackPlugin([
+      { from: '../assets/img/favicon', to: '../build/assets/img/favicon' },
+    ])
   );
 
   // Production rules
   rules.push(
     {
       test: /\.scss$/,
-      loader: ExtractTextPlugin.extract({
-        fallbackLoader: 'style-loader',
-        loader: 'css-loader!postcss-loader!sass-loader',
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: 'css-loader!postcss-loader!sass-loader',
       }),
     }
   );

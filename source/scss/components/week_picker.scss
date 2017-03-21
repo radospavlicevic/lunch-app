@@ -48,6 +48,10 @@
     flex-basis: 50%;
     order: 2;
   }
+  img {
+    width: 30px;
+    transform: rotate(-90deg);
+  }
 }
 
 .WeekPicker-item--active {
