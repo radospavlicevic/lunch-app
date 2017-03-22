@@ -1,34 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
+// import { connect } from 'react-redux';
 import { userSignedIn } from 'api/auth';
 import { saveNoteInOrder, deleteUserOrder } from 'api/orders';
-import { updateOrder } from 'actions/orders';
-import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
-import { addDishInMenu } from 'actions/menus';
-import SideDate from 'components/Client/SideDate';
 import MenuSection from 'components/Client/MenuSection';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
-@connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
-  menus: state.menus.get('menus'),
-  categories: state.meals.get('categories'),
-  standardDishes: state.meals.get('standardDishes'),
-  selectedDate: state.orders.get('selectedDate'),
-  orders: state.orders.get('orders'),
-}))
+// @connect()
 export default class Order extends Component {
   static propTypes = {
-    loggedInUser: PropTypes.object,
     categories: PropTypes.object,
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
     standardDishes: PropTypes.object,
     orders: PropTypes.object,
-    dispatch: PropTypes.func,
+    // dispatch: PropTypes.func,
   }
 
   constructor() {
@@ -43,54 +30,15 @@ export default class Order extends Component {
       note: '',
       open: false,
     };
-    this.setupFirebaseObservers();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { selectedDate, loggedInUser, dispatch } = this.props;
-    if (selectedDate !== nextProps.selectedDate) {
-      this.updateFirebaseObservers(nextProps.selectedDate);
-    }
-    if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
-      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
-        dispatch(updateOrder(selectedDate, order.key, order.val()));
-      });
-    }
-    document.title = `Order, ${ selectedDate } - Yummy Yumzor`;
+    document.title = `Order, ${ nextProps.selectedDate } - Yummy Yumzor`;
   }
 
   componentWillUnmount() {
     clearTimeout(this.timeoutID);
     this.timeoutID = null;
-  }
-
-  setupFirebaseObservers() {
-    const { selectedDate, dispatch } = this.props;
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
-      );
-    });
-
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
-    });
-
-    if (userSignedIn()) {
-      db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
-        dispatch(updateOrder(selectedDate, order.key, order.val()));
-      });
-    }
-  }
-
-  getUserFirstName() {
-    const { loggedInUser } = this.props;
-    return loggedInUser.username.split(' ', 1);
   }
 
   getOrder(loggedInUser, selectedDate, orders) {
@@ -122,20 +70,6 @@ export default class Order extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
-
-  updateFirebaseObservers(selectedDate) {
-    const { dispatch } = this.props;
-
-    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
-      );
-    });
-
-    db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
-      dispatch(updateOrder(selectedDate, order.key, order.val()));
-    });
-  }
 
   handleNoteChange(event, value) {
     clearTimeout(this.timeoutID);
@@ -233,11 +167,7 @@ export default class Order extends Component {
       />,
     ];
     return (
-      <div>
-        <div className='Order-label'>
-          <p>Hello, { this.getUserFirstName() }</p>
-          <p>Choose your meal for { selectedDate }</p>
-        </div>
+      <div className='Order-wrapper'>
         { this.renderMenuSections(selectedDate) }
         <div className='Order-noteSection'>
           <TextField
@@ -274,15 +204,10 @@ export default class Order extends Component {
   }
 
   render() {
-    const { loggedInUser, selectedDate } = this.props;
+    const { selectedDate } = this.props;
     return (
       <div className='Order'>
-        { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
-        { loggedInUser &&
-          <div className='MyOrder-wrapper'>
-            { this.renderMyOrderSide(selectedDate) }
-          </div>
-        }
+        { this.renderMyOrderSide(selectedDate) }
       </div>
     );
   }

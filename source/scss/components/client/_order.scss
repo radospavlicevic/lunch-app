@@ -1,3 +1,25 @@
+.Order {
+  display: flex;
+  font-family: Avenir;
+  flex-direction: column;
+  flex: 1;
+  @include sm {
+    flex-direction: row;
+  }
+}
+
+.Order-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 1;
+  margin-bottom: 100px;
+  @include sm {
+    width: calc( 100% - 170px );
+    margin-left: 170px;
+  }
+}
+
 .Order-noteSection {
  width: 100%;
  display: flex;
@@ -38,13 +60,25 @@
 
 .Order-label {
   display: flex;
-  justify-content: space-around;
-  font-size: 0.8rem;
+  justify-content: space-between;
+  font-size: 0.7rem;
   background-color: #00bcd4;
   color: #fff;
   font-family: Avenir;
   height: 49.5px;
   align-items: center;
+  padding: 0 30px;
+  margin: 0;
+  @include sm {
+    font-size: 0.8rem;
+    margin-left: 170px;
+  }
+  @include md {
+    padding: 0 40px;
+  }
+  @include lg {
+    padding: 0 80px;
+  }
   p {
     margin: 0;
   }
@@ -65,8 +99,8 @@
   z-index: 10;
   height: 80vh;
   padding: 0 30px;
+  margin-left: 170px;
   font-size: 1rem;
-  top: 66px;
   @include md {
     font-size: 1.5rem;
   }

@@ -27,6 +27,7 @@
 }
 
 .SideDate {
+  text-decoration: none;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,6 +41,7 @@
   transition: 0.5s;
   padding-top: 10px;
   width: 20%;
+  color: #000;
   &:hover {
     background: $light-gray;
   }
@@ -53,8 +55,7 @@
   }
 }
 
-.SideDate-active {
-  @extend .SideDate;
+.SideDate--active {
   color: $selected;
 }
 

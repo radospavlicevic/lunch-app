@@ -123,3 +123,17 @@ hr {
   z-index: 10;
   font-family: Avenir;
 }
+
+.Home-loading {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 2rem;
+  z-index: 10;
+  @include sm {
+    width: calc( 100% - 170px );
+    margin-left: 170px;
+  }
+}

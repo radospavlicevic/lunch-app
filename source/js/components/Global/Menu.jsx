@@ -17,13 +17,14 @@ import { userSignedIn, firebaseLogout } from '../../api/auth';
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   breakpoint: state.app.get('breakpoint'),
+  selectedDate: state.orders.get('selectedDate'),
 }))
-
 export default class Menu extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
     breakpoint: PropTypes.string,
+    selectedDate: PropTypes.string,
   }
 
   constructor() {
@@ -43,6 +44,7 @@ export default class Menu extends Component {
   handleClose = () => this.setState({ open: false });
 
   toggleNavigation() {
+    const { selectedDate } = this.props;
     return (
       <div>
         <Drawer
@@ -50,8 +52,10 @@ export default class Menu extends Component {
           open={ this.state.open }
           onRequestChange={ (open) => this.setState({ open }) }
         >
-          <Link className='Menu-link' to={ routeCodes.ORDER }><MenuItem onTouchTap={ this.handleClose }>Order</MenuItem></Link>
-          <Link className='Menu-link' to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>Overview</MenuItem></Link>
+          <Link className='Menu-link' to={ `/order/${ selectedDate }` }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
+          {/* <Link className='Menu-link'
+          to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>
+          Overview</MenuItem></Link> */}
           <Divider />
           { this.renderAdminNavigationMenu() }
           { userSignedIn() &&
@@ -93,14 +97,20 @@ export default class Menu extends Component {
   }
 
   renderMenu() {
+    const { selectedDate } = this.props;
     return (
       <div>
-        <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.ORDER }>
-          <FlatButton label='Order' />
+        <IndexLink
+          className='Menu-button'
+          activeClassName='Menu-button--active'
+          to={ `/order/${ selectedDate }` }
+        >
+          <FlatButton label='Home' />
         </IndexLink>
-        <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.OVERVIEW }>
+        {/* <IndexLink className='Menu-button'
+          activeClassName='Menu-button--active' to={ routeCodes.OVERVIEW }>
           <FlatButton label='Overview' />
-        </IndexLink>
+        </IndexLink> */}
         { this.renderAdminMenuItem() }
         { userSignedIn() &&
           <RaisedButton

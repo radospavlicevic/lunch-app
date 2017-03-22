@@ -73,6 +73,7 @@ export default class Login extends Component {
               id='material-ui-ft-username'
               className='ClientForm-input'
               placeholder='E-mail'
+              type='email'
               fullWidth={ true }
               ref={ node => this.email = node }
             />

@@ -10,7 +10,7 @@ import {
 } from 'actions/orders';
 
 const initialState = Map({
-  selectedDate: moment().add(1, 'weeks').startOf('isoWeek').format(DATE_PATTERN),
+  selectedDate: moment().format(DATE_PATTERN),
   reportDate: moment().format(DATE_PATTERN),
   orders: {},
 });

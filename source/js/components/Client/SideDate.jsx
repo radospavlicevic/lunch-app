@@ -1,19 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import SideDateItem from 'components/Client/SideDateItem';
-import { setSelectedDate } from 'actions/orders';
 import { DATE_PATTERN } from 'utils/globals';
+import { redirectTo } from 'utils/routing';
 import Swipe from 'react-easy-swipe';
 import moment from 'moment';
 import back from '../../../assets/img/back.png';
 import next from '../../../assets/img/next.png';
 
-
 @connect()
 export default class SideDate extends Component {
   static propTypes = {
     selectedDate: PropTypes.string,
-    dispatch: PropTypes.func,
+    orders: PropTypes.object,
   }
 
   constructor() {
@@ -54,9 +53,9 @@ export default class SideDate extends Component {
   }
 
   switchWeek(indicator) {
-    const { selectedDate, dispatch } = this.props;
+    const { selectedDate } = this.props;
     const newSelectedDate = moment(selectedDate, DATE_PATTERN).add(indicator * 7, 'days').format(DATE_PATTERN);
-    dispatch(setSelectedDate(newSelectedDate));
+    redirectTo(`/order/${ newSelectedDate }`);
   }
 
   handlePreviousClick() {
@@ -69,13 +68,14 @@ export default class SideDate extends Component {
 
   renderSideDateItems() {
     const { daysModel } = this.state;
-    const { selectedDate } = this.props;
+    const { selectedDate, orders } = this.props;
     return (
       daysModel.map((date, index) => {
         return (
           <SideDateItem
             key={ index }
             date={ date }
+            orders={ orders }
             selected={ date === selectedDate }
           />
         );

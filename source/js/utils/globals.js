@@ -44,3 +44,7 @@ export const adminPages = [
   routeCodes.DISHES,
   routeCodes.WEEKLY_OVERVIEW,
 ];
+
+export function isPastDate(date) {
+  return moment().subtract(1, 'day').isAfter(moment(date, DATE_PATTERN));
+}

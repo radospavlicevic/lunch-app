@@ -112,12 +112,9 @@ export default class Overview extends Component {
         { loggedInUser && <SideDate selectedDate={ selectedDate } /> }
         { loggedInUser &&
         <div className='Overview-top'>
-          <div className='Order-label'>
-            <p>Hello, { this.getUserFirstName() }</p>
-            <p>Your overview for { selectedDate }</p>
-          </div>
           { (loggedInUser && order) && <MealOverview data={ order } /> }
-          { (loggedInUser && !order) && <div className='Order-locked'><span>There is no order for { selectedDate }</span></div>}
+          {/* { (loggedInUser && !order) && <div className='Order-locked'><span>
+            There is no order for { selectedDate }</span></div>} */}
         </div>
         }
       </div>
