@@ -1,6 +1,6 @@
 .Order {
   display: flex;
-  font-family: Avenir;
+  font-family: 'Open Sans', sans-serif;
   flex-direction: column;
   flex: 1;
   @include sm {
@@ -64,7 +64,7 @@
   font-size: 0.7rem;
   background-color: #00bcd4;
   color: #fff;
-  font-family: Avenir;
+  font-family: 'Open Sans', sans-serif;
   height: 49.5px;
   align-items: center;
   padding: 0 30px;

@@ -59,7 +59,7 @@ const rules = [
     ],
   },
   {
-    test: /\.(otf)$/,
+    test: /\.(otf|ttf)$/,
     include: fontsPath,
     use: 'url-loader?limit=20480&name=assets/[name]-[hash].[ext]',
   },
