@@ -37,10 +37,15 @@ export default class SideDateItem extends Component {
     return '';
   }
 
+  handleClick() {
+    window.scrollTo(0, 0);
+  }
+
   render() {
     const { date, selected } = this.props;
     return (
       <Link
+        onClick={ this.handleClick }
         to={ `/order/${ date }/${ this.getOrderState() }` }
         className={ selected ? 'SideDate SideDate--active' : 'SideDate' }
       >

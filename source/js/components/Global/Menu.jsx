@@ -44,7 +44,7 @@ export default class Menu extends Component {
   handleClose = () => this.setState({ open: false });
 
   toggleNavigation() {
-    const { selectedDate } = this.props;
+    const { selectedDate, loggedInUser } = this.props;
     return (
       <div>
         <Drawer
@@ -52,10 +52,9 @@ export default class Menu extends Component {
           open={ this.state.open }
           onRequestChange={ (open) => this.setState({ open }) }
         >
-          <Link className='Menu-link' to={ `/order/${ selectedDate }` }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
-          {/* <Link className='Menu-link'
-          to={ routeCodes.OVERVIEW }><MenuItem onTouchTap={ this.handleClose }>
-          Overview</MenuItem></Link> */}
+          {loggedInUser && loggedInUser.role === roles.ADMIN &&
+            <Link className='Menu-link' to={ `/order/${ selectedDate }` }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
+          }
           <Divider />
           { this.renderAdminNavigationMenu() }
           { userSignedIn() &&
@@ -97,16 +96,18 @@ export default class Menu extends Component {
   }
 
   renderMenu() {
-    const { selectedDate } = this.props;
+    const { selectedDate, loggedInUser } = this.props;
     return (
       <div>
-        <IndexLink
-          className='Menu-button'
-          activeClassName='Menu-button--active'
-          to={ `/order/${ selectedDate }` }
-        >
-          <FlatButton label='Home' />
-        </IndexLink>
+        {loggedInUser && loggedInUser.role === roles.ADMIN &&
+          <IndexLink
+            className='Menu-button'
+            activeClassName='Menu-button--active'
+            to={ `/order/${ selectedDate }` }
+          >
+            <FlatButton label='Home' />
+          </IndexLink>
+        }
         {/* <IndexLink className='Menu-button'
           activeClassName='Menu-button--active' to={ routeCodes.OVERVIEW }>
           <FlatButton label='Overview' />

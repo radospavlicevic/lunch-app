@@ -125,11 +125,11 @@ hr {
 }
 
 .Home-loading {
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  position: relative;
+  height: 76vh;
   font-size: 2rem;
   z-index: 10;
   @include sm {

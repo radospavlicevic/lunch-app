@@ -32,7 +32,7 @@ export default class Login extends Component {
   componentWillReceiveProps(nextProps) {
     const { loggedInUser } = this.props;
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
-      redirectTo(routeCodes.ORDER);
+      redirectTo(routeCodes.HOME);
     }
   }
 

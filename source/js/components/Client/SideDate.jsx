@@ -54,7 +54,7 @@ export default class SideDate extends Component {
 
   switchWeek(indicator) {
     const { selectedDate } = this.props;
-    const newSelectedDate = moment(selectedDate, DATE_PATTERN).add(indicator * 7, 'days').format(DATE_PATTERN);
+    const newSelectedDate = moment(selectedDate, DATE_PATTERN).add(indicator * 7, 'days').startOf('isoweek').format(DATE_PATTERN);
     redirectTo(`/order/${ newSelectedDate }`);
   }
 
