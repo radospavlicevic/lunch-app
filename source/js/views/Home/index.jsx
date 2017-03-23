@@ -192,7 +192,12 @@ export default class Home extends Component {
           <div className='Home-wrapper'>
             <div className='Order-label'>
               <p>Hello, { this.getUserFirstName() }</p>
-              <p>Choose your meal for { date }</p>
+              { params.state === 'overview' &&
+                <p>Your overview for { date }</p>
+              }
+              { params.state === 'edit' &&
+                <p>Choose your meal for { date }</p>
+              }
             </div>
             <SideDate
               selectedDate={ date }
