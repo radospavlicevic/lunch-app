@@ -35,6 +35,10 @@ export default class Home extends Component {
   componentWillMount() {
     const { params } = this.props;
     this.setupFirebaseObservers();
+    document.title = `${ params.state }, ${ params.date } - Yummy Yumzor`;
+    if (!params.state && !params.date) {
+      document.title = 'Yummy Yumzor';
+    }
     if (params.state === 'edit' && isPastDate(params.date)) {
       redirectTo(`/order/${ params.date }/overview`);
     }
@@ -42,6 +46,12 @@ export default class Home extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { params, selectedDate, loggedInUser, orders, dispatch } = this.props;
+    document.title = `${ nextProps.params.state && nextProps.params.state.charAt(0).toUpperCase() + nextProps.params.state.slice(1) },
+    ${ params.date } - Yummy Yumzor`;
+
+    if (!nextProps.params.state) {
+      document.title = 'Yummy Yumzor';
+    }
     if (params.date !== nextProps.params.date) {
       const date = nextProps.params.date;
       this.updateFirebaseObservers(date);

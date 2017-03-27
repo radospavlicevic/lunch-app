@@ -40,7 +40,6 @@ export default class Order extends Component {
         note: this.getNote(orders, selectedDate, userSignedIn().uid),
       });
     }
-    document.title = `Order, ${ nextProps.selectedDate } - Yummy Yumzor`;
   }
 
   componentWillUnmount() {
