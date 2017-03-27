@@ -26,19 +26,33 @@ export default class Order extends Component {
   }
 
   componentWillMount() {
+    const { orders, selectedDate } = this.props;
     this.state = {
-      note: '',
+      note: this.getNote(orders, selectedDate, userSignedIn().uid),
       open: false,
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    const { orders, selectedDate } = this.props;
+    if (nextProps.orders !== orders) {
+      this.setState({
+        note: this.getNote(orders, selectedDate, userSignedIn().uid),
+      });
+    }
     document.title = `Order, ${ nextProps.selectedDate } - Yummy Yumzor`;
   }
 
   componentWillUnmount() {
     clearTimeout(this.timeoutID);
     this.timeoutID = null;
+  }
+
+  getNote(orders, date, uid) {
+    if (!orders) return '';
+    if (!orders[date]) return '';
+    if (!orders[date][uid]) return '';
+    return orders[date][uid].note;
   }
 
   getOrder(loggedInUser, selectedDate, orders) {
