@@ -17,14 +17,12 @@ import { userSignedIn, firebaseLogout } from '../../api/auth';
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   breakpoint: state.app.get('breakpoint'),
-  selectedDate: state.orders.get('selectedDate'),
 }))
 export default class Menu extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
     breakpoint: PropTypes.string,
-    selectedDate: PropTypes.string,
   }
 
   constructor() {
@@ -44,7 +42,7 @@ export default class Menu extends Component {
   handleClose = () => this.setState({ open: false });
 
   toggleNavigation() {
-    const { selectedDate, loggedInUser } = this.props;
+    const { loggedInUser } = this.props;
     return (
       <div>
         <Drawer
@@ -53,7 +51,7 @@ export default class Menu extends Component {
           onRequestChange={ (open) => this.setState({ open }) }
         >
           {loggedInUser && loggedInUser.role === roles.ADMIN &&
-            <Link className='Menu-link' to={ `/order/${ selectedDate }` }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
+            <Link className='Menu-link' to={ routeCodes.HOME }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
           }
           <Divider />
           { this.renderAdminNavigationMenu() }
@@ -96,22 +94,17 @@ export default class Menu extends Component {
   }
 
   renderMenu() {
-    const { selectedDate, loggedInUser } = this.props;
+    const { loggedInUser } = this.props;
     return (
       <div>
-        {loggedInUser && loggedInUser.role === roles.ADMIN &&
+        { loggedInUser && loggedInUser.role === roles.ADMIN &&
           <IndexLink
             className='Menu-button'
             activeClassName='Menu-button--active'
-            to={ `/order/${ selectedDate }` }
+            to={ routeCodes.HOME }
           >
             <FlatButton label='Home' />
-          </IndexLink>
-        }
-        {/* <IndexLink className='Menu-button'
-          activeClassName='Menu-button--active' to={ routeCodes.OVERVIEW }>
-          <FlatButton label='Overview' />
-        </IndexLink> */}
+          </IndexLink> }
         { this.renderAdminMenuItem() }
         { userSignedIn() &&
           <RaisedButton

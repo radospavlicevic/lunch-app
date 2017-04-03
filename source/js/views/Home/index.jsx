@@ -52,11 +52,7 @@ export default class Home extends Component {
     if (!nextProps.params.state) {
       document.title = 'Yummy Yumzor';
     }
-    if (params.date !== nextProps.params.date) {
-      const date = nextProps.params.date;
-      this.updateFirebaseObservers(date);
-      dispatch(setSelectedDate(date));
-    }
+
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
       const date = params.date || selectedDate;
       db.ref(`orders/${ date }/${ userSignedIn().uid }`).on('value', order => {
@@ -64,18 +60,22 @@ export default class Home extends Component {
       });
     }
 
+    if (params.date !== nextProps.params.date) {
+      const date = nextProps.params.date || selectedDate;
+      this.updateFirebaseObservers(date);
+      dispatch(setSelectedDate(date));
+    }
+
     if (nextProps.orders !== orders) {
       const date = nextProps.params.date || selectedDate;
-      if (!params.state) {
+      if (!nextProps.params.state) {
         redirectTo(`/order/${ date }/${ this.getHomePageState(nextProps.orders, date) }`);
       }
     }
 
     if (nextProps.params.state !== params.state) {
       const date = nextProps.params.date || selectedDate;
-      if (!nextProps.params.state) {
-        redirectTo(`/order/${ date }/${ this.getHomePageState(nextProps.orders, date) }`);
-      } else if (nextProps.params.state === 'edit' && isPastDate(date)) {
+      if (nextProps.params.state === 'edit' && isPastDate(date)) {
         redirectTo(`/order/${ date }/overview`);
       }
     }
@@ -146,7 +146,6 @@ export default class Home extends Component {
 
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
-
     db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
       dispatch(
         addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
@@ -196,6 +195,7 @@ export default class Home extends Component {
     } = this.props;
     const date = params.date || selectedDate;
     const ordersLoaded = orders && orders[date];
+
     return (
       <div className='Home'>
         { loggedInUser &&
