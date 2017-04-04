@@ -3,6 +3,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 import App from 'views/App';
 import Home from 'views/Home';
+import Profile from 'views/Profile';
 import Login from 'views/Login';
 import Users from 'views/Users';
 import Dishes from 'views/Dishes';
@@ -17,6 +18,7 @@ const publicPath = '/';
 
 export const routeCodes = {
   HOME: publicPath,
+  PROFILE: `${ publicPath }profile`,
   ORDER: `${ publicPath }order(/:date)(/:state)`,
   LOGIN: `${ publicPath }login`,
   USERS: `${ publicPath }users`,
@@ -36,6 +38,7 @@ export default class Routes extends Component {
         <Route path={ publicPath } component={ App }>
           <IndexRoute component={ Home } />
           <Route path={ routeCodes.ORDER } component={ Home } />
+          <Route path={ routeCodes.PROFILE } component={ Profile } />
           <Route path={ routeCodes.LOGIN } component={ Login } />
           <Route path={ routeCodes.USERS } component={ Users } />
           <Route path={ routeCodes.DISHES } component={ Dishes } />

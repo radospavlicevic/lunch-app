@@ -9,6 +9,8 @@ export const GET_USER_START = 'GET_USER_START';
 export const GET_USER_SUCCESS = 'GET_USER_SUCCESS';
 export const GET_USER_ERROR = 'GET_USER_ERROR';
 
+
+export const UPDATE_LOGGED_IN_USER = 'UPDATE_LOGGED_IN_USER';
 export const LOGOUT = 'LOGOUT';
 
 // Get user
@@ -68,6 +70,13 @@ function loginError(error) {
 export function logout() {
   return {
     type: LOGOUT,
+  };
+}
+
+export function updateLoggedInUser(user) {
+  return {
+    type: UPDATE_LOGGED_IN_USER,
+    user,
   };
 }
 

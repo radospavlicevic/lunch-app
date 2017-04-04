@@ -49,9 +49,13 @@ export default class Menu extends Component {
           docked={ false }
           open={ this.state.open }
           onRequestChange={ (open) => this.setState({ open }) }
+          onTouchTap={ this.handleClose }
         >
-          {loggedInUser && loggedInUser.role === roles.ADMIN &&
-            <Link className='Menu-link' to={ routeCodes.HOME }><MenuItem onTouchTap={ this.handleClose }>Home</MenuItem></Link>
+          { loggedInUser &&
+            <Link className='Menu-link' to={ routeCodes.HOME }><MenuItem>Home</MenuItem></Link>
+          }
+          { loggedInUser &&
+            <Link className='Menu-link' to={ routeCodes.PROFILE }><MenuItem>Profile</MenuItem></Link>
           }
           <Divider />
           { this.renderAdminNavigationMenu() }
@@ -97,7 +101,7 @@ export default class Menu extends Component {
     const { loggedInUser } = this.props;
     return (
       <div>
-        { loggedInUser && loggedInUser.role === roles.ADMIN &&
+        { loggedInUser &&
           <IndexLink
             className='Menu-button'
             activeClassName='Menu-button--active'
@@ -105,6 +109,14 @@ export default class Menu extends Component {
           >
             <FlatButton label='Home' />
           </IndexLink> }
+        { loggedInUser &&
+          <Link
+            className='Menu-button'
+            activeClassName='Menu-button--active'
+            to={ routeCodes.PROFILE }
+          >
+            <FlatButton label='Profile' />
+          </Link> }
         { this.renderAdminMenuItem() }
         { userSignedIn() &&
           <RaisedButton

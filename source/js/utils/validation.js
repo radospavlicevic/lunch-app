@@ -18,11 +18,11 @@ function checkEmail(email) {
   return result;
 }
 
-function checkPassword(password) {
+export function checkPassword(password, passwordHint = 'Password') {
   let result = '';
   const passwordRegex = /.{8}/;
   if (!password) {
-    result += 'Password field is required. ';
+    result += `${ passwordHint } field is required. `;
   }
   if (password && !passwordRegex.test(password)) {
     result += 'Invalid password (must contain 8 chars). ';

@@ -6,6 +6,7 @@ import {
   FETCH_USERS_START,
   FETCH_USERS_ERROR,
   FETCH_USERS_SUCCESS,
+  CHANGE_PASSWORD,
 } from 'actions/users';
 
 const initialState = Map({
@@ -25,6 +26,16 @@ const actionsMap = {
   [DELETE_USER]: (state, action) => {
     const users = { ...state.get('users') };
     delete users[action.uid];
+    return state.merge(Map({
+      users,
+    }));
+  },
+
+  [CHANGE_PASSWORD]: (state, action) => {
+    const users = { ...state.get('users') };
+    if (users[action.uid]) {
+      users[action.uid].password = action.newPassword;
+    }
     return state.merge(Map({
       users,
     }));

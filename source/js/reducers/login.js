@@ -7,6 +7,7 @@ import {
   GET_USER_START,
   GET_USER_ERROR,
   GET_USER_SUCCESS,
+  UPDATE_LOGGED_IN_USER,
   LOGOUT,
 } from 'actions/login';
 
@@ -60,6 +61,11 @@ const actionsMap = {
     return state.merge(Map({
       getUserLoading: false,
       loggedInUser: action.data,
+    }));
+  },
+  [UPDATE_LOGGED_IN_USER]: (state, action) => {
+    return state.merge(Map({
+      loggedInUser: action.user,
     }));
   },
   [LOGOUT]: (state) => {

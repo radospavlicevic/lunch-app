@@ -1,0 +1,55 @@
+.Profile {
+  position: relative;
+  top: 114px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Profile-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 50%;
+  @include md-and-lower {
+    width: 100%;
+  }
+
+  h1 {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+.Profile-form-input {
+  flex-basis: 100%;
+}
+
+
+.Profile-form-footer {
+  padding-top: 30px;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.Profile-errorMessage {
+  color: #f44336;
+  padding: 20px 0;
+  height: 20px;
+}
+
+.Profile-form-success {
+  margin-top: 20px;
+  align-self: flex-end;
+  color: $primary;
+}
+
+.Profile-forgotten {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

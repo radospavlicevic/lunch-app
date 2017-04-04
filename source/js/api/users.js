@@ -13,6 +13,10 @@ export function saveUser(uid, user) {
   });
 }
 
+export function updatePassword(uid, newPassword) {
+  return db.ref(`users/${ uid }`).update({ password: newPassword });
+}
+
 export function fetchAllUsers() {
   return db.ref('users').once('value');
 }
