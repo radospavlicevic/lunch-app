@@ -54,6 +54,7 @@ export default class DailyTableRow extends Component {
               label={ canceled ? 'Canceled' : 'Cancel' }
               disabled={ canceled }
               onClick={ this.handleCancelClick }
+              className='TableCell-button'
             />
           </TableRowColumn>
         }

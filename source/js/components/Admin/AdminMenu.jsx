@@ -25,6 +25,7 @@ export default class AdminMenu extends Component {
           <Link className='AdminMenu-link' activeClassName='AdminMenu-link--active' to={ routeCodes.USERS }><MenuItem>Users</MenuItem></Link>
           <Link className='AdminMenu-link' activeClassName='AdminMenu-link--active' to={ routeCodes.WEEKLY_OVERVIEW }><MenuItem>Weekly Overview</MenuItem></Link>
           <Link className='AdminMenu-link' activeClassName='AdminMenu-link--active' to={ routeCodes.REPORT } target='_blank'><MenuItem>Report</MenuItem></Link>
+          <Link className='AdminMenu-link' activeClassName='AdminMenu-link--active' to={ routeCodes.EXPORT }><MenuItem>Export</MenuItem></Link>
         </Drawer>
       </div>
     );

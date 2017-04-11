@@ -12,6 +12,7 @@ import Caterings from 'views/Caterings';
 import Menus from 'views/Menus';
 import WeeklyOverview from 'views/WeeklyOverview';
 import Report from 'views/Report';
+import Export from 'views/Export';
 import NotFound from 'views/NotFound';
 
 const publicPath = '/';
@@ -28,6 +29,7 @@ export const routeCodes = {
   MENUS: `${ publicPath }menus`,
   WEEKLY_OVERVIEW: `${ publicPath }weekly-overview`,
   REPORT: `${ publicPath }report`,
+  EXPORT: `${ publicPath }export`,
 };
 
 export default class Routes extends Component {
@@ -47,6 +49,7 @@ export default class Routes extends Component {
           <Route path={ routeCodes.MENUS } component={ Menus } />
           <Route path={ routeCodes.WEEKLY_OVERVIEW } component={ WeeklyOverview } />
           <Route path={ routeCodes.REPORT } component={ Report } />
+          <Route path={ routeCodes.EXPORT } component={ Export } />
           <Route path='*' component={ NotFound } />
         </Route>
       </Router>

@@ -28,7 +28,32 @@ Table {
 
 .TableCell-button {
   width: 15% !important;
+
+  span {
+    font-size: 12px !important;
+  }
+
   @include lg-and-lower {
     width: 20% !important;
+  }
+}
+
+.Export-table {
+  table-layout: fixed;
+  margin-bottom: 50px;
+  width: 100%;
+
+  tr, td {
+    border: 1px solid black;
+    padding: 10px;
+    word-wrap: break-word;
+  }
+
+  thead {
+    tr, td {
+      border: none;
+      text-align: left;
+      padding: 0 5px 10px 0;
+    }
   }
 }

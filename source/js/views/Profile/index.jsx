@@ -41,6 +41,10 @@ export default class Profile extends Component {
     };
   }
 
+  componentWillMount() {
+    document.title = 'Profile - Yummy Yumzor';
+  }
+
   componentWillReceiveProps(nextProps) {
     const { loggedInUser, dispatch } = this.props;
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
