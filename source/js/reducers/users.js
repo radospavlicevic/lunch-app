@@ -1,25 +1,25 @@
 import { Map } from 'immutable';
 
 import {
-  ADD_USER,
+  ADD_OR_UPDATE_USER,
   DELETE_USER,
-  FETCH_USERS_START,
-  FETCH_USERS_ERROR,
-  FETCH_USERS_SUCCESS,
   CHANGE_PASSWORD,
+  PREPARE_USER_UPDATE,
+  CANCEL_USER_UPDATE,
 } from 'actions/users';
 
 const initialState = Map({
   users: {},
-  // userForUpdate: null,
+  userForUpdate: null,
 });
 
 const actionsMap = {
-  // USERS actions
-  [ADD_USER]: (state, action) => {
+
+  [ADD_OR_UPDATE_USER]: (state, action) => {
     const users = { ...state.get('users'), [action.uid]: action.data };
     return state.merge(Map({
       users,
+      userForUpdate: null,
     }));
   },
 
@@ -41,26 +41,21 @@ const actionsMap = {
     }));
   },
 
-  [FETCH_USERS_START]: (state) => {
+  [PREPARE_USER_UPDATE]: (state, action) => {
     return state.merge(Map({
-      fetchUsersLoading: true,
-      fetchUsersError: null,
+      userForUpdate: {
+        uid: action.uid,
+        data: action.data,
+      },
     }));
   },
 
-  [FETCH_USERS_ERROR]: (state, action) => {
+  [CANCEL_USER_UPDATE]: (state) => {
     return state.merge(Map({
-      fetchUsersLoading: false,
-      fetchUsersError: action.error,
+      userForUpdate: null,
     }));
   },
 
-  [FETCH_USERS_SUCCESS]: (state, action) => {
-    return state.merge(Map({
-      fetchUsersLoading: false,
-      users: action.data,
-    }));
-  },
 };
 
 export default function reducer(state = initialState, action = {}) {

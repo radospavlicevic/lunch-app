@@ -6,7 +6,7 @@ import { tablesToExcel } from 'utils/excel_export';
 import AdminMenu from 'components/Admin/AdminMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
-import { addUser } from 'actions/users';
+import { addOrUpdateUser } from 'actions/users';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import { updateOrder } from 'actions/orders';
@@ -69,7 +69,7 @@ export default class Export extends Component {
     const { dispatch } = this.props;
 
     db.ref('users').on('child_added', newUser => {
-      dispatch(addUser(newUser.key, newUser.val()));
+      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
     });
 
     db.ref('categories').on('child_added', newCategory => {

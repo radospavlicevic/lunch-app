@@ -5,7 +5,7 @@ import WeekPicker from 'components/Global/WeekPicker';
 import DailyTable from 'components/Admin/DailyTable';
 import AdminMenu from 'components/Admin/AdminMenu';
 import { updateOrder, cancelOrder } from 'actions/orders';
-import { addUser } from 'actions/users';
+import { addOrUpdateUser } from 'actions/users';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
@@ -46,7 +46,7 @@ export default class WeeklyOverview extends Component {
     const { selectedDate, dispatch } = this.props;
 
     db.ref('users').on('child_added', newUser => {
-      dispatch(addUser(newUser.key, newUser.val()));
+      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
     });
 
     db.ref('categories').on('child_added', newCategory => {

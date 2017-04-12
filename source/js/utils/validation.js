@@ -30,11 +30,11 @@ export function checkPassword(password, passwordHint = 'Password') {
   return result;
 }
 
-export function getUserValidationErrors(user) {
+export function getUserValidationErrors(user, update) {
   const errors = {
     username: checkUsername(user.username),
     email: checkEmail(user.email),
-    password: checkPassword(user.password),
+    password: update ? '' : checkPassword(user.password),
   };
   return errors;
 }

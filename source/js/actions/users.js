@@ -1,37 +1,13 @@
-import { fetchAllUsers } from 'api/users.js';
-
-export const FETCH_USERS_START = 'FETCH_USERS_START';
-export const FETCH_USERS_ERROR = 'FETCH_USERS_ERROR';
-export const FETCH_USERS_SUCCESS = 'FETCH_USERS_SUCCESS';
-
-export const ADD_USER = 'ADD_USER';
+export const ADD_OR_UPDATE_USER = 'ADD_OR_UPDATE_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const PREPARE_USER_UPDATE = 'PREPARE_USER_UPDATE';
+export const CANCEL_USER_UPDATE = 'CANCEL_USER_UPDATE';
 
-function fetchUsersStart() {
+export function addOrUpdateUser(uid, data) {
   return {
-    type: FETCH_USERS_START,
-  };
-}
-
-function fetchUsersSuccess(data) {
-  return {
-    type: FETCH_USERS_SUCCESS,
-    data,
-  };
-}
-
-function fetchUsersError(error) {
-  return {
-    type: FETCH_USERS_ERROR,
-    error,
-  };
-}
-
-export function addUser(uid, data) {
-  return {
-    type: ADD_USER,
+    type: ADD_OR_UPDATE_USER,
     uid,
     data,
   };
@@ -52,30 +28,16 @@ export function changePassword(uid, newPassword) {
   };
 }
 
-export function updateUser(data) {
+export function prepareUserUpdate(uid, data) {
   return {
-    type: UPDATE_USER,
+    type: PREPARE_USER_UPDATE,
+    uid,
     data,
   };
 }
 
-function mapUsersToArray(users) {
-  const result = [];
-  Object.keys(users).forEach(key => {
-    result.push({
-      uid: key,
-      user: users[key],
-    });
-  });
-  return result;
-}
-
-export function fetchUsers() {
-  return function (dispatch) {
-    dispatch(fetchUsersStart());
-
-    fetchAllUsers()
-      .then(data => dispatch(fetchUsersSuccess(mapUsersToArray(data.val()))))
-      .catch(error => dispatch(fetchUsersError(error)));
+export function cancelUserUpdate() {
+  return {
+    type: CANCEL_USER_UPDATE,
   };
 }

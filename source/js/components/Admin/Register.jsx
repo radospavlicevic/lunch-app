@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { roles } from 'utils/globals';
-import { firebaseRegister } from 'api/auth.js';
-import { saveUser } from 'api/users.js';
+import { connect } from 'react-redux';
+import { roles, objectsHasSameValues } from 'utils/globals';
+import { firebaseRegister, firebaseLogin, firebaseUpdateUserEmail, firebaseUpdateUserPassword } from 'api/auth.js';
+import { saveOrUpdateUser } from 'api/users.js';
+import { cancelUserUpdate } from 'actions/users.js';
 import { getUserValidationErrors } from 'utils/validation';
 import { prepareForReauthentication, reauthenticateAdmin } from 'utils/reauth';
 import TextField from 'material-ui/TextField';
@@ -9,14 +11,34 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import md5 from 'md5';
 
+@connect(state => ({
+  userForUpdate: state.users.get('userForUpdate'),
+}))
 export default class Register extends Component {
 
   static propTypes = {
     loggedInUser: PropTypes.object,
+    userForUpdate: PropTypes.object,
+    dispatch: PropTypes.func,
   }
 
   constructor() {
     super();
+
+    this.initState();
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancelClick = this.handleCancelClick.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.userForUpdate) {
+      this.initStateForUpdate(nextProps.userForUpdate.data);
+    } else {
+      this.initState();
+    }
+  }
+
+  initState() {
     this.state = {
       user: {
         role: roles.USER,
@@ -28,10 +50,28 @@ export default class Register extends Component {
         username: '',
         email: '',
         password: '',
+        firebase: '',
       },
+      update: false,
     };
+  }
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+  initStateForUpdate(data) {
+    this.setState({
+      user: {
+        role: data.role,
+        username: data.username,
+        email: data.email,
+        password: '',
+      },
+      errors: {
+        username: '',
+        email: '',
+        password: '',
+        firebase: '',
+      },
+      update: true,
+    });
   }
 
   resetForm() {
@@ -46,7 +86,9 @@ export default class Register extends Component {
         username: '',
         email: '',
         password: '',
+        firebase: '',
       },
+      update: false,
     });
   }
 
@@ -59,6 +101,11 @@ export default class Register extends Component {
     });
   }
 
+  handleCancelClick() {
+    const { dispatch } = this.props;
+    dispatch(cancelUserUpdate());
+  }
+
   validationPassed(errors) {
     return (errors && !errors.username && !errors.email && !errors.password);
   }
@@ -66,25 +113,14 @@ export default class Register extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { loggedInUser } = this.props;
-    const { user } = this.state;
-    const encryptedUser = {
-      ...user,
-      password: md5(user.password),
-    };
-    const validationErrors = getUserValidationErrors(user);
+    const { user, update } = this.state;
+    const validationErrors = getUserValidationErrors(user, update);
     if (this.validationPassed(validationErrors)) {
-      prepareForReauthentication();
-      firebaseRegister(encryptedUser)
-      .then(userRecord => {
-        saveUser(userRecord.uid, encryptedUser);
-        reauthenticateAdmin(loggedInUser);
-        this.resetForm();
-      })
-      .catch(error => {
-        this.setState({
-          errors: { email: error.message },
-        });
-      });
+      if (update) {
+        this.updateUser(user, loggedInUser);
+      } else {
+        this.createUser(user, loggedInUser);
+      }
     } else {
       this.setState({
         errors: validationErrors,
@@ -92,8 +128,55 @@ export default class Register extends Component {
     }
   }
 
+  createUser(user, admin) {
+    const encryptedUser = {
+      ...user,
+      password: md5(user.password),
+    };
+    prepareForReauthentication();
+    firebaseRegister(encryptedUser)
+    .then(userRecord => {
+      saveOrUpdateUser(userRecord.uid, encryptedUser);
+      reauthenticateAdmin(admin);
+      this.resetForm();
+    })
+    .catch(error => {
+      this.setState({
+        errors: { email: error.message },
+      });
+    });
+  }
+
+  updateUser(user, admin) {
+    const { userForUpdate } = this.props;
+    const updatedUserData = { ...user,
+      password: user.password ? md5(user.password) : userForUpdate.data.password,
+    };
+    if (!objectsHasSameValues(userForUpdate.data, updatedUserData)) {
+      if (user.password || userForUpdate.data.email !== user.email) {
+        prepareForReauthentication();
+        firebaseLogin({ email: userForUpdate.data.email, password: userForUpdate.data.password })
+          .then(updatedUser => {
+            Promise.all([firebaseUpdateUserEmail(updatedUser, updatedUserData.email),
+              firebaseUpdateUserPassword(updatedUser, updatedUserData.password)]).then(() => {
+                reauthenticateAdmin(admin);
+                saveOrUpdateUser(userForUpdate.uid, updatedUserData);
+                this.resetForm();
+              }).catch(error => {
+                this.setState({
+                  errors: { firebase: error.message },
+                });
+              });
+          });
+      } else {
+        saveOrUpdateUser(userForUpdate.uid, updatedUserData);
+        this.resetForm();
+      }
+    }
+  }
+
   render() {
-    const { user, errors } = this.state;
+    const { user, errors, update } = this.state;
     return (
       <div className='Register'>
         <div className='AdminForm-wrapper'>
@@ -116,7 +199,7 @@ export default class Register extends Component {
               errorText={ errors.email }
             />
             <TextField
-              hintText='Password Field'
+              hintText={ update ? 'New Password (or leave empty to keep old password)' : 'Password Field' }
               floatingLabelText='Password'
               fullWidth={ true }
               value={ user.password }
@@ -125,8 +208,8 @@ export default class Register extends Component {
             />
             <RadioButtonGroup
               className='AdminForm-radioGroup'
-              name='userRole'
-              defaultSelected={ user.role }
+              name='role'
+              valueSelected={ user.role }
               onChange={ (e, value) => { this.handleChange(e, value, 'role'); } }
             >
               <RadioButton
@@ -143,9 +226,19 @@ export default class Register extends Component {
             <RaisedButton
               type='submit'
               className='AdminForm-button'
-              label='Register'
+              label={ update ? 'Update User' : 'Register' }
               primary={ true }
             />
+            { update &&
+              <RaisedButton
+                style={ { marginLeft: 10 } }
+                className='AdminForm-button'
+                label='Cancel'
+                primary={ true }
+                onClick={ this.handleCancelClick }
+              />
+            }
+            { errors.firebase && <span className='AdminForm-error'>{ errors.firebase }</span> }
           </form>
         </div>
       </div>

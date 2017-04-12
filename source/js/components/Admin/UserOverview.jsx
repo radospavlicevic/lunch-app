@@ -29,8 +29,9 @@ export default class UserOverview extends Component {
             <TableRow>
               <TableHeaderColumn>Username</TableHeaderColumn>
               <TableHeaderColumn>Email</TableHeaderColumn>
-              <TableHeaderColumn className='u-tableCellButton'>Role</TableHeaderColumn>
-              <TableHeaderColumn className='u-tableCellButton' />
+              <TableHeaderColumn style={ { width: '15%' } }>Role</TableHeaderColumn>
+              <TableHeaderColumn style={ { width: '15%' } } />
+              <TableHeaderColumn style={ { width: '15%' } } />
             </TableRow>
           </TableHeader>
           <TableBody

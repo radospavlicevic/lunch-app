@@ -21,6 +21,14 @@ export function firebaseUpdatePassword(newPassword) {
   return userSignedIn().updatePassword(newPassword);
 }
 
+export function firebaseUpdateUserEmail(user, newEmail) {
+  return user.updateEmail(newEmail);
+}
+
+export function firebaseUpdateUserPassword(user, newPassword) {
+  return user.updatePassword(newPassword);
+}
+
 // removes user from firebase auth db
 export function deleteUserFromAuthDB(user, admin) {
   firebaseAuth().signInWithEmailAndPassword(user.email, user.password)

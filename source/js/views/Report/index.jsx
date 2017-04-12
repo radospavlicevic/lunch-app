@@ -4,7 +4,7 @@ import { db } from 'utils/firebase_config';
 import ReportDatePicker from 'components/Global/ReportDatePicker';
 import DailyTable from 'components/Admin/DailyTable';
 import { updateOrder, cancelOrder } from 'actions/orders';
-import { addUser } from 'actions/users';
+import { addOrUpdateUser } from 'actions/users';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
 import { addDishInMenu } from 'actions/menus';
 
@@ -43,7 +43,7 @@ export default class Report extends Component {
     const { reportDate, dispatch } = this.props;
 
     db.ref('users').on('child_added', newUser => {
-      dispatch(addUser(newUser.key, newUser.val()));
+      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
     });
 
     db.ref('categories').on('child_added', newCategory => {

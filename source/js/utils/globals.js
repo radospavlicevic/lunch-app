@@ -48,3 +48,13 @@ export const adminPages = [
 export function isPastDate(date) {
   return moment().subtract(1, 'day').isAfter(moment(date, DATE_PATTERN));
 }
+
+export function objectsHasSameValues(obj1, obj2) {
+  const keys = Object.keys(obj1);
+  for (let i = 0; i < keys.length; i++) {
+    if (obj1[keys[i]] !== obj2[keys[i]]) {
+      return false;
+    }
+  }
+  return true;
+}

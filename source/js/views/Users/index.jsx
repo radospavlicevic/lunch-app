@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { addUser, deleteUser } from 'actions/users';
+import { addOrUpdateUser, deleteUser } from 'actions/users';
 import { db } from 'utils/firebase_config';
 import Register from 'components/Admin/Register';
 import UserOverview from 'components/Admin/UserOverview';
@@ -28,11 +28,15 @@ export default class Users extends Component {
   setupFirebaseObservers() {
     const { dispatch } = this.props;
     db.ref('users').on('child_added', newUser => {
-      dispatch(addUser(newUser.key, newUser.val()));
+      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
     });
 
     db.ref('users').on('child_removed', removedUser => {
       dispatch(deleteUser(removedUser.key));
+    });
+
+    db.ref('users').on('child_changed', changedUser => {
+      dispatch(addOrUpdateUser(changedUser.key, changedUser.val()));
     });
   }
 

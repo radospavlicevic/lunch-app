@@ -4,7 +4,7 @@ export function findUserByUID(uid) {
   return db.ref(`users/${ uid }`).once('value');
 }
 
-export function saveUser(uid, user) {
+export function saveOrUpdateUser(uid, user) {
   return db.ref(`users/${ uid }`).set({
     role: user.role,
     username: user.username,
