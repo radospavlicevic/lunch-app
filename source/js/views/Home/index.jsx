@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { db } from 'utils/firebase_config';
 import { redirectTo } from 'utils/routing';
-import { isPastDate } from 'utils/globals';
+import { isPastDate, formatDateSr } from 'utils/globals';
 import { userSignedIn } from 'api/auth';
 import { updateOrder, setSelectedDate } from 'actions/orders';
 import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
@@ -203,10 +203,10 @@ export default class Home extends Component {
             <div className='Order-label'>
               <p>Hello, { this.getUserFirstName() }</p>
               { params.state === 'overview' &&
-                <p>Your overview for { date }</p>
+                <p>Your order for { formatDateSr(date) }</p>
               }
               { params.state === 'edit' &&
-                <p>Choose your meal for { date }</p>
+                <p>Choose your meal for { formatDateSr(date) }</p>
               }
             </div>
             <SideDate

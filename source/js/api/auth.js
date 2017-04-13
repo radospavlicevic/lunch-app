@@ -29,6 +29,10 @@ export function firebaseUpdateUserPassword(user, newPassword) {
   return user.updatePassword(newPassword);
 }
 
+export function getGoogleAuthProvider() {
+  return new firebaseAuth.GoogleAuthProvider();
+}
+
 // removes user from firebase auth db
 export function deleteUserFromAuthDB(user, admin) {
   firebaseAuth().signInWithEmailAndPassword(user.email, user.password)

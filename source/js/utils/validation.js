@@ -8,7 +8,7 @@ function checkUsername(username) {
 
 function checkEmail(email) {
   let result = '';
-  const emailRegex = /^[a-z0-9](\.?[a-z0-9]){3,}@work.co/;
+  const emailRegex = /^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@work.co/;
   if (!email) {
     result += 'Email field is required. ';
   }

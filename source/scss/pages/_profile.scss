@@ -1,9 +1,21 @@
 .Profile {
   position: relative;
-  top: 114px;
+  top: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.Profile-contentWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+
+  width: 50%;
+  @include md-and-lower {
+    width: 100%;
+  }
 }
 
 .Profile-form {
@@ -11,11 +23,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
-  width: 50%;
-  @include md-and-lower {
-    width: 100%;
-  }
 
   h1 {
     width: 100%;
@@ -36,9 +43,21 @@
 }
 
 .Profile-errorMessage {
-  color: #f44336;
+  color: $error-color;
   padding: 20px 0;
   height: 20px;
+}
+
+.Profile-GoogleErrorMessage {
+  color: $error-color;
+  padding: 20px 0;
+  align-self: center;
+}
+
+.Profile-GoogleInfoMessage {
+  color: $primary;
+  padding: 20px 0;
+  align-self: center;
 }
 
 .Profile-form-success {
@@ -52,4 +71,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.Profile-GoogleAccountButton {
+  margin-top: 50px;
+  align-self: center;
+
+  img {
+    height: 100%;
+    border-right: 1px solid #fff;
+    padding: 8px 10px 8px 5px;
+    margin-top: -1px;
+    margin-right: 5px !important;
+  }
 }

@@ -92,3 +92,9 @@ export function login(user) {
       .catch(error => dispatch(loginError(error)));
   };
 }
+
+export function googleLogin(user) {
+  return function (dispatch) {
+    dispatch(getUser(user.uid));
+  };
+}
