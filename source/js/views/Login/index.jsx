@@ -61,6 +61,7 @@ export default class Login extends Component {
 
     firebaseAuth().signInWithPopup(googleAuthProvider).then((result) => {
       if (!result.user.email.endsWith('work.co')) {
+        result.user.delete();
         firebaseAuth().signOut();
         this.setState({
           googleAuthErrors: 'Available only for work.co domen. ',
