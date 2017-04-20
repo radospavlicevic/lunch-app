@@ -7,7 +7,6 @@ import { redirectTo } from 'utils/routing';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import md5 from 'md5';
-import googleIcon from '../../../assets/img/google-plus.png';
 import { routeCodes } from '../../routes';
 
 @connect(state => ({
@@ -120,15 +119,6 @@ export default class Login extends Component {
           <div className='errorContainer'>
             { this.renderLoginErrors() }
           </div>
-          <RaisedButton
-            className='Login-GoogleAuthButton'
-            fullWidth={ true }
-            primary={ true }
-            onClick={ this.handleGoogleSignInClick }
-            label='Google sign in'
-            icon={ <img alt='Google plus icon' src={ googleIcon } /> }
-          />
-          { this.state.googleAuthErrors && <span className='Message-LoginError'>{ this.state.googleAuthErrors }</span> }
         </div>
       </div>
     );
