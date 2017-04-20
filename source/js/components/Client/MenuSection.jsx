@@ -32,6 +32,12 @@ export default class MenuSection extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.dishes !== this.props.dishes) {
+      this.selectProperTab();
+    }
+  }
+
   setTabBasedState(selectedTab, visibleDishes, init) {
     if (init) {
       this.state = {

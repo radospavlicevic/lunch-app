@@ -133,6 +133,7 @@ export default class Order extends Component {
 
   renderMenuSections(selectedDate) {
     const { menus, categories, orders } = this.props;
+
     return Object.keys(categories).map((key, index) => {
       return (
         <MenuSection
@@ -218,6 +219,7 @@ export default class Order extends Component {
 
   render() {
     const { selectedDate } = this.props;
+
     return (
       <div className='Order'>
         { this.renderMyOrderSide(selectedDate) }
