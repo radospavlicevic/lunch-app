@@ -20,35 +20,44 @@ export default class MenuSection extends Component {
   }
 
   componentWillMount() {
-    const { dishes } = this.props;
     this.handleTabClick = this.handleTabClick.bind(this);
+    this.reinitState();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.dishes !== nextProps.dishes) {
+      this.reinitState(nextProps.dishes, true);
+    }
+  }
+
+  setTabBasedState(selectedTab, visibleDishes, update) {
+    if (update) {
+      this.setState({
+        selectedTab,
+        dishes: this.filterMainDishes(selectedTab, visibleDishes),
+      });
+    } else {
+
+  reinitState(nextDishes = null, update = false) {
+    const dishes = nextDishes || this.props.dishes;
     if (this.isMainDish()) {
-      this.selectProperTab();
+      this.selectProperTab(dishes, update);
+    } else {
+      this.initNoMainDishState(dishes, update);
+    }
+  }
+
+  initNoMainDishState(dishes, update) {
+    if (update) {
+      this.setState({
+        selectedTab: 'none',
+        dishes,
+      });
     } else {
       this.state = {
         selectedTab: 'none',
         dishes,
       };
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.dishes !== this.props.dishes) {
-      this.selectProperTab();
-    }
-  }
-
-  setTabBasedState(selectedTab, visibleDishes, init) {
-    if (init) {
-      this.state = {
-        selectedTab,
-        dishes: this.filterMainDishes(selectedTab, visibleDishes),
-      };
-    } else {
-      this.setState({
-        selectedTab,
-        dishes: this.filterMainDishes(selectedTab, visibleDishes),
-      });
     }
   }
 
@@ -60,17 +69,15 @@ export default class MenuSection extends Component {
     return true;
   }
 
-  selectProperTab(nextDishes, init = false) {
-    const { dishes } = this.props;
-    const actualDishes = nextDishes || dishes;
+  selectProperTab(actualDishes, update = false) {
     if (!this.hasDishesSelected()) {
-      this.setTabBasedState('main', actualDishes, init);
+      this.setTabBasedState('main', actualDishes, update);
       return;
     }
     let isStandard = false;
     isStandard = this.isMainDishTypeStandard(actualDishes);
     const activeTab = isStandard ? 'standard' : 'main';
-    this.setTabBasedState(activeTab, actualDishes, init);
+    this.setTabBasedState(activeTab, actualDishes, update);
   }
 
   isMainDishTypeStandard(mainDishes) {

@@ -38,6 +38,14 @@ Table {
   }
 }
 
+.TableCell-select {
+  display: block !important;
+
+  hr {
+    display: none;
+  }
+}
+
 .Export-table {
   table-layout: fixed;
   margin-bottom: 50px;

@@ -2,20 +2,17 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addOrUpdateUser, deleteUser } from 'actions/users';
 import { db } from 'utils/firebase_config';
-import Register from 'components/Admin/Register';
 import UserOverview from 'components/Admin/UserOverview';
 import AdminMenu from 'components/Admin/AdminMenu';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
 @connect(state => ({
-  loggedInUser: state.login.get('loggedInUser'),
   users: state.users.get('users'),
 }))
 export default class Users extends Component {
 
   static propTypes = {
-    loggedInUser: PropTypes.object,
     users: PropTypes.object,
     dispatch: PropTypes.func,
   }
@@ -41,13 +38,13 @@ export default class Users extends Component {
   }
 
   render() {
-    const { loggedInUser, users } = this.props;
+    const { users } = this.props;
     return (
       <div className='Admin-wrapper'>
         <AdminMenu />
         <div className='Users'>
-          <Register loggedInUser={ loggedInUser } />
-          <UserOverview users={ users } admin={ loggedInUser } />
+          <h2>Users</h2>
+          <UserOverview users={ users } />
         </div>
       </div>
     );

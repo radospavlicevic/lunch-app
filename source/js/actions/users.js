@@ -2,6 +2,8 @@ export const ADD_OR_UPDATE_USER = 'ADD_OR_UPDATE_USER';
 export const DELETE_USER = 'DELETE_USER';
 export const UPDATE_USER = 'UPDATE_USER';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const CHANGE_USERNAME = 'CHANGE_USERNAME';
+export const CHANGE_ROLE = 'CHANGE_ROLE';
 export const PREPARE_USER_UPDATE = 'PREPARE_USER_UPDATE';
 export const CANCEL_USER_UPDATE = 'CANCEL_USER_UPDATE';
 
@@ -25,6 +27,22 @@ export function changePassword(uid, newPassword) {
     type: CHANGE_PASSWORD,
     uid,
     newPassword,
+  };
+}
+
+export function changeUsername(uid, newUsername) {
+  return {
+    type: CHANGE_USERNAME,
+    uid,
+    newUsername,
+  };
+}
+
+export function changeRole(uid, newRole) {
+  return {
+    type: CHANGE_ROLE,
+    uid,
+    newRole,
   };
 }
 

@@ -17,6 +17,7 @@ import next from '../../../assets/img/next.png';
 
 @CheckAdminRole
 @connect(state => ({
+  loggedInUser: state.login.get('loggedInUser'),
   menus: state.menus.get('menus'),
   categories: state.meals.get('categories'),
   standardDishes: state.meals.get('standardDishes'),
@@ -25,6 +26,7 @@ import next from '../../../assets/img/next.png';
 }))
 export default class Export extends Component {
   static propTypes = {
+    loggedInUser: PropTypes.object,
     menus: PropTypes.object,
     standardDishes: PropTypes.object,
     categories: PropTypes.object,
@@ -52,7 +54,7 @@ export default class Export extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    const { orders, menus } = this.props;
+    const { loggedInUser, orders, menus } = this.props;
     const { weekDates } = this.state;
     if (nextProps.orders !== orders || nextProps.menus !== menus) {
       this.setState({
@@ -60,13 +62,17 @@ export default class Export extends Component {
       });
     }
 
+    if (!loggedInUser && nextProps.loggedInUser) {
+      this.setObserversForChoosenWeek();
+    }
+
     if (nextState.weekDates !== weekDates) {
-      this.setObserversForChoosenWeek(nextState.weekDates, true);
+      this.setObserversForChoosenWeek(nextState.weekDates);
     }
   }
 
   setupFirebaseObservers() {
-    const { dispatch } = this.props;
+    const { loggedInUser, dispatch } = this.props;
 
     db.ref('users').on('child_added', newUser => {
       dispatch(addOrUpdateUser(newUser.key, newUser.val()));
@@ -80,17 +86,19 @@ export default class Export extends Component {
       dispatch(addOrUpdateDish(newDish.key, newDish.val()));
     });
 
-    this.setObserversForChoosenWeek();
+    if (loggedInUser) {
+      this.setObserversForChoosenWeek();
+    }
 
     // db.ref(`orders/${ reportDate }`).on('child_removed', order => {
     //   dispatch(cancelOrder(reportDate, order.key));
     // });
   }
 
-  setObserversForChoosenWeek(week = null, update = false) {
+  setObserversForChoosenWeek(week = null) {
     const weekDates = week || this.state.weekDates;
     for (let i = 0; i < weekDates.length; i++) {
-      this.setObserverFor(weekDates[i], i, update);
+      this.setObserversFor(weekDates[i], i);
     }
   }
 
@@ -104,7 +112,7 @@ export default class Export extends Component {
     return weekDates;
   }
 
-  setObserverFor(day, index, update) {
+  setObserversFor(day, index) {
     const { dispatch } = this.props;
     db.ref(`menus/${ day }`).on('child_added', newMenuDish => {
       dispatch(addDishInMenu(day, newMenuDish.key, newMenuDish.val()));

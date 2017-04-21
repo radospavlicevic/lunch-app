@@ -4,6 +4,8 @@ import {
   ADD_OR_UPDATE_USER,
   DELETE_USER,
   CHANGE_PASSWORD,
+  CHANGE_USERNAME,
+  CHANGE_ROLE,
   PREPARE_USER_UPDATE,
   CANCEL_USER_UPDATE,
 } from 'actions/users';
@@ -41,6 +43,26 @@ const actionsMap = {
     }));
   },
 
+  [CHANGE_USERNAME]: (state, action) => {
+    const users = { ...state.get('users') };
+    if (users[action.uid]) {
+      users[action.uid].username = action.newUsername;
+    }
+    return state.merge(Map({
+      users,
+    }));
+  },
+
+  [CHANGE_ROLE]: (state, action) => {
+    const users = { ...state.get('users') };
+    if (users[action.uid]) {
+      users[action.uid].role = action.newRole;
+    }
+    return state.merge(Map({
+      users,
+    }));
+  },
+
   [PREPARE_USER_UPDATE]: (state, action) => {
     return state.merge(Map({
       userForUpdate: {
@@ -55,7 +77,6 @@ const actionsMap = {
       userForUpdate: null,
     }));
   },
-
 };
 
 export default function reducer(state = initialState, action = {}) {

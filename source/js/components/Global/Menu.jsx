@@ -1,4 +1,3 @@
-
 import React, { Component, PropTypes } from 'react';
 import { IndexLink, Link } from 'react-router';
 import AppBar from 'material-ui/AppBar';
@@ -9,6 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { connect } from 'react-redux';
 import { roles } from 'utils/globals';
+import { redirectTo } from 'utils/routing';
 import ComposedComponent from 'decorators/AppBreakpointsDecorator';
 import { routeCodes } from '../../routes';
 import { userSignedIn, firebaseLogout } from '../../api/auth';
@@ -30,16 +30,25 @@ export default class Menu extends Component {
     this.state = { open: false };
 
     this.handleLogout = this.handleLogout.bind(this);
-    this.renderMenu = this.renderMenu.bind(this);
-    this.toggleNavigation = this.toggleNavigation.bind(this);
+    this.handleTitleClick = this.handleTitleClick.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
   }
 
   handleLogout() {
     firebaseLogout();
   }
 
+  handleTitleClick() {
+    redirectTo(routeCodes.HOME);
+  }
+
   handleToggle = () => this.setState({ open: !this.state.open });
   handleClose = () => this.setState({ open: false });
+
+  adminLoggedIn() {
+    const { loggedInUser } = this.props;
+    return loggedInUser && loggedInUser.role === roles.ADMIN;
+  }
 
   toggleNavigation() {
     const { loggedInUser } = this.props;
@@ -71,8 +80,7 @@ export default class Menu extends Component {
   }
 
   renderAdminNavigationMenu() {
-    const { loggedInUser } = this.props;
-    if (loggedInUser && loggedInUser.role === roles.ADMIN) {
+    if (this.adminLoggedIn()) {
       return (
         <div>
           <Link className='Menu-link' to={ routeCodes.MENUS } onTouchTap={ this.handleClose }><MenuItem>Menus</MenuItem></Link>
@@ -90,8 +98,7 @@ export default class Menu extends Component {
   }
 
   renderAdminMenuItem() {
-    const { loggedInUser } = this.props;
-    if (loggedInUser && loggedInUser.role === roles.ADMIN) {
+    if (this.adminLoggedIn()) {
       return <IndexLink className='Menu-button' activeClassName='Menu-button--active' to={ routeCodes.MENUS }><FlatButton label='Admin' /></IndexLink>;
     }
     return '';
@@ -136,6 +143,7 @@ export default class Menu extends Component {
         style={ { position: 'fixed' } }
         showMenuIconButton={ breakpoint === 'sm' }
         title='Yummy Yumzor'
+        onTitleTouchTap={ this.handleTitleClick }
         onLeftIconButtonTouchTap={ this.handleToggle }
       >
         { breakpoint === 'sm' ? this.toggleNavigation() : this.renderMenu() }

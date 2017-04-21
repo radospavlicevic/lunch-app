@@ -5,14 +5,13 @@ import UserItem from './UserItem';
 
 export default class UserOverview extends Component {
   static propTypes = {
-    admin: PropTypes.object,
     users: PropTypes.object,
   }
 
   renderUsers() {
-    const { admin, users } = this.props;
+    const { users } = this.props;
     return users && Object.keys(users).map((key, index) => {
-      return <UserItem key={ index } admin={ admin } user={ { uid: key, data: users[key] } } />;
+      return <UserItem key={ index } user={ { uid: key, data: users[key] } } />;
     });
   }
 
@@ -30,7 +29,6 @@ export default class UserOverview extends Component {
               <TableHeaderColumn>Username</TableHeaderColumn>
               <TableHeaderColumn>Email</TableHeaderColumn>
               <TableHeaderColumn style={ { width: '15%' } }>Role</TableHeaderColumn>
-              <TableHeaderColumn style={ { width: '15%' } } />
               <TableHeaderColumn style={ { width: '15%' } } />
             </TableRow>
           </TableHeader>
