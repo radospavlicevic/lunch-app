@@ -37,6 +37,12 @@ export default class MenuSection extends Component {
         dishes: this.filterMainDishes(selectedTab, visibleDishes),
       });
     } else {
+      this.state = {
+        selectedTab,
+        dishes: this.filterMainDishes(selectedTab, visibleDishes),
+      };
+    }
+  }
 
   reinitState(nextDishes = null, update = false) {
     const dishes = nextDishes || this.props.dishes;
