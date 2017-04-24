@@ -25,8 +25,8 @@ export default class MenuSection extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.dishes !== nextProps.dishes) {
-      this.reinitState(nextProps.dishes, true);
+    if (this.props.dishes !== nextProps.dishes || this.props.orders !== nextProps.orders) {
+      this.reinitState(nextProps.dishes, true, nextProps.orders);
     }
   }
 
@@ -44,10 +44,10 @@ export default class MenuSection extends Component {
     }
   }
 
-  reinitState(nextDishes = null, update = false) {
+  reinitState(nextDishes, update = false, nextOrders) {
     const dishes = nextDishes || this.props.dishes;
     if (this.isMainDish()) {
-      this.selectProperTab(dishes, update);
+      this.selectProperTab(dishes, update, nextOrders);
     } else {
       this.initNoMainDishState(dishes, update);
     }
@@ -75,20 +75,22 @@ export default class MenuSection extends Component {
     return true;
   }
 
-  selectProperTab(actualDishes, update = false) {
+  selectProperTab(actualDishes, update = false, nextOrders) {
     if (!this.hasDishesSelected()) {
       this.setTabBasedState('main', actualDishes, update);
       return;
     }
-    let isStandard = false;
-    isStandard = this.isMainDishTypeStandard(actualDishes);
+    const isStandard = this.isMainDishTypeStandard(actualDishes, nextOrders);
     const activeTab = isStandard ? 'standard' : 'main';
     this.setTabBasedState(activeTab, actualDishes, update);
   }
 
-  isMainDishTypeStandard(mainDishes) {
-    const { orders, selectedDate } = this.props;
-    const dishGUID = orders[selectedDate][userSignedIn().uid].meal.main_dish;
+  isMainDishTypeStandard(mainDishes, nextOrders) {
+    const { selectedDate } = this.props;
+    const orders = nextOrders || this.props.orders;
+    const dishGUID = orders[selectedDate][userSignedIn().uid]
+      && orders[selectedDate][userSignedIn().uid].meal
+      && orders[selectedDate][userSignedIn().uid].meal.main_dish;
     return (mainDishes[dishGUID] ? mainDishes[dishGUID].standard : false);
   }
 
@@ -153,7 +155,7 @@ export default class MenuSection extends Component {
     const { category, selectedDate, orders } = this.props;
     const { dishes } = this.state;
     return (
-      <div className={ this.noDishes() ? 'u-invisible' : 'MenuSection' } >
+      <div className={ this.noDishes() ? 'u-invisible' : 'MenuSection' }>
         <p className='MenuSection-category'>{ category.name }</p>
         { this.isMainDish() && this.renderTabs() }
         <Grid

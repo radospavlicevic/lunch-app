@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-// import { connect } from 'react-redux';
 import { userSignedIn } from 'api/auth';
 import { saveNoteInOrder, deleteUserOrder } from 'api/orders';
 import MenuSection from 'components/Client/MenuSection';
@@ -7,7 +6,6 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import Dialog from 'material-ui/Dialog';
 
-// @connect()
 export default class Order extends Component {
   static propTypes = {
     categories: PropTypes.object,
@@ -15,7 +13,6 @@ export default class Order extends Component {
     selectedDate: PropTypes.string,
     standardDishes: PropTypes.object,
     orders: PropTypes.object,
-    // dispatch: PropTypes.func,
   }
 
   constructor() {

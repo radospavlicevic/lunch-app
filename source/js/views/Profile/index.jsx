@@ -16,15 +16,15 @@ export default class Profile extends Component {
     dispatch: PropTypes.func,
   }
 
-  constructor() {
+  constructor(props) {
     super();
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
-      username: '',
-      success: false,
+      username: (props.loggedInUser && props.loggedInUser.username) || '',
+      error: '',
     };
   }
 
@@ -35,11 +35,16 @@ export default class Profile extends Component {
   componentWillReceiveProps(nextProps) {
     const { loggedInUser, dispatch } = this.props;
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
+      if (nextProps.loggedInUser.username) {
+        this.setState({
+          username: nextProps.loggedInUser.username,
+        });
+      }
       if (loggedInUser && nextProps.loggedInUser.username !== loggedInUser.username) {
         dispatch(changeUsername(userSignedIn(), nextProps.loggedInUser.username));
         this.setState({
-          success: true,
-          username: '',
+          username: nextProps.loggedInUser.username,
+          error: '',
         });
       }
     }
@@ -49,8 +54,14 @@ export default class Profile extends Component {
     event.preventDefault();
     const { dispatch, loggedInUser } = this.props;
     const { username } = this.state;
-    updateUsername(userSignedIn().uid, username);
-    dispatch(updateLoggedInUser({ ...loggedInUser, username }));
+    if (username) {
+      updateUsername(userSignedIn().uid, username);
+      dispatch(updateLoggedInUser({ ...loggedInUser, username }));
+    } else {
+      this.setState({
+        error: 'Username cannot be empty. ',
+      });
+    }
   }
 
   handleInputChange(event) {
@@ -60,7 +71,7 @@ export default class Profile extends Component {
   }
 
   render() {
-    const { username, success } = this.state;
+    const { username, error } = this.state;
     return (
       <div className='Profile'>
         <div className='Profile-contentWrapper'>
@@ -77,7 +88,7 @@ export default class Profile extends Component {
               <div className='Profile-form-submitButton'>
                 <RaisedButton label={ 'Submit' } type='submit' secondary={ true } style={ { maxWidth: 500 } } />
               </div>
-              { success && <span className='Profile-form-success'>Username changed successfully.</span> }
+              { error && <span className='Profile-form-errorMsg'>{ error }</span> }
             </div>
           </form>
         </div>
