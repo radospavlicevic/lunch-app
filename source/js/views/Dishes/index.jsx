@@ -7,13 +7,14 @@ import DishOverview from 'components/Admin/DishOverview';
 import { addOrUpdateDish, deleteDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals.js';
 import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
+import { getDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
 @connect(state => ({
   caterings: state.meals.get('caterings'),
   categories: state.meals.get('categories'),
-  dishes: state.meals.get('dishes'),
+  dishes: getDishesSearchSelector(state),
   menus: state.menus.get('menus'),
 }))
 export default class Dishes extends Component {

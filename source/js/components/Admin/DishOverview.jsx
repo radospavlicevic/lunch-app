@@ -43,17 +43,6 @@ export default class DishOverview extends Component {
     }
   }
 
-  getTitle(type) {
-    if (type === dishOverviewTypes.SELECTABLE) {
-      return 'Select Dishes';
-    } else if (type === dishOverviewTypes.EDITABLE) {
-      return 'All Dishes';
-    } else if (type === dishOverviewTypes.REMOVABLE) {
-      return 'Selected Dishes';
-    }
-    return '';
-  }
-
   handleCategoryFilterChange(event, index, value) {
     const { dishes } = this.props;
     const nextFilters = {
@@ -146,10 +135,15 @@ export default class DishOverview extends Component {
     return filteredDishes;
   }
 
+  checkDishAltName(dish, searchWord) {
+    return dish.altName && dish.altName.toLowerCase().includes(searchWord.toLowerCase());
+  }
+
   filterBySearchWord(dishes, searchWord) {
     const filteredDishes = {};
     Object.keys(dishes).forEach((key) => {
-      if (dishes[key].name.toLowerCase().includes(searchWord.toLowerCase())) {
+      if (this.checkDishAltName(dishes[key], searchWord)
+        || dishes[key].name.toLowerCase().includes(searchWord.toLowerCase())) {
         filteredDishes[key] = dishes[key];
       }
     });
@@ -357,7 +351,6 @@ export default class DishOverview extends Component {
     const { type } = this.props;
     return (
       <div className='DishOverview'>
-        {/* <p>{ this.getTitle(type) }</p> */}
         <div className='DishOverview-header'>
           { this.renderFilters() }
         </div>

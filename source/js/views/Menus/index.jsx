@@ -11,13 +11,14 @@ import { addOrUpdateMenu } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
 import { addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
 import moment from 'moment';
+import { getNoStandardDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
 @connect(state => ({
   caterings: state.meals.get('caterings'),
   categories: state.meals.get('categories'),
-  dishes: state.meals.get('noStandardDishes'),
+  dishes: getNoStandardDishesSearchSelector(state),
   menus: state.menus.get('menus'),
   selectedDate: state.orders.get('selectedDate'),
 }))
@@ -108,7 +109,7 @@ export default class Menus extends Component {
     return (menus && menus[selectedDay] && menus[selectedDay].locked);
   }
 
-  checkLockedSreen() {
+  checkLockedScreen() {
     if (!this.menuIsLocked()) return '';
     return (
       <div className='u-locked'>
@@ -128,7 +129,7 @@ export default class Menus extends Component {
         onChange={ this.handleTabChange }
       >
         <Tab label='Select dishes' value='select_dishes'>
-          { this.checkLockedSreen() }
+          { this.checkLockedScreen() }
           <DishOverview
             key={ selectedTab }
             type={ dishOverviewTypes.SELECTABLE }
@@ -140,7 +141,7 @@ export default class Menus extends Component {
           />
         </Tab>
         <Tab label='Overview' value='overview'>
-          { this.checkLockedSreen() }
+          { this.checkLockedScreen() }
           <DishOverview
             key={ selectedTab }
             type={ dishOverviewTypes.REMOVABLE }
