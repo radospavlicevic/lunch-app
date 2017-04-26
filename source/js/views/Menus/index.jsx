@@ -7,9 +7,9 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import DatePicker from 'material-ui/DatePicker';
 import DishOverview from 'components/Admin/DishOverview';
 import { dishOverviewTypes, DATE_PATTERN, formatDate } from 'utils/globals';
-import { addDishInMenu, removeDishFromMenu, setMenuLock } from 'actions/menus';
+import { addOrUpdateMenu } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
-import { addOrUpdateDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
+import { addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
 import moment from 'moment';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
@@ -54,22 +54,8 @@ export default class Menus extends Component {
     const { dispatch } = this.props;
     const { selectedDay } = this.state;
 
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
-    });
-
-    db.ref(`menus/${ selectedDay }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDay, newMenuDish.key, newMenuDish.val())
-      );
-    });
-
-    db.ref(`menus/${ selectedDay }`).on('child_removed', exMenuDish => {
-      dispatch(removeDishFromMenu(selectedDay, exMenuDish.key));
-    });
-
-    db.ref(`menus/${ selectedDay }`).on('child_changed', menuLock => {
-      dispatch(setMenuLock(selectedDay, menuLock.val()));
+    db.ref(`menus/${ selectedDay }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
     });
 
     db.ref('caterings').on('child_added', newCatering => {
@@ -84,16 +70,8 @@ export default class Menus extends Component {
   updateFirebaseObservers(date) {
     const { dispatch } = this.props;
 
-    db.ref(`menus/${ date }`).on('child_added', newMenuDish => {
-      dispatch(addDishInMenu(date, newMenuDish.key, newMenuDish.val()));
-    });
-
-    db.ref(`menus/${ date }`).on('child_changed', menuLock => {
-      dispatch(setMenuLock(date, menuLock.val()));
-    });
-
-    db.ref(`menus/${ date }`).on('child_removed', exMenuDish => {
-      dispatch(removeDishFromMenu(date, exMenuDish.key));
+    db.ref(`menus/${ date }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
     });
   }
 
@@ -174,36 +152,6 @@ export default class Menus extends Component {
         </Tab>
       </Tabs>
     );
-  }
-
-  renderTabContent() {
-    const { selectedTab, selectedDay } = this.state;
-    const { caterings, categories, dishes, menus } = this.props;
-    if (selectedTab === 'select_dishes') {
-      return (
-        <DishOverview
-          key={ selectedTab }
-          type={ dishOverviewTypes.SELECTABLE }
-          caterings={ caterings }
-          categories={ categories }
-          dishes={ dishes }
-          menus={ menus }
-          lunchDay={ selectedDay }
-        />
-      );
-    } else if (selectedTab === 'overview') {
-      return (
-        <DishOverview
-          key={ selectedTab }
-          type={ dishOverviewTypes.REMOVABLE }
-          caterings={ caterings }
-          categories={ categories }
-          lunchDay={ selectedDay }
-          dishes={ this.selectedDateDishes() }
-        />
-      );
-    }
-    return '';
   }
 
   renderDateView() {

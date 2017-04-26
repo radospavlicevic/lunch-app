@@ -5,8 +5,8 @@ import ReportDatePicker from 'components/Global/ReportDatePicker';
 import DailyTable from 'components/Admin/DailyTable';
 import { updateOrder, cancelOrder } from 'actions/orders';
 import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
-import { addDishInMenu } from 'actions/menus';
+import { addOrUpdateCategory, addOrUpdateDishes } from 'actions/meals';
+import { addOrUpdateMenu } from 'actions/menus';
 
 @connect(state => ({
   menus: state.menus.get('menus'),
@@ -50,10 +50,8 @@ export default class Report extends Component {
       dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
-    db.ref(`menus/${ reportDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(reportDate, newMenuDish.key, newMenuDish.val())
-      );
+    db.ref(`menus/${ reportDate }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(reportDate, currentMenu.key, currentMenu.val()));
     });
 
     db.ref(`orders/${ reportDate }`).on('child_added', order => {
@@ -64,8 +62,8 @@ export default class Report extends Component {
       dispatch(cancelOrder(reportDate, order.key));
     });
 
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
+    db.ref('dishes').on('value', dishes => {
+      dispatch(addOrUpdateDishes(dishes.val()));
     });
   }
 
@@ -84,10 +82,8 @@ export default class Report extends Component {
   updateFirebaseObservers(reportDate) {
     const { dispatch } = this.props;
 
-    db.ref(`menus/${ reportDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(reportDate, newMenuDish.key, newMenuDish.val())
-      );
+    db.ref(`menus/${ reportDate }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(reportDate, currentMenu.key, currentMenu.val()));
     });
 
     db.ref(`orders/${ reportDate }`).on('child_added', order => {

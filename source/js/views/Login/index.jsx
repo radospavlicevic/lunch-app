@@ -39,12 +39,11 @@ export default class Login extends Component {
 
   handleGoogleSignInClick() {
     const googleAuthProvider = getGoogleAuthProvider();
-
     firebaseAuth().signInWithPopup(googleAuthProvider).then((result) => {
       if (!result.user.email.endsWith('work.co')) {
         result.user.delete();
         this.setState({
-          googleAuthErrors: 'Available only for work.co domen. ',
+          googleAuthErrors: 'Available only for work.co domain. ',
         });
       }
     }).catch(error => {

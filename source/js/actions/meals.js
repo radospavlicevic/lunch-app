@@ -5,6 +5,7 @@ export const CANCEL_CATEGORY_UPDATE = 'CANCEL_CATEGORY_UPDATE';
 export const DELETE_CATEGORY = 'DELETE_CATEGORY';
 export const PREPARE_CATEGORY_UPDATE = 'PREPARE_CATEGORY_UPDATE';
 export const COUNT_CATEGORIES = 'COUNT_CATEGORIES';
+export const ADD_OR_UPDATE_DISHES = 'ADD_OR_UPDATE_DISHES';
 export const ADD_OR_UPDATE_DISH = 'ADD_OR_UPDATE_DISH';
 export const CANCEL_DISH_UPDATE = 'CANCEL_DISH_UPDATE';
 export const DELETE_DISH = 'DELETE_DISH';
@@ -83,6 +84,13 @@ export function countCategories(number) {
   return {
     type: COUNT_CATEGORIES,
     number,
+  };
+}
+
+export function addOrUpdateDishes(data) {
+  return {
+    type: ADD_OR_UPDATE_DISHES,
+    data,
   };
 }
 

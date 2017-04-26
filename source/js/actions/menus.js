@@ -1,20 +1,20 @@
-export const ADD_DISH_IN_MENU = 'ADD_DISH_IN_MENU';
-export const ADD_DISHES_IN_MENU = 'ADD_DISHES_IN_MENU';
+export const ADD_DISH_TO_MENU = 'ADD_DISH_TO_MENU';
+export const ADD_OR_UPDATE_MENU = 'ADD_OR_UPDATE_MENU';
 export const REMOVE_DISH_FROM_MENU = 'REMOVE_DISH_FROM_MENU';
 export const SET_MENU_LOCK = 'SET_MENU_LOCK';
 
-export function addDishInMenu(date, key, data) {
+export function addDishToMenu(date, key, data) {
   return {
-    type: ADD_DISH_IN_MENU,
+    type: ADD_DISH_TO_MENU,
     date,
     key,
     data,
   };
 }
 
-export function addDishesInMenu(date, dishes) {
+export function addOrUpdateMenu(date, dishes) {
   return {
-    type: ADD_DISHES_IN_MENU,
+    type: ADD_OR_UPDATE_MENU,
     date,
     dishes,
   };
@@ -25,14 +25,6 @@ export function removeDishFromMenu(date, key) {
     type: REMOVE_DISH_FROM_MENU,
     date,
     key,
-  };
-}
-
-export function addSelectedDish(key, data) {
-  return {
-    type: ADD_SELECTED_DISH,
-    key,
-    data,
   };
 }
 

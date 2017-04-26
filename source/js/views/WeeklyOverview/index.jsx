@@ -6,8 +6,8 @@ import DailyTable from 'components/Admin/DailyTable';
 import AdminMenu from 'components/Admin/AdminMenu';
 import { updateOrder, cancelOrder } from 'actions/orders';
 import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
-import { addDishInMenu } from 'actions/menus';
+import { addOrUpdateCategory } from 'actions/meals';
+import { addOrUpdateMenu } from 'actions/menus';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
@@ -53,10 +53,8 @@ export default class WeeklyOverview extends Component {
       dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
-    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
-      );
+    db.ref(`menus/${ selectedDate }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
     });
 
     db.ref(`orders/${ selectedDate }`).on('child_added', order => {
@@ -65,10 +63,6 @@ export default class WeeklyOverview extends Component {
 
     db.ref(`orders/${ selectedDate }`).on('child_removed', order => {
       dispatch(cancelOrder(selectedDate, order.key));
-    });
-
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
     });
   }
 
@@ -87,10 +81,8 @@ export default class WeeklyOverview extends Component {
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
 
-    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
-      );
+    db.ref(`menus/${ selectedDate }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
     });
 
     db.ref(`orders/${ selectedDate }`).on('child_added', order => {

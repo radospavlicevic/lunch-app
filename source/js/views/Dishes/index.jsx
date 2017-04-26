@@ -34,10 +34,6 @@ export default class Dishes extends Component {
   setupFirebaseObservers() {
     const { dispatch } = this.props;
 
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
-    });
-
     db.ref('dishes').on('child_changed', updatedDish => {
       dispatch(addOrUpdateDish(updatedDish.key, updatedDish.val()));
       this.cascadeUpdate(updatedDish.key, updatedDish.val());

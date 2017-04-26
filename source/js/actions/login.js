@@ -33,25 +33,19 @@ export function getUser(uid, email) {
   return function (dispatch) {
     dispatch(getUserStart());
     findUserByUID(uid)
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          response.json().then(data => {
-            if (data) {
-              dispatch(getUserSuccess(data));
-            } else {
-              const newUser = {
-                username: '',
-                role: roles.USER,
-                email,
-              };
-              saveOrUpdateUser(uid, newUser);
-              dispatch(getUserSuccess(newUser));
-            }
-          });
+      .then(data => {
+        if (data.val()) {
+          dispatch(getUserSuccess(data.val()));
         } else {
-          dispatch(getUserError('Bad request. '));
+          const newUser = {
+            username: '',
+            role: roles.USER,
+            email,
+          };
+          saveOrUpdateUser(uid, newUser);
+          dispatch(getUserSuccess(newUser));
         }
-      });
+      }).catch(error => dispatch(getUserError(error)));
   };
 }
 
@@ -68,15 +62,3 @@ export function updateLoggedInUser(user) {
   };
 }
 
-// export function login(user) {
-//   return function (dispatch) {
-//     dispatch(loginStart());
-//
-//     firebaseLogin(user)
-//       .then(data => {
-//         dispatch(getUser(data.uid));
-//         dispatch(loginSuccess(data));
-//       })
-//       .catch(error => dispatch(loginError(error)));
-//   };
-// }

@@ -1,8 +1,8 @@
 import { Map } from 'immutable';
 
 import {
-  ADD_DISH_IN_MENU,
-  ADD_DISHES_IN_MENU,
+  ADD_DISH_TO_MENU,
+  ADD_OR_UPDATE_MENU,
   REMOVE_DISH_FROM_MENU,
   SET_MENU_LOCK,
 } from 'actions/menus';
@@ -12,7 +12,7 @@ const initialState = Map({
 });
 
 const actionsMap = {
-  [ADD_DISH_IN_MENU]: (state, action) => {
+  [ADD_DISH_TO_MENU]: (state, action) => {
     const date = Object.assign({}, state.get('menus')[action.date], {
       [action.key]: action.data,
     });
@@ -24,7 +24,7 @@ const actionsMap = {
     }));
   },
 
-  [ADD_DISHES_IN_MENU]: (state, action) => {
+  [ADD_OR_UPDATE_MENU]: (state, action) => {
     const menus = Object.assign({}, state.get('menus'),
       {
         [action.date]: action.dishes,

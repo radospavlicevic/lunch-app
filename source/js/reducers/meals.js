@@ -13,6 +13,7 @@ import {
   DELETE_CATEGORY,
   COUNT_CATEGORIES,
   ADD_OR_UPDATE_DISH,
+  ADD_OR_UPDATE_DISHES,
   PREPARE_DISH_UPDATE,
   DELETE_DISH,
 } from 'actions/meals';
@@ -119,6 +120,24 @@ const actionsMap = {
     const number = action.number;
     return state.merge(Map({
       categoriesNumber: number,
+    }));
+  },
+
+  [ADD_OR_UPDATE_DISHES]: (state, action) => {
+    const dishes = Object.assign({}, action.data);
+    const noStandardDishes = {};
+    const standardDishes = {};
+    Object.keys(dishes).forEach(dishKey => {
+      if (dishes[dishKey].standard) {
+        standardDishes[dishKey] = dishes[dishKey];
+      } else {
+        noStandardDishes[dishKey] = dishes[dishKey];
+      }
+    });
+    return state.merge(Map({
+      dishes,
+      standardDishes,
+      noStandardDishes,
     }));
   },
 

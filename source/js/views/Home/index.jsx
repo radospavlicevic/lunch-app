@@ -5,8 +5,8 @@ import { redirectTo } from 'utils/routing';
 import { isPastDate, formatDateSr } from 'utils/globals';
 import { userSignedIn } from 'api/auth';
 import { updateOrder, setSelectedDate } from 'actions/orders';
-import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
-import { addDishInMenu } from 'actions/menus';
+import { addOrUpdateCategory } from 'actions/meals';
+import { addOrUpdateMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import Order from 'components/Client/Order';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -123,18 +123,15 @@ export default class Home extends Component {
   setupFirebaseObservers() {
     const { selectedDate, params, dispatch } = this.props;
     const date = params.date || selectedDate;
+
     db.ref('categories').on('child_added', newCategory => {
       dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
-    db.ref(`menus/${ date }`).on('child_added', newMenuDish => {
+    db.ref(`menus/${ date }`).on('value', newMenuDish => {
       dispatch(
-        addDishInMenu(date, newMenuDish.key, newMenuDish.val())
+        addOrUpdateMenu(newMenuDish.key, newMenuDish.val())
       );
-    });
-
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
     });
 
     if (userSignedIn()) {
@@ -146,10 +143,8 @@ export default class Home extends Component {
 
   updateFirebaseObservers(selectedDate) {
     const { dispatch } = this.props;
-    db.ref(`menus/${ selectedDate }`).on('child_added', newMenuDish => {
-      dispatch(
-        addDishInMenu(selectedDate, newMenuDish.key, newMenuDish.val())
-      );
+    db.ref(`menus/${ selectedDate }`).on('value', newMenuDish => {
+      dispatch(addOrUpdateMenu(newMenuDish.key, newMenuDish.val()));
     });
 
     db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {

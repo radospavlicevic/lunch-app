@@ -3,9 +3,10 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import CircularProgress from 'material-ui/CircularProgress';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
-import { firebaseAuth } from 'utils/firebase_config';
+import { db, firebaseAuth } from 'utils/firebase_config';
 import { publicPages } from 'utils/globals';
 import { getUser, logout } from 'actions/login';
+import { addOrUpdateDishes } from 'actions/meals';
 import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
@@ -15,7 +16,6 @@ injectTapEventPlugin();
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
   getUserLoading: state.login.get('getUserLoading'),
-  adminMenuVisibile: state.app.get('adminMenuVisibile'),
 }))
 export default class App extends Component {
   static propTypes = {
@@ -42,14 +42,17 @@ export default class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loggedInUser } = this.props;
+    const { loggedInUser, dispatch } = this.props;
     const path = localStorage.getItem('init-path');
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
+      db.ref('dishes').on('value', newDish => {
+        dispatch(addOrUpdateDishes(newDish.val()));
+      });
       if (path) {
         redirectTo(path);
         localStorage.removeItem('init-path');
       } else {
-        redirectTo(nextProps.loggedInUser && nextProps.loggedInUser.username ?
+        redirectTo(nextProps.loggedInUser.username ?
           routeCodes.HOME : routeCodes.PROFILE);
       }
     }

@@ -1,9 +1,7 @@
 import { db } from 'utils/firebase_config';
 
-const API_URL = 'https://lunchapp-caeae.firebaseio.com/';
-
 export function findUserByUID(uid) {
-  return fetch(API_URL.concat(`users/${ uid }.json`));
+  return db.ref(`users/${ uid }`).once('value');
 }
 
 export function saveOrUpdateUser(uid, user) {

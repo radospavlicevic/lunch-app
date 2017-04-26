@@ -4,15 +4,20 @@ import { userSignedIn } from 'api/auth';
 import { updateUsername } from 'api/users';
 import { updateLoggedInUser } from 'actions/login';
 import { changeUsername } from 'actions/users';
+import { addOrUpdateMenu } from 'actions/menus';
+import { db } from 'utils/firebase_config';
+import { roles } from 'utils/globals';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
+  selectedDate: state.orders.get('selectedDate'),
 }))
 export default class Profile extends Component {
   static propTypes = {
     loggedInUser: PropTypes.object,
+    selectedDate: PropTypes.string,
     dispatch: PropTypes.func,
   }
 
@@ -33,8 +38,14 @@ export default class Profile extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loggedInUser, dispatch } = this.props;
+    const { loggedInUser, selectedDate, dispatch } = this.props;
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
+      if (nextProps.loggedInUser.role === roles.ADMIN) {
+        const date = selectedDate || nextProps.selectedDate;
+        db.ref(`menus/${ date }`).on('value', currentMenu => {
+          dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
+        });
+      }
       if (nextProps.loggedInUser.username) {
         this.setState({
           username: nextProps.loggedInUser.username,

@@ -7,8 +7,8 @@ import AdminMenu from 'components/Admin/AdminMenu';
 import RaisedButton from 'material-ui/RaisedButton';
 import CircularProgress from 'material-ui/CircularProgress';
 import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory, addOrUpdateDish } from 'actions/meals';
-import { addDishInMenu } from 'actions/menus';
+import { addOrUpdateCategory } from 'actions/meals';
+import { addOrUpdateMenu } from 'actions/menus';
 import { updateOrder } from 'actions/orders';
 import moment from 'moment';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
@@ -82,17 +82,9 @@ export default class Export extends Component {
       dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
     });
 
-    db.ref('dishes').on('child_added', newDish => {
-      dispatch(addOrUpdateDish(newDish.key, newDish.val()));
-    });
-
     if (loggedInUser) {
       this.setObserversForChoosenWeek();
     }
-
-    // db.ref(`orders/${ reportDate }`).on('child_removed', order => {
-    //   dispatch(cancelOrder(reportDate, order.key));
-    // });
   }
 
   setObserversForChoosenWeek(week = null) {
@@ -114,8 +106,8 @@ export default class Export extends Component {
 
   setObserversFor(day, index) {
     const { dispatch } = this.props;
-    db.ref(`menus/${ day }`).on('child_added', newMenuDish => {
-      dispatch(addDishInMenu(day, newMenuDish.key, newMenuDish.val()));
+    db.ref(`menus/${ day }`).on('value', currentMenu => {
+      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
     });
 
     db.ref(`orders/${ day }`).on('child_added', order => {
