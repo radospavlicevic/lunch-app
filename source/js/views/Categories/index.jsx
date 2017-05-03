@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { removeDish } from 'api/meals.js';
-import { addOrUpdateCategory, deleteCategory, countCategories } from 'actions/meals.js';
-import { db } from 'utils/firebase_config';
+import { loadCategories, deleteCategory, countCategories } from 'actions/meals.js';
 import CategoryForm from 'components/Admin/CategoryForm';
 import CategoryOverview from 'components/Admin/CategoryOverview';
 import AdminMenu from 'components/Admin/AdminMenu';
+import { observableModule } from 'components/Observable/observableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
@@ -18,7 +18,6 @@ export default class Categories extends Component {
   static propTypes = {
     categories: PropTypes.object,
     dishes: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   componentWillMount() {
@@ -27,23 +26,8 @@ export default class Categories extends Component {
   }
 
   setupFirebaseObservers() {
-    const { dispatch } = this.props;
-    db.ref('categories').on('value', snapshot => {
-      dispatch(countCategories(snapshot.numChildren()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref('categories').on('child_changed', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref('categories').on('child_removed', removedCategory => {
-      dispatch(deleteCategory(removedCategory.key));
-      this.cascadeDelete(removedCategory.key);
-    });
+    observableModule.addValueCounterObserver('categories', loadCategories, countCategories);
+    observableModule.addCascadingObserver('categories', 'child_removed', deleteCategory, this.cascadeDelete.bind(this));
   }
 
   cascadeDelete(categoryKey) {

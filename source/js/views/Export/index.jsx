@@ -1,16 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import { DATE_PATTERN, formatDateSr, weekDays } from 'utils/globals';
 import { tablesToExcel } from 'utils/excel_export';
 import AdminMenu from 'components/Admin/AdminMenu';
 import RaisedButton from 'material-ui/RaisedButton';
-import CircularProgress from 'material-ui/CircularProgress';
-import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory } from 'actions/meals';
+import { loadUsers } from 'actions/users';
+import { loadCategories } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
-import { updateOrder } from 'actions/orders';
+import { loadOrders } from 'actions/orders';
 import moment from 'moment';
+import { observableModule } from 'components/Observable/observableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 import back from '../../../assets/img/back.png';
 import next from '../../../assets/img/next.png';
@@ -32,7 +31,6 @@ export default class Export extends Component {
     categories: PropTypes.object,
     orders: PropTypes.object,
     users: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   constructor() {
@@ -41,10 +39,9 @@ export default class Export extends Component {
     this.handleExportToExcelClick = this.handleExportToExcelClick.bind(this);
     this.tableIDs = ['mon', 'tue', 'wed', 'thu', 'fri'];
     this.state = {
-      weekOffset: -1,
+      weekOffset: 0,
       weekDates: this.getChoosenWeek(),
       tablesData: [],
-      orderCounts: [],
     };
   }
 
@@ -58,7 +55,7 @@ export default class Export extends Component {
     const { weekDates } = this.state;
     if (nextProps.orders !== orders || nextProps.menus !== menus) {
       this.setState({
-        tablesData: this.getTablesData(),
+        tablesData: this.getTablesData(nextProps.orders),
       });
     }
 
@@ -72,15 +69,10 @@ export default class Export extends Component {
   }
 
   setupFirebaseObservers() {
-    const { loggedInUser, dispatch } = this.props;
+    const { loggedInUser } = this.props;
 
-    db.ref('users').on('child_added', newUser => {
-      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
+    observableModule.addValueObserver('users', loadUsers);
+    observableModule.addValueObserver('categories', loadCategories);
 
     if (loggedInUser) {
       this.setObserversForChoosenWeek();
@@ -90,11 +82,11 @@ export default class Export extends Component {
   setObserversForChoosenWeek(week = null) {
     const weekDates = week || this.state.weekDates;
     for (let i = 0; i < weekDates.length; i++) {
-      this.setObserversFor(weekDates[i], i);
+      this.setObserversFor(weekDates[i]);
     }
   }
 
-  getChoosenWeek(offset = -1) {
+  getChoosenWeek(offset = 0) {
     const weekDates = [];
     const startWeekDay = moment().add(offset, 'weeks').startOf('isoWeek');
     weekDates.push(startWeekDay.format(DATE_PATTERN));
@@ -104,38 +96,25 @@ export default class Export extends Component {
     return weekDates;
   }
 
-  setObserversFor(day, index) {
-    const { dispatch } = this.props;
-    db.ref(`menus/${ day }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref(`orders/${ day }`).on('child_added', order => {
-      dispatch(updateOrder(day, order.key, order.val()));
-    });
-
-    db.ref(`orders/${ day }`).on('value', snapshot => {
-      const counts = this.state.orderCounts;
-      counts[index] = snapshot.numChildren();
-      this.setState({
-        orderCounts: counts,
-      });
-    });
+  setObserversFor(day) {
+    observableModule.addValueObserver(`menus/${ day }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ day }`, loadOrders, 2);
   }
 
-  getTablesData(weekDates = null) {
+  getTablesData(nextOrders, weekDates = null) {
     const data = [];
     const week = weekDates || this.state.weekDates;
     for (let i = 0; i < week.length; i++) {
-      data.push(this.tableOrders(week[i]));
+      data.push(this.tableOrders(nextOrders, week[i]));
     }
     return data;
   }
 
-  getUserOrderedDishes(uid, date) {
-    const { orders, menus, standardDishes } = this.props;
-    if (!orders[date][uid]) return null;
-    if (!orders[date][uid].meal) return null;
+  getUserOrderedDishes(uid, date, orders) {
+    const { menus, standardDishes } = this.props;
+    if (!orders[date]) return null; // no orders for that date
+    if (!orders[date][uid]) return null; // no orders for user with specified uid
+    if (!orders[date][uid].meal) return null; // user doesn't select any dish
     const dishes = {};
     const { meal } = orders[date][uid];
     Object.keys(meal).forEach(key => {
@@ -169,13 +148,18 @@ export default class Export extends Component {
   }
 
   handleExportToExcelClick() {
-    tablesToExcel(this.tableIDs, weekDays, 'WorkAndCoExcel.xls', 'Yummy Yumzor');
+    const { weekDates } = this.state;
+    tablesToExcel(
+      this.tableIDs,
+      weekDays,
+      `Work&Co${ formatDateSr(weekDates[0]) }-${ formatDateSr(weekDates[4]) }.xls`,
+      'Yummy Yumzor');
   }
 
   handleSliderButtonClick(event, offset) {
     const weekOffset = this.state.weekOffset + offset;
     const weekDates = this.getChoosenWeek(weekOffset);
-    const tablesData = this.getTablesData(weekDates);
+    const tablesData = this.getTablesData(this.props.orders, weekDates);
 
     this.setState({
       weekOffset,
@@ -184,8 +168,8 @@ export default class Export extends Component {
     });
   }
 
-  tableOrders(date) {
-    const { orders, users } = this.props;
+  tableOrders(orders, date) {
+    const { users } = this.props;
     if (!orders[date]) return null;
     const orderData = [];
     Object.keys(users).forEach((uid, index) => {
@@ -193,24 +177,12 @@ export default class Export extends Component {
         orderNumber: index + 1,
         name: users[uid].username,
         canceled: !orders[date][uid],
-        dishes: this.getUserOrderedDishes(uid, date),
+        dishes: this.getUserOrderedDishes(uid, date, orders),
         note: orders[date][uid] && orders[date][uid].note,
         standardDish: '',
       });
     });
     return orderData;
-  }
-
-  ordersLoading() {
-    const { orders } = this.props;
-    const { weekDates, orderCounts } = this.state;
-    for (let i = 0; i < weekDates.length; i++) {
-      if (orderCounts[i] === undefined) return true;
-      if (!orders[weekDates[i]] && orderCounts[i] !== 0) return true;
-      if (orders[weekDates[i]] &&
-        Object.keys(orders[weekDates[i]]).length !== orderCounts[i]) return true;
-    }
-    return false;
   }
 
   renderMealColumns(dishes) {
@@ -300,24 +272,16 @@ export default class Export extends Component {
   }
 
   render() {
-    const loading = this.ordersLoading();
     return (
       <div className='Admin-wrapper'>
         <div className='Export'>
           <AdminMenu />
-          { loading &&
-            <div className='Export-loadingWrapper'>
-              <CircularProgress className='Export-loading' size={ 80 } thickness={ 5 } />
-            </div>
-          }
           { this.renderWeekSlider() }
           { this.renderTables() }
-          { !loading &&
-            <RaisedButton
-              label='Export to Excel'
-              onClick={ this.handleExportToExcelClick }
-            />
-          }
+          <RaisedButton
+            label='Export to Excel'
+            onClick={ this.handleExportToExcelClick }
+          />
         </div>
       </div>
     );

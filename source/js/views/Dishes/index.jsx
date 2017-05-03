@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import AdminMenu from 'components/Admin/AdminMenu';
 import DishForm from 'components/Admin/DishForm';
 import DishOverview from 'components/Admin/DishOverview';
-import { addOrUpdateDish, deleteDish, addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals.js';
+import { loadDishes, addOrUpdateDish, deleteDish, loadCaterings, loadCategories } from 'actions/meals.js';
 import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
+import { observableModule } from 'components/Observable/observableModule';
 import { getDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
@@ -24,7 +24,6 @@ export default class Dishes extends Component {
     categories: PropTypes.object,
     dishes: PropTypes.object,
     menus: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   componentWillMount() {
@@ -33,25 +32,11 @@ export default class Dishes extends Component {
   }
 
   setupFirebaseObservers() {
-    const { dispatch } = this.props;
-
-    db.ref('dishes').on('child_changed', updatedDish => {
-      dispatch(addOrUpdateDish(updatedDish.key, updatedDish.val()));
-      this.cascadeUpdate(updatedDish.key, updatedDish.val());
-    });
-
-    db.ref('dishes').on('child_removed', removedDish => {
-      dispatch(deleteDish(removedDish.key));
-      this.cascadeDelete(removedDish.key);
-    });
-
-    db.ref('caterings').on('child_added', newCatering => {
-      dispatch(addOrUpdateCatering(newCatering.key, newCatering.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
+    observableModule.addCascadingObserver('dishes', 'child_changed', addOrUpdateDish, this.cascadeUpdate.bind(this));
+    observableModule.addCascadingObserver('dishes', 'child_removed', deleteDish, this.cascadeDelete.bind(this));
+    observableModule.addValueObserver('dishes', loadDishes);
+    observableModule.addValueObserver('caterings', loadCaterings);
+    observableModule.addValueObserver('categories', loadCategories);
   }
 
   cascadeUpdate(dishKey, dishData) {

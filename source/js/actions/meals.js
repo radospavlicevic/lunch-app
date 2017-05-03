@@ -5,7 +5,9 @@ export const CANCEL_CATEGORY_UPDATE = 'CANCEL_CATEGORY_UPDATE';
 export const DELETE_CATEGORY = 'DELETE_CATEGORY';
 export const PREPARE_CATEGORY_UPDATE = 'PREPARE_CATEGORY_UPDATE';
 export const COUNT_CATEGORIES = 'COUNT_CATEGORIES';
-export const ADD_OR_UPDATE_DISHES = 'ADD_OR_UPDATE_DISHES';
+export const LOAD_DISHES = 'LOAD_DISHES';
+export const LOAD_CATEGORIES = 'LOAD_CATEGORIES';
+export const LOAD_CATERINGS = 'LOAD_CATERINGS';
 export const ADD_OR_UPDATE_DISH = 'ADD_OR_UPDATE_DISH';
 export const CANCEL_DISH_UPDATE = 'CANCEL_DISH_UPDATE';
 export const DELETE_DISH = 'DELETE_DISH';
@@ -87,9 +89,23 @@ export function countCategories(number) {
   };
 }
 
-export function addOrUpdateDishes(data) {
+export function loadDishes(data) {
   return {
-    type: ADD_OR_UPDATE_DISHES,
+    type: LOAD_DISHES,
+    data,
+  };
+}
+
+export function loadCategories(data) {
+  return {
+    type: LOAD_CATEGORIES,
+    data,
+  };
+}
+
+export function loadCaterings(data) {
+  return {
+    type: LOAD_CATERINGS,
     data,
   };
 }

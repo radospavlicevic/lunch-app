@@ -1,11 +1,11 @@
 export const ADD_OR_UPDATE_USER = 'ADD_OR_UPDATE_USER';
 export const DELETE_USER = 'DELETE_USER';
-export const UPDATE_USER = 'UPDATE_USER';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
 export const CHANGE_USERNAME = 'CHANGE_USERNAME';
 export const CHANGE_ROLE = 'CHANGE_ROLE';
 export const PREPARE_USER_UPDATE = 'PREPARE_USER_UPDATE';
 export const CANCEL_USER_UPDATE = 'CANCEL_USER_UPDATE';
+export const LOAD_USERS = 'LOAD_USERS';
 
 export function addOrUpdateUser(uid, data) {
   return {
@@ -57,5 +57,12 @@ export function prepareUserUpdate(uid, data) {
 export function cancelUserUpdate() {
   return {
     type: CANCEL_USER_UPDATE,
+  };
+}
+
+export function loadUsers(data) {
+  return {
+    type: LOAD_USERS,
+    data,
   };
 }

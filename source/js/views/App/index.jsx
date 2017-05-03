@@ -3,10 +3,9 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import CircularProgress from 'material-ui/CircularProgress';
 import { connect } from 'react-redux';
 import { redirectTo } from 'utils/routing';
-import { db, firebaseAuth } from 'utils/firebase_config';
+import { firebaseAuth } from 'utils/firebase_config';
 import { publicPages } from 'utils/globals';
 import { getUser, logout } from 'actions/login';
-import { addOrUpdateDishes } from 'actions/meals';
 import { userSignedIn } from 'api/auth.js';
 import Menu from 'components/Global/Menu';
 import { routeCodes } from '../../routes';
@@ -42,18 +41,15 @@ export default class App extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loggedInUser, dispatch } = this.props;
+    const { loggedInUser } = this.props;
     const path = localStorage.getItem('init-path');
     if (nextProps.loggedInUser !== loggedInUser && nextProps.loggedInUser) {
-      db.ref('dishes').on('value', newDish => {
-        dispatch(addOrUpdateDishes(newDish.val()));
-      });
+      if (!nextProps.loggedInUser.username) redirectTo(routeCodes.PROFILE);
       if (path) {
         redirectTo(path);
         localStorage.removeItem('init-path');
       } else {
-        redirectTo(nextProps.loggedInUser.username ?
-          routeCodes.HOME : routeCodes.PROFILE);
+        redirectTo(routeCodes.HOME);
       }
     }
   }
@@ -84,7 +80,6 @@ export default class App extends Component {
         <div className='Page'>
           { children }
         </div>
-
       </div>
     );
   }

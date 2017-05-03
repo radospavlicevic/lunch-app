@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   SET_SELECTED_DATE,
   SET_REPORT_DATE,
+  LOAD_ORDERS,
   UPDATE_ORDER,
   CANCEL_ORDER,
 } from 'actions/orders';
@@ -56,6 +57,15 @@ const actionsMap = {
     const orders = { ...state.get('orders') };
     delete orders[action.date][action.uid];
 
+    return state.merge(Map({
+      orders,
+    }));
+  },
+
+  [LOAD_ORDERS]: (state, action) => {
+    const ordersFor = {};
+    ordersFor[action.date] = action.data;
+    const orders = Object.assign({}, state.get('orders'), ordersFor);
     return state.merge(Map({
       orders,
     }));

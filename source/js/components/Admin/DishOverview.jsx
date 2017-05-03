@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui/Table';
 import { dishOverviewTypes } from 'utils/globals';
+import CircularProgress from 'material-ui/CircularProgress';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -348,28 +349,37 @@ export default class DishOverview extends Component {
   }
 
   render() {
-    const { type } = this.props;
+    const { type, dishes } = this.props;
+    const loading = Object.keys(dishes).length === 0;
+
     return (
       <div className='DishOverview'>
         <div className='DishOverview-header'>
           { this.renderFilters() }
         </div>
-        <Table
-          fixedHeader={ true }
-          fixedFooter={ true }
-          selectable={ type === dishOverviewTypes.SELECTABLE }
-          multiSelectable={ type === dishOverviewTypes.SELECTABLE }
-        >
-          { this.renderTableHeader(type) }
-          <TableBody
-            displayRowCheckbox={ true }
-            adjustForCheckbox={ false }
-            showRowHover={ true }
+        { loading &&
+          <div className='Dishes-loading'>
+            <CircularProgress size={ 80 } thickness={ 3 } />
+          </div>
+        }
+        { !loading &&
+          <Table
+            fixedHeader={ true }
+            fixedFooter={ true }
+            selectable={ type === dishOverviewTypes.SELECTABLE }
+            multiSelectable={ type === dishOverviewTypes.SELECTABLE }
           >
-            { this.renderDishes() }
-          </TableBody>
-          { this.renderTableFooter(type) }
-        </Table>
+            { this.renderTableHeader(type) }
+            <TableBody
+              displayRowCheckbox={ true }
+              adjustForCheckbox={ false }
+              showRowHover={ true }
+            >
+              { this.renderDishes() }
+            </TableBody>
+            { this.renderTableFooter(type) }
+          </Table>
+        }
       </div>
     );
   }

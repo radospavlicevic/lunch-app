@@ -8,6 +8,7 @@ import {
   CHANGE_ROLE,
   PREPARE_USER_UPDATE,
   CANCEL_USER_UPDATE,
+  LOAD_USERS,
 } from 'actions/users';
 
 const initialState = Map({
@@ -75,6 +76,12 @@ const actionsMap = {
   [CANCEL_USER_UPDATE]: (state) => {
     return state.merge(Map({
       userForUpdate: null,
+    }));
+  },
+
+  [LOAD_USERS]: (state, action) => {
+    return state.merge(Map({
+      users: action.data,
     }));
   },
 };

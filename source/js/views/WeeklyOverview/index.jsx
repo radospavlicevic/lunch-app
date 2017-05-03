@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import WeekPicker from 'components/Global/WeekPicker';
 import DailyTable from 'components/Admin/DailyTable';
 import AdminMenu from 'components/Admin/AdminMenu';
-import { updateOrder, cancelOrder } from 'actions/orders';
-import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory } from 'actions/meals';
+import { loadOrders } from 'actions/orders';
+import { loadUsers } from 'actions/users';
+import { loadCategories } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
+import { observableModule } from 'components/Observable/observableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
@@ -27,7 +27,6 @@ export default class WeeklyOverview extends Component {
     categories: PropTypes.object,
     orders: PropTypes.object,
     users: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   componentWillMount() {
@@ -43,27 +42,12 @@ export default class WeeklyOverview extends Component {
   }
 
   setupFirebaseObservers() {
-    const { selectedDate, dispatch } = this.props;
+    const { selectedDate } = this.props;
 
-    db.ref('users').on('child_added', newUser => {
-      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref(`menus/${ selectedDate }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref(`orders/${ selectedDate }`).on('child_added', order => {
-      dispatch(updateOrder(selectedDate, order.key, order.val()));
-    });
-
-    db.ref(`orders/${ selectedDate }`).on('child_removed', order => {
-      dispatch(cancelOrder(selectedDate, order.key));
-    });
+    observableModule.addValueObserver('users', loadUsers);
+    observableModule.addValueObserver('categories', loadCategories);
+    observableModule.addValueObserver(`menus/${ selectedDate }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ selectedDate }`, loadOrders, 2);
   }
 
   getUserOrderedDishes(uid) {
@@ -79,19 +63,8 @@ export default class WeeklyOverview extends Component {
   }
 
   updateFirebaseObservers(selectedDate) {
-    const { dispatch } = this.props;
-
-    db.ref(`menus/${ selectedDate }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref(`orders/${ selectedDate }`).on('child_added', order => {
-      dispatch(updateOrder(selectedDate, order.key, order.val()));
-    });
-
-    db.ref(`orders/${ selectedDate }`).on('child_removed', order => {
-      dispatch(cancelOrder(selectedDate, order.key));
-    });
+    observableModule.addValueObserver(`menus/${ selectedDate }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ selectedDate }`, loadOrders, 2);
   }
 
   tableOrders() {

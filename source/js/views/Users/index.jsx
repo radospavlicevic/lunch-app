@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { addOrUpdateUser, deleteUser } from 'actions/users';
-import { db } from 'utils/firebase_config';
+import { loadUsers } from 'actions/users';
 import UserOverview from 'components/Admin/UserOverview';
 import AdminMenu from 'components/Admin/AdminMenu';
+import { observableModule } from 'components/Observable/observableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole
@@ -14,27 +14,11 @@ export default class Users extends Component {
 
   static propTypes = {
     users: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   componentWillMount() {
-    this.setupFirebaseObservers();
+    observableModule.addValueObserver('users', loadUsers);
     document.title = 'Users, Admin - Yummy Yumzor';
-  }
-
-  setupFirebaseObservers() {
-    const { dispatch } = this.props;
-    db.ref('users').on('child_added', newUser => {
-      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
-    });
-
-    db.ref('users').on('child_removed', removedUser => {
-      dispatch(deleteUser(removedUser.key));
-    });
-
-    db.ref('users').on('child_changed', changedUser => {
-      dispatch(addOrUpdateUser(changedUser.key, changedUser.val()));
-    });
   }
 
   render() {

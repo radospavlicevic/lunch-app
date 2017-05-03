@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import AdminMenu from 'components/Admin/AdminMenu';
 import Toggle from 'material-ui/Toggle';
 import { Tabs, Tab } from 'material-ui/Tabs';
@@ -9,8 +8,9 @@ import DishOverview from 'components/Admin/DishOverview';
 import { dishOverviewTypes, DATE_PATTERN, formatDate } from 'utils/globals';
 import { addOrUpdateMenu } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
-import { addOrUpdateCategory, addOrUpdateCatering } from 'actions/meals';
+import { loadDishes, loadCategories, loadCaterings } from 'actions/meals';
 import moment from 'moment';
+import { observableModule } from 'components/Observable/observableModule';
 import { getNoStandardDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
@@ -30,7 +30,6 @@ export default class Menus extends Component {
     dishes: PropTypes.object,
     menus: PropTypes.object,
     selectedDate: PropTypes.string,
-    dispatch: PropTypes.func,
   }
 
   constructor(props) {
@@ -52,28 +51,16 @@ export default class Menus extends Component {
   }
 
   setupFirebaseObservers() {
-    const { dispatch } = this.props;
     const { selectedDay } = this.state;
 
-    db.ref(`menus/${ selectedDay }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref('caterings').on('child_added', newCatering => {
-      dispatch(addOrUpdateCatering(newCatering.key, newCatering.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
+    observableModule.addValueObserver('dishes', loadDishes);
+    observableModule.addValueObserver(`menus/${ selectedDay }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver('categories', loadCategories);
+    observableModule.addValueObserver('caterings', loadCaterings);
   }
 
   updateFirebaseObservers(date) {
-    const { dispatch } = this.props;
-
-    db.ref(`menus/${ date }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(currentMenu.key, currentMenu.val()));
-    });
+    observableModule.addValueObserver(`menus/${ date }`, addOrUpdateMenu, 2);
   }
 
   handleLockToggle() {

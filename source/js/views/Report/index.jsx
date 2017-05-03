@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import ReportDatePicker from 'components/Global/ReportDatePicker';
 import DailyTable from 'components/Admin/DailyTable';
-import { updateOrder, cancelOrder } from 'actions/orders';
-import { addOrUpdateUser } from 'actions/users';
-import { addOrUpdateCategory, addOrUpdateDishes } from 'actions/meals';
+import { loadOrders } from 'actions/orders';
+import { loadUsers } from 'actions/users';
+import { loadCategories, loadDishes } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
+import { observableModule } from 'components/Observable/observableModule';
 
 @connect(state => ({
   menus: state.menus.get('menus'),
@@ -24,7 +24,6 @@ export default class Report extends Component {
     categories: PropTypes.object,
     orders: PropTypes.object,
     users: PropTypes.object,
-    dispatch: PropTypes.func,
   }
 
   componentWillMount() {
@@ -40,31 +39,13 @@ export default class Report extends Component {
   }
 
   setupFirebaseObservers() {
-    const { reportDate, dispatch } = this.props;
+    const { reportDate } = this.props;
 
-    db.ref('users').on('child_added', newUser => {
-      dispatch(addOrUpdateUser(newUser.key, newUser.val()));
-    });
-
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref(`menus/${ reportDate }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(reportDate, currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref(`orders/${ reportDate }`).on('child_added', order => {
-      dispatch(updateOrder(reportDate, order.key, order.val()));
-    });
-
-    db.ref(`orders/${ reportDate }`).on('child_removed', order => {
-      dispatch(cancelOrder(reportDate, order.key));
-    });
-
-    db.ref('dishes').on('value', dishes => {
-      dispatch(addOrUpdateDishes(dishes.val()));
-    });
+    observableModule.addValueObserver('users', loadUsers);
+    observableModule.addValueObserver('dishes', loadDishes);
+    observableModule.addValueObserver('categories', loadCategories);
+    observableModule.addValueObserver(`menus/${ reportDate }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ reportDate }`, loadOrders, 2);
   }
 
   getUserOrderedDishes(uid) {
@@ -80,19 +61,8 @@ export default class Report extends Component {
   }
 
   updateFirebaseObservers(reportDate) {
-    const { dispatch } = this.props;
-
-    db.ref(`menus/${ reportDate }`).on('value', currentMenu => {
-      dispatch(addOrUpdateMenu(reportDate, currentMenu.key, currentMenu.val()));
-    });
-
-    db.ref(`orders/${ reportDate }`).on('child_added', order => {
-      dispatch(updateOrder(reportDate, order.key, order.val()));
-    });
-
-    db.ref(`orders/${ reportDate }`).on('child_removed', order => {
-      dispatch(cancelOrder(reportDate, order.key));
-    });
+    observableModule.addValueObserver(`menus/${ reportDate }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ reportDate }`, loadOrders, 2);
   }
 
   tableOrders() {

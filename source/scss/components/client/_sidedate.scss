@@ -4,9 +4,11 @@
   background-color: $light-gray;
   height: 100%;
   border-top: $border;
+
   p {
-    margin: 0;
-    }
+    margin: 5px;
+  }
+
   @include sm {
     border: none;
     border-right: $border;
@@ -24,6 +26,11 @@
   font-size: 2.5rem;
   font-family: 'Open Sans', sans-serif;
   line-height: 2.5rem;
+}
+
+.SideDate-dayName {
+  font-size: 0.8rem;
+  margin-top: 10px;
 }
 
 .SideDate {

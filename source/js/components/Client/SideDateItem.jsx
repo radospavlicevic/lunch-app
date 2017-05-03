@@ -11,6 +11,7 @@ export default class SideDateItem extends Component {
     date: PropTypes.string,
     selected: PropTypes.bool,
     orders: PropTypes.object,
+    day: PropTypes.string,
   }
 
   // function returns formatted date as number
@@ -42,7 +43,7 @@ export default class SideDateItem extends Component {
   }
 
   render() {
-    const { date, selected } = this.props;
+    const { date, selected, day } = this.props;
     return (
       <Link
         onClick={ this.handleClick }
@@ -51,6 +52,7 @@ export default class SideDateItem extends Component {
       >
         <p className='SideDate-month'>{ this.getMonthName() }</p>
         <p className='SideDate-day'>{ this.getDay() }</p>
+        <span className='SideDate-dayName'>{ day }</span>
       </Link>
     );
   }

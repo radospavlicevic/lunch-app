@@ -50,3 +50,10 @@
 .CateringOverview {
   border: 1px solid $light-gray;
 }
+
+.Dishes-loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 25vh 0;
+}

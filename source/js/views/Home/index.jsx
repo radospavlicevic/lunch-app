@@ -1,16 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { db } from 'utils/firebase_config';
 import { redirectTo } from 'utils/routing';
 import { isPastDate, formatDateSr } from 'utils/globals';
 import { userSignedIn } from 'api/auth';
 import { updateOrder, setSelectedDate } from 'actions/orders';
-import { addOrUpdateCategory } from 'actions/meals';
+import { loadDishes, loadCategories } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
 import SideDate from 'components/Client/SideDate';
 import Order from 'components/Client/Order';
 import CircularProgress from 'material-ui/CircularProgress';
 import MealOverview from 'components/Client/MealOverview';
+import { observableModule } from 'components/Observable/observableModule';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),
@@ -55,9 +55,7 @@ export default class Home extends Component {
 
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
       const date = params.date || selectedDate;
-      db.ref(`orders/${ date }/${ userSignedIn().uid }`).on('value', order => {
-        dispatch(updateOrder(date, order.key, order.val()));
-      });
+      observableModule.addValueObserver(`orders/${ date }/${ userSignedIn().uid }`, updateOrder, 3, date);
     }
 
     if (params.date !== nextProps.params.date) {
@@ -121,35 +119,21 @@ export default class Home extends Component {
   }
 
   setupFirebaseObservers() {
-    const { selectedDate, params, dispatch } = this.props;
+    const { selectedDate, params } = this.props;
     const date = params.date || selectedDate;
 
-    db.ref('categories').on('child_added', newCategory => {
-      dispatch(addOrUpdateCategory(newCategory.key, newCategory.val().name));
-    });
-
-    db.ref(`menus/${ date }`).on('value', newMenuDish => {
-      dispatch(
-        addOrUpdateMenu(newMenuDish.key, newMenuDish.val())
-      );
-    });
+    observableModule.addValueObserver('dishes', loadDishes);
+    observableModule.addValueObserver('categories', loadCategories);
+    observableModule.addValueObserver(`menus/${ date }`, addOrUpdateMenu, 2);
 
     if (userSignedIn()) {
-      db.ref(`orders/${ date }/${ userSignedIn().uid }`).on('value', order => {
-        dispatch(updateOrder(date, order.key, order.val()));
-      });
+      observableModule.addValueObserver(`orders/${ date }/${ userSignedIn().uid }`, updateOrder, 3, date);
     }
   }
 
   updateFirebaseObservers(selectedDate) {
-    const { dispatch } = this.props;
-    db.ref(`menus/${ selectedDate }`).on('value', newMenuDish => {
-      dispatch(addOrUpdateMenu(newMenuDish.key, newMenuDish.val()));
-    });
-
-    db.ref(`orders/${ selectedDate }/${ userSignedIn().uid }`).on('value', order => {
-      dispatch(updateOrder(selectedDate, order.key, order.val()));
-    });
+    observableModule.addValueObserver(`menus/${ selectedDate }`, addOrUpdateMenu, 2);
+    observableModule.addValueObserver(`orders/${ selectedDate }/${ userSignedIn().uid }`, updateOrder, 3, selectedDate);
   }
 
   renderContent(date, orders) {

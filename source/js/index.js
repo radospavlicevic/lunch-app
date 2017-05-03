@@ -10,6 +10,7 @@ import rootReducer from 'reducers';
 import Routes from 'routes';
 import DevTools from 'dev/redux-dev-tools';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import { observableModule } from 'components/Observable/observableModule';
 
 // Load SCSS
 import '../scss/app.scss';
@@ -27,6 +28,7 @@ if (isProduction) {
     rootReducer,
     middleware
   );
+  observableModule.attachStore(store);
 } else {
   // In development mode beside thunk
   // logger and DevTools are added
@@ -40,6 +42,7 @@ if (isProduction) {
     rootReducer,
     enhancer
   );
+  observableModule.attachStore(store);
 }
 
 // Render it to DOM
@@ -57,3 +60,4 @@ ReactDOM.render(
   </Provider>,
   document.getElementById('root')
 );
+

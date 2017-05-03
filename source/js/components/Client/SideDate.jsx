@@ -5,19 +5,26 @@ import { DATE_PATTERN } from 'utils/globals';
 import { redirectTo } from 'utils/routing';
 import Swipe from 'react-easy-swipe';
 import moment from 'moment';
+import ComposedComponent from 'decorators/AppBreakpointsDecorator';
 import back from '../../../assets/img/back.png';
 import next from '../../../assets/img/next.png';
 
-@connect()
+@ComposedComponent
+@connect(state => ({
+  breakpoint: state.app.get('breakpoint'),
+}))
 export default class SideDate extends Component {
   static propTypes = {
     selectedDate: PropTypes.string,
+    breakpoint: PropTypes.string,
     orders: PropTypes.object,
   }
 
   constructor() {
     super();
 
+    this.weekDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+    this.weekDaysShort = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
     this.handlePreviousClick = this.handlePreviousClick.bind(this);
     this.handleNextClick = this.handleNextClick.bind(this);
   }
@@ -68,7 +75,7 @@ export default class SideDate extends Component {
 
   renderSideDateItems() {
     const { daysModel } = this.state;
-    const { selectedDate, orders } = this.props;
+    const { selectedDate, orders, breakpoint } = this.props;
     return (
       daysModel.map((date, index) => {
         return (
@@ -77,6 +84,7 @@ export default class SideDate extends Component {
             date={ date }
             orders={ orders }
             selected={ date === selectedDate }
+            day={ breakpoint === 'sm' ? this.weekDaysShort[index] : this.weekDays[index] }
           />
         );
       })
