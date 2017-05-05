@@ -133,6 +133,7 @@ export default class Export extends Component {
 
     const data = {
       orderNumber: rowData.orderNumber,
+      canceled: rowData.canceled,
       name: rowData.name,
       note: rowData.note ? rowData.note : '-',
       dishes,
@@ -152,8 +153,7 @@ export default class Export extends Component {
     tablesToExcel(
       this.tableIDs,
       weekDays,
-      `Work&Co${ formatDateSr(weekDates[0]) }-${ formatDateSr(weekDates[4]) }.xls`,
-      'Yummy Yumzor');
+      `Work&Co${ formatDateSr(weekDates[0]) }-${ formatDateSr(weekDates[4]) }.xls`);
   }
 
   handleSliderButtonClick(event, offset) {
@@ -185,14 +185,25 @@ export default class Export extends Component {
     return orderData;
   }
 
-  renderMealColumns(dishes) {
+  renderMealColumns(dishes, canceled = false) {
     if (!dishes) return null;
     return dishes.map((dish, index) => {
-      return <td key={ index }>{ (dish && !dish.standard) ? dish.name : '-' }</td>;
+      return <td data-style={ canceled ? 'none' : '' } key={ index }>{ (dish && !dish.standard) ? dish.name : '-' }</td>;
     });
   }
 
   renderSingleRow(rowData) {
+    if (rowData.canceled) {
+      return (
+        <tr key={ rowData.orderNumber }>
+          <td data-style='none'>{ rowData.orderNumber }</td>
+          <td data-style='none'>{ rowData.name }</td>
+          { this.renderMealColumns(rowData.dishes, true) }
+          <td data-style='none'>{ this.getStandardDish(rowData.dishes) }</td>
+          <td data-style='none'>{ rowData.note }</td>
+        </tr>
+      );
+    }
     return (
       <tr key={ rowData.orderNumber }>
         <td>{ rowData.orderNumber }</td>
@@ -217,15 +228,16 @@ export default class Export extends Component {
     return (
       <thead>
         <tr>
-          <td>{ day }</td>
-          <td>{ date }</td>
+          <td />
+          <td data-style='bold'>{ day }</td>
+          <td data-style='bold'>{ date }</td>
         </tr>
         <tr>
-          <th>R.B</th>
-          <th>Ime i prezime</th>
+          <th data-style='head'>R.B</th>
+          <th data-style='head'>Ime i prezime</th>
           { this.renderHeaderCategories() }
-          <th>Stalni meni</th>
-          <th>NAPOMENA</th>
+          <th data-style='head'>Stalni meni</th>
+          <th data-style='head'>NAPOMENA</th>
         </tr>
       </thead>
     );
@@ -235,7 +247,7 @@ export default class Export extends Component {
     const { categories } = this.props;
     return Object.keys(categories).map((key, index) => {
       return (
-        <th key={ index }>
+        <th key={ index } data-style='head'>
           { categories[key].name }
         </th>
       );

@@ -148,8 +148,7 @@ export default class DishForm extends Component {
 
   validationPassed() {
     let passed = true;
-    const { categories } = this.props;
-    const { name, price, category } = this.state.dish;
+    const { name, price } = this.state.dish;
     const errors = {
       name: '',
     };
@@ -159,7 +158,7 @@ export default class DishForm extends Component {
       passed = false;
     }
 
-    if (categories[category].name.toLowerCase() !== 'salate' && !price) {
+    if (!price) {
       errors.price = 'Price field is required. ';
       passed = false;
     }
@@ -258,6 +257,7 @@ export default class DishForm extends Component {
               fullWidth={ true }
               value={ dish.price }
               onChange={ (e, value) => this.handleTextFieldChange(e, value, 'price') }
+              errorText={ errors.price }
             />
             <RaisedButton
               type='submit'

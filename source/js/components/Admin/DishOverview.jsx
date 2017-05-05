@@ -350,7 +350,7 @@ export default class DishOverview extends Component {
 
   render() {
     const { type, dishes } = this.props;
-    const loading = Object.keys(dishes).length === 0;
+    const loading = type !== dishOverviewTypes.REMOVABLE && Object.keys(dishes).length === 0;
 
     return (
       <div className='DishOverview'>

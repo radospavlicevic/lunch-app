@@ -50,11 +50,13 @@ export default class Dishes extends Component {
 
   cascadeDelete(dishKey) {
     const { menus } = this.props;
-    Object.keys(menus).forEach(key => {
-      if (menus[key][dishKey]) {
-        deleteDishFromMenu(key, dishKey);
-      }
-    });
+    if (menus) {
+      Object.keys(menus).forEach(key => {
+        if (menus[key][dishKey]) {
+          deleteDishFromMenu(key, dishKey);
+        }
+      });
+    }
   }
 
   render() {

@@ -1,24 +1,47 @@
 export const tablesToExcel = (() => {
   const uri = 'data:application/vnd.ms-excel;base64,';
-  const tmplWorkbookXML = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?>, \
-    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">, \
-      <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">, \
-        <Author>Work&Co</Author>, \
-        <Created>{created}</Created>, \
-      </DocumentProperties>, \
-    <Styles>, \
-      <Style ss:ID="Currency"><NumberFormat ss:Format="Currency"></NumberFormat></Style>, \
-      <Style ss:ID="Date"><NumberFormat ss:Format="Medium Date"></NumberFormat></Style>, \
-    </Styles>, \
-    {worksheets}</Workbook>';
-  const tmplWorksheetXML = '<Worksheet ss:Name="{nameWS}"><Table>{rows}</Table></Worksheet>';
-  const tmplCellXML = '<Cell{attributeStyleID}{attributeFormula}><Data ss:Type="{nameType}">{data}</Data></Cell>';
+  const tmplWorkbookXML = `<?xml version="1.0"?>
+    <?mso-application progid="Excel.Sheet"?>
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+    xmlns:o="urn:schemas-microsoft-com:office:office"
+    xmlns:x="urn:schemas-microsoft-com:office:excel"
+    xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+    xmlns:html="http://www.w3.org/TR/REC-html40">
+      <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+        <Author>WorkCo</Author>
+        <Version>16.00</Version>
+      </DocumentProperties>
+      <Styles>
+        <Style ss:ID="default">
+          <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+        </Style>
+        <Style ss:ID="head">
+          <Alignment ss:Vertical="Bottom"/>
+          <Borders>
+            <Border ss:Position="Top" ss:LineStyle="Continuous" ss:Weight="1"/>
+          </Borders>
+          <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000" ss:Bold="1"/>
+          <Interior ss:Color="#9BC2E6" ss:Pattern="Solid"/>
+        </Style>
+        <Style ss:ID="none">
+          <Interior ss:Color="#E38888" ss:Pattern="Solid"/>
+        </Style>
+        <Style ss:ID="bold">
+          <Alignment ss:Vertical="Bottom"/>
+          <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000" ss:Bold="1"/>
+        </Style>
+      </Styles>
+    {worksheets}</Workbook>`;
+  const tmplWorksheetXML = '<Worksheet ss:Name="{nameWS}"><Table>{columns}{rows}</Table></Worksheet>';
+  const tmplCellXML = '<Cell{attributeStyleID}><Data ss:Type="{nameType}">{data}</Data></Cell>';
   const base64 = (s) => { return window.btoa(unescape(encodeURIComponent(s))); };
   const format = (s, c) => { return s.replace(/{(\w+)}/g, (m, p) => { return c[p]; }); };
-  return function (tables, wsnames, wbname, appname) {
+  return function (tables, wsnames, wbname) {
+    const styles = ['head', 'bold', 'none'];
     let ctx = '';
     let workbookXML = '';
     let worksheetsXML = '';
+    let columnsXML = '';
     let rowsXML = '';
 
     for (let i = 0; i < tables.length; i++) {
@@ -26,22 +49,19 @@ export const tablesToExcel = (() => {
       for (let j = 0; j < tables[i].rows.length; j++) {
         rowsXML += '<Row>';
         for (let k = 0; k < tables[i].rows[j].cells.length; k++) {
-          const dataType = tables[i].rows[j].cells[k].getAttribute('data-type');
+          columnsXML += '<Column ss:Width="100" />';
           const dataStyle = tables[i].rows[j].cells[k].getAttribute('data-style');
           const dataValueInit = tables[i].rows[j].cells[k].getAttribute('data-value');
           const dataValue = dataValueInit || tables[i].rows[j].cells[k].innerHTML;
-          const dataFormulaInit = tables[i].rows[j].cells[k].getAttribute('data-formula');
-          const dataFormula = dataFormulaInit || (appname === 'Calc' && dataType === 'DateTime' && dataValue) || null;
-          ctx = { attributeStyleID: (dataStyle === 'Currency' || dataStyle === 'Date') ? ` ss:StyleID="${ dataStyle }"` : '',
-            nameType: (dataType === 'Number' || dataType === 'DateTime' || dataType === 'Boolean' || dataType === 'Error') ? dataType : 'String',
-            data: (dataFormula) ? '' : dataValue,
-            attributeFormula: (dataFormula) ? ` ss:Formula="${ dataFormula }"` : '',
+          ctx = { attributeStyleID: (styles.includes(dataStyle)) ? ` ss:StyleID="${ dataStyle }"` : ' ss:StyleID="default"',
+            nameType: 'String',
+            data: dataValue,
           };
           rowsXML += format(tmplCellXML, ctx);
         }
         rowsXML += '</Row>';
       }
-      ctx = { rows: rowsXML, nameWS: wsnames[i] || `Sheet${ i }` };
+      ctx = { columns: columnsXML, rows: rowsXML, nameWS: wsnames[i] || `Sheet${ i }` };
       worksheetsXML += format(tmplWorksheetXML, ctx);
       rowsXML = '';
     }

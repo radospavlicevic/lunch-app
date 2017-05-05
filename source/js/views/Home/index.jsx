@@ -39,18 +39,25 @@ export default class Home extends Component {
     if (!params.state && !params.date) {
       document.title = 'Yummy Yumzor';
     }
+
     if (params.state === 'edit' && isPastDate(params.date)) {
       redirectTo(`/order/${ params.date }/overview`);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params, selectedDate, loggedInUser, orders, dispatch } = this.props;
+    const { params, selectedDate, loggedInUser, menus, orders, dispatch } = this.props;
     document.title = `${ nextProps.params.state && nextProps.params.state.charAt(0).toUpperCase() + nextProps.params.state.slice(1) },
     ${ params.date } - Yummy Yumzor`;
 
     if (!nextProps.params.state) {
       document.title = 'Yummy Yumzor';
+    }
+
+    if (nextProps.menus !== menus) {
+      if (!(nextProps.menus && nextProps.menus[nextProps.selectedDate])) {
+        redirectTo(`/order/${ nextProps.selectedDate }/edit`);
+      }
     }
 
     if (loggedInUser !== nextProps.loggedInUser && nextProps.loggedInUser) {
@@ -87,9 +94,10 @@ export default class Home extends Component {
   getOrder(loggedInUser, selectedDate, orders) {
     const mealItems = [];
     const { menus, categories, standardDishes } = this.props;
-    if (loggedInUser && orders[selectedDate] && orders[selectedDate][userSignedIn().uid]) {
+    if (loggedInUser && menus && menus[selectedDate]
+      && orders[selectedDate] && orders[selectedDate][userSignedIn().uid]) {
       const { meal, note } = orders[selectedDate][userSignedIn().uid];
-      Object.keys(meal).forEach(key => {
+      Object.keys(categories).forEach(key => {
         if (menus[selectedDate][meal[key]] || standardDishes[meal[key]]) {
           const dish = menus[selectedDate][meal[key]] || standardDishes[meal[key]];
           mealItems.push({
