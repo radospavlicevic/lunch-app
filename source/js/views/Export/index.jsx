@@ -9,7 +9,7 @@ import { loadCategories } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
 import { loadOrders } from 'actions/orders';
 import moment from 'moment';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 import back from '../../../assets/img/back.png';
 import next from '../../../assets/img/next.png';

@@ -6,7 +6,7 @@ import DishOverview from 'components/Admin/DishOverview';
 import { loadDishes, addOrUpdateDish, deleteDish, loadCaterings, loadCategories } from 'actions/meals.js';
 import { deleteDishFromMenu, updateDishInMenu } from 'api/menus.js';
 import { dishOverviewTypes } from 'utils/globals';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import { getDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 

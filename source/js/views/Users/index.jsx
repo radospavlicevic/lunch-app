@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { loadUsers } from 'actions/users';
 import UserOverview from 'components/Admin/UserOverview';
 import AdminMenu from 'components/Admin/AdminMenu';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole

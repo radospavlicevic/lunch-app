@@ -7,7 +7,7 @@ import { loadOrders } from 'actions/orders';
 import { loadUsers } from 'actions/users';
 import { loadCategories } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole

@@ -10,7 +10,7 @@ import { addOrUpdateMenu } from 'actions/menus';
 import { switchMenuLock } from 'api/menus';
 import { loadDishes, loadCategories, loadCaterings } from 'actions/meals';
 import moment from 'moment';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import { getNoStandardDishesSearchSelector } from '../../selectors/dishes';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 

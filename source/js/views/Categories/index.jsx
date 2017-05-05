@@ -5,7 +5,7 @@ import { loadCategories, deleteCategory, countCategories } from 'actions/meals.j
 import CategoryForm from 'components/Admin/CategoryForm';
 import CategoryOverview from 'components/Admin/CategoryOverview';
 import AdminMenu from 'components/Admin/AdminMenu';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole

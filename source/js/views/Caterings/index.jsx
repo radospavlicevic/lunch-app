@@ -5,7 +5,7 @@ import { loadCaterings, deleteCatering, countCaterings } from 'actions/meals.js'
 import AdminMenu from 'components/Admin/AdminMenu';
 import CateringForm from 'components/Admin/CateringForm';
 import CateringOverview from 'components/Admin/CateringOverview';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 import CheckAdminRole from '../../decorators/AuthorizationDecorator';
 
 @CheckAdminRole

@@ -6,7 +6,7 @@ import { loadOrders } from 'actions/orders';
 import { loadUsers } from 'actions/users';
 import { loadCategories, loadDishes } from 'actions/meals';
 import { addOrUpdateMenu } from 'actions/menus';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 
 @connect(state => ({
   menus: state.menus.get('menus'),

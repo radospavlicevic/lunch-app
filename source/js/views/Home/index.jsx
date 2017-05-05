@@ -10,7 +10,7 @@ import SideDate from 'components/Client/SideDate';
 import Order from 'components/Client/Order';
 import CircularProgress from 'material-ui/CircularProgress';
 import MealOverview from 'components/Client/MealOverview';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 
 @connect(state => ({
   loggedInUser: state.login.get('loggedInUser'),

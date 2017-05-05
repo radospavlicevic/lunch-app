@@ -10,7 +10,7 @@ import rootReducer from 'reducers';
 import Routes from 'routes';
 import DevTools from 'dev/redux-dev-tools';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import { observableModule } from 'components/Observable/observableModule';
+import { observableModule } from 'components/Observable/ObservableModule';
 
 // Load SCSS
 import '../scss/app.scss';
