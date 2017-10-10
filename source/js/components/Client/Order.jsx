@@ -34,7 +34,7 @@ export default class Order extends Component {
     const { orders, selectedDate } = this.props;
     if (nextProps.orders !== orders) {
       this.setState({
-        note: this.getNote(orders, selectedDate, userSignedIn().uid),
+        note: this.getNote(nextProps.orders, selectedDate, userSignedIn().uid),
       });
     }
   }
@@ -216,7 +216,6 @@ export default class Order extends Component {
 
   render() {
     const { selectedDate } = this.props;
-
     return (
       <div className='Order'>
         { this.renderMyOrderSide(selectedDate) }

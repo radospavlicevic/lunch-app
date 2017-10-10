@@ -67,21 +67,37 @@ export default class MenuSection extends Component {
     }
   }
 
-  hasDishesSelected() {
+  hasDishesSelected(nextOrders) {
     const { orders, selectedDate } = this.props;
-    if (!orders[selectedDate]) return false;
-    if (!orders[selectedDate][userSignedIn().uid]) return false;
-    if (!orders[selectedDate][userSignedIn().uid].meal) return false;
+    const currentOrder = nextOrders || orders;
+    if (!currentOrder[selectedDate]) return false;
+    if (!currentOrder[selectedDate][userSignedIn().uid]) return false;
+    if (!currentOrder[selectedDate][userSignedIn().uid].meal) return false;
+    if (!currentOrder[selectedDate][userSignedIn().uid].meal.main_dish) return false;
+    return true;
+  }
+
+  isNoteAdded(nextOrders) {
+    const { selectedDate } = this.props;
+    if (!nextOrders[selectedDate]) return false;
+    if (!nextOrders[selectedDate][userSignedIn().uid]) return false;
+    if (!nextOrders[selectedDate][userSignedIn().uid].note && !nextOrders[selectedDate][userSignedIn().uid].note === '') return false;
     return true;
   }
 
   selectProperTab(actualDishes, update = false, nextOrders) {
-    if (!this.hasDishesSelected()) {
-      this.setTabBasedState('main', actualDishes, update);
+    if (!this.hasDishesSelected(nextOrders)) {
+      const selectedTab = update ? this.state.selectedTab : 'main';
+      this.setTabBasedState(selectedTab, actualDishes, update);
       return;
     }
     const isStandard = this.isMainDishTypeStandard(actualDishes, nextOrders);
-    const activeTab = isStandard ? 'standard' : 'main';
+    let activeTab = isStandard ? 'standard' : 'main';
+    if (nextOrders) {
+      if (this.isNoteAdded(nextOrders)) {
+        activeTab = this.state.selectedTab;
+      }
+    }
     this.setTabBasedState(activeTab, actualDishes, update);
   }
 
